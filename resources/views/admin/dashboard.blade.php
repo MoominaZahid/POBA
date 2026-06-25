@@ -5,22 +5,43 @@
 @section('content')
 
 <div class="grid-4" style="gap:20px;margin-bottom:30px">
-    <div style="background:#fff;border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);border-left:4px solid var(--teal)">
-        <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px">Total Alumni</div>
-        <div style="font-size:2.2rem;font-weight:800;color:var(--teal)">{{ $totalAlumni }}</div>
-    </div>
-    <div style="background:#fff;border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);border-left:4px solid var(--orange)">
-        <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px">Pending Approvals</div>
-        <div style="font-size:2.2rem;font-weight:800;color:var(--orange)">{{ $pendingAlumni }}</div>
-    </div>
-    <div style="background:#fff;border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);border-left:4px solid #3498db">
-        <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px">Total Events</div>
-        <div style="font-size:2.2rem;font-weight:800;color:#3498db">{{ $totalEvents }}</div>
-    </div>
-    <div style="background:#fff;border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);border-left:4px solid #27ae60">
-        <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px">Upcoming Events</div>
-        <div style="font-size:2.2rem;font-weight:800;color:#27ae60">{{ $upcomingEvents }}</div>
-    </div>
+
+    <a href="{{ route('admin.alumni.index') }}" style="text-decoration:none;display:block">
+        <div style="background:#fff;border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);border-left:4px solid var(--teal);cursor:pointer;transition:box-shadow .2s"
+             onmouseover="this.style.boxShadow='0 8px 25px rgba(26,122,122,0.2)'"
+             onmouseout="this.style.boxShadow='var(--shadow)'">
+            <p style="font-size:13px;color:var(--text-muted);margin-bottom:8px">Total Alumni</p>
+            <div style="font-size:2.2rem;font-weight:800;color:var(--teal)">{{ $totalAlumni }}</div>
+        </div>
+    </a>
+
+    <a href="{{ route('admin.alumni.approvals') }}" style="text-decoration:none;display:block">
+        <div style="background:#fff;border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);border-left:4px solid var(--orange);cursor:pointer;transition:box-shadow .2s"
+             onmouseover="this.style.boxShadow='0 8px 25px rgba(232,119,34,0.2)'"
+             onmouseout="this.style.boxShadow='var(--shadow)'">
+            <p style="font-size:13px;color:var(--text-muted);margin-bottom:8px">Pending Approvals</p>
+            <div style="font-size:2.2rem;font-weight:800;color:var(--orange)">{{ $pendingAlumni }}</div>
+        </div>
+    </a>
+
+    <a href="{{ route('admin.events.index') }}" style="text-decoration:none;display:block">
+        <div style="background:#fff;border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);border-left:4px solid #3498db;cursor:pointer;transition:box-shadow .2s"
+             onmouseover="this.style.boxShadow='0 8px 25px rgba(52,152,219,0.2)'"
+             onmouseout="this.style.boxShadow='var(--shadow)'">
+            <p style="font-size:13px;color:var(--text-muted);margin-bottom:8px">Total Events</p>
+            <div style="font-size:2.2rem;font-weight:800;color:#3498db">{{ $totalEvents }}</div>
+        </div>
+    </a>
+
+    <a href="{{ route('admin.events.index') }}" style="text-decoration:none;display:block">
+        <div style="background:#fff;border-radius:var(--radius);padding:24px;box-shadow:var(--shadow);border-left:4px solid #27ae60;cursor:pointer;transition:box-shadow .2s"
+             onmouseover="this.style.boxShadow='0 8px 25px rgba(39,174,96,0.2)'"
+             onmouseout="this.style.boxShadow='var(--shadow)'">
+            <p style="font-size:13px;color:var(--text-muted);margin-bottom:8px">Upcoming Events</p>
+            <div style="font-size:2.2rem;font-weight:800;color:#27ae60">{{ $upcomingEvents }}</div>
+        </div>
+    </a>
+
 </div>
 
 <div class="grid-2" style="gap:24px">

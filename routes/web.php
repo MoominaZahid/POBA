@@ -31,11 +31,8 @@ Route::post('/contact',        [ContactController::class, 'send'])->name('contac
 Route::get('/updates',         [NewsController::class, 'index'])->name('news.index');
 Route::get('/updates/{id}',    [NewsController::class, 'show'])->name('news.show');
 Route::get('/events',          [CustomerEventController::class, 'index'])->name('events.index');
-Route::get('/alumni',          [AlumniController::class, 'index'])->name('alumni.index');
-Route::get('/alumni/{id}',     [AlumniController::class, 'show'])->name('alumni.show');
 Route::get('/star-alumni',     [AlumniController::class, 'starAlumni'])->name('star.alumni');
 Route::get('/gallery',         [CustomerGalleryController::class, 'index'])->name('gallery.index');
-Route::get('/gallery/{id}',    [CustomerGalleryController::class, 'show'])->name('gallery.show');
 Route::get('/become-a-member', [MemberController::class, 'index'])->name('member.index');
 Route::post('/become-a-member',[MemberController::class, 'store'])->name('member.store');
 
@@ -47,6 +44,10 @@ Route::post('/become-a-member',[MemberController::class, 'store'])->name('member
 
 // Alumni-only routes
 Route::middleware('alumni')->group(function () {
+    Route::get('/alumni', [AlumniController::class, 'index'])->name('alumni.index');
+    Route::get('/alumni/{id}', [AlumniController::class, 'show'])->name('alumni.show');
+
+    Route::get('/gallery/{id}', [CustomerGalleryController::class, 'show'])->name('gallery.show');
 
     Route::post('/events/{id}/register', [CustomerEventController::class, 'register'])->name('events.register');
     Route::post('/events/{id}/cancel',   [CustomerEventController::class, 'cancel'])->name('events.cancel');

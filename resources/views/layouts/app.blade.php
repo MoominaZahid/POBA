@@ -76,6 +76,9 @@
         <a href="{{ route('member.index') }}" class="btn-teal-nav">
             Become a Member
         </a>
+         <a href="{{ route('login') }}" class="btn-teal-nav">
+            Login
+        </a>
     @endauth
 </li>
         </ul>
@@ -148,7 +151,7 @@
 </footer> -->
 <footer>
     <div class="footer-container">
-        
+
         {{-- Main Row: Logo on left, links pushed right --}}
         <div class="footer-inner">
             <div class="footer-brand">

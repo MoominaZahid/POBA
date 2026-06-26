@@ -15,36 +15,49 @@ class EventController extends Controller
 
     public function index(Request $request)
     {
-        $now = Carbon::now();
+        $now     = Carbon::now();
+        $today   = $now->toDateString();   // e.g. "2026-06-26"
+        $timeNow = $now->toTimeString();   // e.g. "17:00:00"
 
-        // ── Upcoming: event still ongoing or not yet ended ──
-        //    end_date > today OR (end_date == today AND end_time >= now)
-        $upcomingQuery = Event::where(function ($q) use ($now) {
-            $q->where('end_date', '>', $now->toDateString())
-              ->orWhere(function ($q2) use ($now) {
-                  $q2->where('end_date', '=', $now->toDateString())
-                     ->where('end_time', '>=', $now->toTimeString());
+        // ─────────────────────────────────────────────────────────────────
+        // UPCOMING: event has NOT yet ended
+        //   • end_date is AFTER today, OR
+        //   • end_date IS today AND end_time >= current time, OR
+        //   • end_date IS today AND end_time IS NULL  (treat as 23:59:59 – still running)
+        // ─────────────────────────────────────────────────────────────────
+        $upcomingQuery = Event::where(function ($q) use ($today, $timeNow) {
+            // Ends on a future date
+            $q->where('end_date', '>', $today)
+              // OR ends today and hasn't finished yet (or has no end_time)
+              ->orWhere(function ($q2) use ($today, $timeNow) {
+                  $q2->where('end_date', '=', $today)
+                     ->where(function ($q3) use ($timeNow) {
+                         $q3->whereNull('end_time')
+                            ->orWhere('end_time', '>=', $timeNow);
+                     });
               });
-        })->orderBy('start_date');
+        })->orderBy('start_date')->orderBy('start_time');
 
-        // ── Previous: event has already ended ──
-        //    end_date < today OR (end_date == today AND end_time < now)
-        $previousQuery = Event::where(function ($q) use ($now) {
-            $q->where('end_date', '<', $now->toDateString())
-              ->orWhere(function ($q2) use ($now) {
-                  $q2->where('end_date', '=', $now->toDateString())
-                     ->where('end_time', '<', $now->toTimeString());
+        // ─────────────────────────────────────────────────────────────────
+        // PREVIOUS: event has already ended
+        //   • end_date is BEFORE today, OR
+        //   • end_date IS today AND end_time < current time (and end_time is not null)
+        // ─────────────────────────────────────────────────────────────────
+        $previousQuery = Event::where(function ($q) use ($today, $timeNow) {
+            // Ended on a past date
+            $q->where('end_date', '<', $today)
+              // OR ended today and the end_time has already passed
+              ->orWhere(function ($q2) use ($today, $timeNow) {
+                  $q2->where('end_date', '=', $today)
+                     ->whereNotNull('end_time')
+                     ->where('end_time', '<', $timeNow);
               });
-        })->orderByDesc('start_date');
-
-        // If end_time is null, we treat it as 23:59:59 so the event remains
-        // "upcoming" until the end of that day. The above queries handle that
-        // because null will be considered less than any time string, so
-        // it will fall into previous only if end_date < today.
+        })->orderByDesc('end_date')->orderByDesc('end_time');
 
         $upcoming = $upcomingQuery->paginate(self::PER_PAGE, ['*'], 'upcoming_page');
         $previous = $previousQuery->paginate(self::PER_PAGE, ['*'], 'previous_page');
 
+        // ── Fetch this alumni's registrations ────────────────────────────
         $myEventIds       = [];
         $myParticipations = [];
 
@@ -54,15 +67,15 @@ class EventController extends Controller
                         ->get(['event_id', 'status']);
 
             foreach ($rows as $r) {
-                $myEventIds[] = $r->event_id;
+                $myEventIds[]                  = $r->event_id;
                 $myParticipations[$r->event_id] = $r->status;
             }
         }
 
-        // AJAX load‑more
+        // ── AJAX load-more ───────────────────────────────────────────────
         if ($request->ajax()) {
-            $tab = $request->get('tab', 'upcoming');
-            $events = $tab === 'upcoming' ? $upcoming : $previous;
+            $tab        = $request->get('tab', 'upcoming');
+            $events     = $tab === 'upcoming' ? $upcoming : $previous;
             $isPrevious = $tab === 'previous';
 
             return response()->json([
@@ -74,12 +87,11 @@ class EventController extends Controller
         }
 
         return view('customer.events.index', compact(
-            'upcoming', 'previous',
-            'myEventIds', 'myParticipations'
+            'upcoming', 'previous', 'myEventIds', 'myParticipations'
         ));
     }
 
-    // ── Register & Cancel methods (unchanged) ──
+    // ── Register ─────────────────────────────────────────────────────────
 
     public function register($id)
     {
@@ -90,16 +102,18 @@ class EventController extends Controller
             return back()->with('error', 'This event does not require registration.');
         }
 
-        // Block registration if event has already ended
-        $now = Carbon::now();
-        $endDateTime = $event->end_date . ' ' . ($event->end_time ?? '23:59:59');
-        if (Carbon::parse($endDateTime)->lt($now)) {
-            return back()->with('error', 'Registration is closed for past events.');
+        // Block if the event has already ended
+        $now         = Carbon::now();
+        $endDateTime = Carbon::parse(
+            $event->end_date . ' ' . ($event->end_time ?? '23:59:59')
+        );
+        if ($endDateTime->lt($now)) {
+            return back()->with('error', 'Registration is closed – this event has already ended.');
         }
 
+        // Batch eligibility check
         if (!empty($event->entry_batches)) {
-            $alumniEntry = (int) $alumni->entry;
-            if (!in_array($alumniEntry, $event->entry_batches)) {
+            if (!in_array((int) $alumni->entry, $event->entry_batches)) {
                 return back()->with('error',
                     'You are not eligible for this event. It is open to batches: '
                     . implode(', ', $event->entry_batches) . '.'
@@ -108,8 +122,8 @@ class EventController extends Controller
         }
 
         $existing = EventParticipant::where('event_id', $id)
-                    ->where('alumni_user_id', $alumni->id)
-                    ->first();
+                        ->where('alumni_user_id', $alumni->id)
+                        ->first();
 
         if ($existing) {
             if ($existing->status !== 'cancelled') {
@@ -127,14 +141,15 @@ class EventController extends Controller
         return back()->with('success', 'Registered successfully! Your status is pending confirmation.');
     }
 
+    // ── Cancel ───────────────────────────────────────────────────────────
+
     public function cancel($id)
     {
-        $alumniId = Auth::guard('alumni')->id();
-
+        $alumniId    = Auth::guard('alumni')->id();
         $participant = EventParticipant::where('event_id', $id)
-                        ->where('alumni_user_id', $alumniId)
-                        ->whereIn('status', ['pending', 'confirmed'])
-                        ->first();
+                            ->where('alumni_user_id', $alumniId)
+                            ->whereIn('status', ['pending', 'confirmed'])
+                            ->first();
 
         if (!$participant) {
             return back()->with('error', 'No active registration found for this event.');

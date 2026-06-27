@@ -260,87 +260,46 @@
                     <p style="color:var(--text-muted);font-size:15px;line-height:1.7;margin-bottom:28px">
                         {{ $settings['about_description'] ?? 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.' }}
                     </p>
+                    @php
+                        $aboutStats = json_decode($settings['about_stats'] ?? '[]', true) ?: [];
+                        if (empty($aboutStats)) {
+                            $aboutStats = [
+                                ['icon' => null, 'heading' => 'Excellence', 'subheading' => 'In Service & Leadership'],
+                                ['icon' => null, 'heading' => 'Community', 'subheading' => 'Strong Alumni Network'],
+                                ['icon' => null, 'heading' => 'Global Reach', 'subheading' => 'Worldwide Presence'],
+                                ['icon' => null, 'heading' => 'Integrity', 'subheading' => 'Honor & Commitment'],
+                            ];
+                        }
+                    @endphp
+
                     <div class="stats-grid-custom">
-                        <div class="stat-item-custom">
-                            <div class="stat-icon-custom">
-                                <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M13 2L20 14L27 2H22L20 6L18 2H13Z" fill="#C0392B" />
-                                    <path d="M14 8L20 18L26 8H22L20 12L18 8H14Z" fill="#E74C3C" />
-                                    <circle cx="20" cy="24" r="11" fill="#F4B731" stroke="#D4920A"
-                                        stroke-width="1.5" />
-                                    <circle cx="20" cy="24" r="7.5" fill="#FBCB4A" stroke="#F4B731"
-                                        stroke-width="1" />
-                                    <path
-                                        d="M20 19.5L21.3 22.2L24.3 22.6L22.1 24.7L22.7 27.6L20 26.1L17.3 27.6L17.9 24.7L15.7 22.6L18.7 22.2L20 19.5Z"
-                                        fill="#fff" />
-                                </svg>
+                        @foreach ($aboutStats as $stat)
+                            <div class="stat-item-custom">
+                                <div class="stat-icon-custom">
+                                    @if (!empty($stat['icon']))
+                                        <img src="{{ asset('storage/' . $stat['icon']) }}" alt=""
+                                            style="width:40px;height:40px;object-fit:contain">
+                                    @else
+                                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M13 2L20 14L27 2H22L20 6L18 2H13Z" fill="#C0392B" />
+                                            <path d="M14 8L20 18L26 8H22L20 12L18 8H14Z" fill="#E74C3C" />
+                                            <circle cx="20" cy="24" r="11" fill="#F4B731" stroke="#D4920A"
+                                                stroke-width="1.5" />
+                                            <circle cx="20" cy="24" r="7.5" fill="#FBCB4A" stroke="#F4B731"
+                                                stroke-width="1" />
+                                            <path
+                                                d="M20 19.5L21.3 22.2L24.3 22.6L22.1 24.7L22.7 27.6L20 26.1L17.3 27.6L17.9 24.7L15.7 22.6L18.7 22.2L20 19.5Z"
+                                                fill="#fff" />
+                                        </svg>
+                                    @endif
+                                </div>
+                                <div>
+                                    <div class="stat-heading-custom">{{ $stat['heading'] }}</div>
+                                    <div class="stat-subheading-custom">{{ $stat['subheading'] }}</div>
+                                </div>
                             </div>
-                            <div>
-                                <div class="stat-heading-custom">Excellence</div>
-                                <div class="stat-subheading-custom">In Service &amp; Leadership</div>
-                            </div>
-                        </div>
-                        <div class="stat-item-custom">
-                            <div class="stat-icon-custom">
-                                <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M13 2L20 14L27 2H22L20 6L18 2H13Z" fill="#C0392B" />
-                                    <path d="M14 8L20 18L26 8H22L20 12L18 8H14Z" fill="#E74C3C" />
-                                    <circle cx="20" cy="24" r="11" fill="#F4B731" stroke="#D4920A"
-                                        stroke-width="1.5" />
-                                    <circle cx="20" cy="24" r="7.5" fill="#FBCB4A" stroke="#F4B731"
-                                        stroke-width="1" />
-                                    <path
-                                        d="M20 19.5L21.3 22.2L24.3 22.6L22.1 24.7L22.7 27.6L20 26.1L17.3 27.6L17.9 24.7L15.7 22.6L18.7 22.2L20 19.5Z"
-                                        fill="#fff" />
-                                </svg>
-                            </div>
-                            <div>
-                                <div class="stat-heading-custom">Community</div>
-                                <div class="stat-subheading-custom">Strong Alumni Network</div>
-                            </div>
-                        </div>
-                        <div class="stat-item-custom">
-                            <div class="stat-icon-custom">
-                                <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M13 2L20 14L27 2H22L20 6L18 2H13Z" fill="#C0392B" />
-                                    <path d="M14 8L20 18L26 8H22L20 12L18 8H14Z" fill="#E74C3C" />
-                                    <circle cx="20" cy="24" r="11" fill="#F4B731" stroke="#D4920A"
-                                        stroke-width="1.5" />
-                                    <circle cx="20" cy="24" r="7.5" fill="#FBCB4A" stroke="#F4B731"
-                                        stroke-width="1" />
-                                    <path
-                                        d="M20 19.5L21.3 22.2L24.3 22.6L22.1 24.7L22.7 27.6L20 26.1L17.3 27.6L17.9 24.7L15.7 22.6L18.7 22.2L20 19.5Z"
-                                        fill="#fff" />
-                                </svg>
-                            </div>
-                            <div>
-                                <div class="stat-heading-custom">Global Reach</div>
-                                <div class="stat-subheading-custom">Worldwide Presence</div>
-                            </div>
-                        </div>
-                        <div class="stat-item-custom">
-                            <div class="stat-icon-custom">
-                                <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M13 2L20 14L27 2H22L20 6L18 2H13Z" fill="#C0392B" />
-                                    <path d="M14 8L20 18L26 8H22L20 12L18 8H14Z" fill="#E74C3C" />
-                                    <circle cx="20" cy="24" r="11" fill="#F4B731" stroke="#D4920A"
-                                        stroke-width="1.5" />
-                                    <circle cx="20" cy="24" r="7.5" fill="#FBCB4A" stroke="#F4B731"
-                                        stroke-width="1" />
-                                    <path
-                                        d="M20 19.5L21.3 22.2L24.3 22.6L22.1 24.7L22.7 27.6L20 26.1L17.3 27.6L17.9 24.7L15.7 22.6L18.7 22.2L20 19.5Z"
-                                        fill="#fff" />
-                                </svg>
-                            </div>
-                            <div>
-                                <div class="stat-heading-custom">Integrity</div>
-                                <div class="stat-subheading-custom">Honor &amp; Commitment</div>
-                            </div>
-                        </div>
+                        @endforeach
                     </div>
                     <div style="margin-top:35px">
                         <a href="{{ $settings['about_btn_url'] ?? route('member.index') }}"

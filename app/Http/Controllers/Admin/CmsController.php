@@ -235,9 +235,12 @@ class CmsController extends Controller
         $settings = CmsSetting::pluck('value', 'key');
         return view('admin.cms.contact', compact('settings'));
     }
+
     public function saveContact(Request $request)
     {
         $fields = [
+            'contact_page_title',
+            'contact_page_description',
             'contact_email',
             'contact_number',
             'location',
@@ -250,13 +253,19 @@ class CmsController extends Controller
             'social_instagram',
             'social_facebook',
             'social_linkedin',
-            'social_tiktok'
+            'social_tiktok',
+            'social_youtube',
+            'footer_copyright',
+            'footer_year',
         ];
+
         foreach ($fields as $f) CmsSetting::set($f, $request->$f);
+
         if ($request->hasFile('qr_code')) {
             $path = $request->file('qr_code')->store('cms', 'public');
             CmsSetting::set('qr_code', $path);
         }
+
         return back()->with('success', 'Contact settings saved.');
     }
 

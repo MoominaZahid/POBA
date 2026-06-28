@@ -8,6 +8,20 @@
 <form method="POST" action="{{ route('admin.cms.contact.save') }}" enctype="multipart/form-data">
     @csrf
 
+    {{-- Page Details --}}
+    <div style="background:#fff;border-radius:var(--radius);padding:28px;margin-bottom:24px;box-shadow:var(--shadow)">
+        <div class="cms-section-title">Page Details</div>
+        <div class="admin-form-group">
+            <label class="admin-form-label">Title: *</label>
+            <input type="text" name="contact_page_title" class="admin-input" value="{{ $settings['contact_page_title'] ?? 'Contact Us' }}" placeholder="Contact Us" required>
+        </div>
+        <div class="admin-form-group">
+            <label class="admin-form-label">Description:</label>
+            <textarea name="contact_page_description" class="admin-input" rows="4" placeholder="Enter page description...">{{ $settings['contact_page_description'] ?? '' }}</textarea>
+        </div>
+    </div>
+
+    {{-- Contact Details --}}
     <div style="background:#fff;border-radius:var(--radius);padding:28px;margin-bottom:24px;box-shadow:var(--shadow)">
         <div class="cms-section-title">Contact Details</div>
         <div class="admin-form-row">
@@ -31,7 +45,7 @@
         <div class="admin-form-group">
             <label class="admin-form-label">Social Media Links:</label>
             <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-                @foreach(['twitter'=>'Twitter','instagram'=>'Instagram','facebook'=>'Facebook','linkedin'=>'LinkedIn','tiktok'=>'TikTok'] as $key => $label)
+                @foreach(['twitter'=>'Twitter','instagram'=>'Instagram','facebook'=>'Facebook','tiktok'=>'TikTok','linkedin'=>'LinkedIn','youtube'=>'YouTube'] as $key => $label)
                 <div style="display:flex;align-items:center;gap:10px">
                     <label style="display:flex;align-items:center;gap:6px;min-width:100px;font-size:13px;cursor:pointer">
                         <input type="checkbox" name="social_enabled[]" value="{{ $key }}"
@@ -47,6 +61,7 @@
         </div>
     </div>
 
+    {{-- Bank Details --}}
     <div style="background:#fff;border-radius:var(--radius);padding:28px;margin-bottom:24px;box-shadow:var(--shadow)">
         <div class="cms-section-title">Bank Details</div>
         <div class="admin-form-row">
@@ -71,17 +86,42 @@
         </div>
         <div class="admin-form-group">
             <label class="admin-form-label">Upload QR Code:</label>
-            @if(!empty($settings['qr_code']))
-                <img src="{{ asset('storage/'.$settings['qr_code']) }}" alt="QR" style="height:80px;border-radius:8px;display:block;margin-bottom:8px">
-            @endif
-            <div class="admin-upload" onclick="document.getElementById('qrFile').click()">
-                <span style="font-size:18px">➕</span><p style="font-size:12px">Upload QR Code Image</p>
+            <div style="display:flex;align-items:center;gap:15px;">
+                <div onclick="document.getElementById('qrFile').click()"
+                    style="flex:1;display:flex;align-items:center;gap:10px;background:#E6F3F4;border:1px solid #E6F3F4;border-radius:30px;padding:12px 18px;cursor:pointer;">
+                    <span style="width:22px;height:22px;background:#0B8CA3;color:#fff;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:bold;">+</span>
+                    <span id="qrFileName" style="font-size:13px;color:#666;">Drag & Drop files here or click to select file(s)</span>
+                    <input type="file" id="qrFile" name="qr_code" accept="image/*" style="display:none"
+                        onchange="document.getElementById('qrFileName').textContent='✓ '+this.files[0].name">
+                </div>
+                @if(!empty($settings['qr_code']))
+                    <img src="{{ asset('storage/'.$settings['qr_code']) }}" alt="QR"
+                        style="width:55px;height:55px;object-fit:cover;border-radius:8px;border:1px solid #ddd;">
+                @endif
             </div>
-            <input type="file" id="qrFile" name="qr_code" accept="image/*" style="display:none">
         </div>
     </div>
 
-    <div style="display:flex;gap:14px">
+    {{-- Footer Section --}}
+    <div style="background:#fff;border-radius:var(--radius);padding:28px;margin-bottom:24px;box-shadow:var(--shadow)">
+        <div class="cms-section-title">Footer Section</div>
+        <div class="admin-form-row">
+            <div class="admin-form-group">
+                <label class="admin-form-label">Copyright Text:</label>
+                <input type="text" name="footer_copyright" class="admin-input" value="{{ $settings['footer_copyright'] ?? '© 2025. All rights reserved.' }}" placeholder="© 2025. All rights reserved.">
+            </div>
+            <div class="admin-form-group">
+                <label class="admin-form-label">Year: *</label>
+                <select name="footer_year" class="admin-input" required>
+                    @for($y = 2020; $y <= 2035; $y++)
+                        <option value="{{ $y }}" {{ ($settings['footer_year'] ?? date('Y')) == $y ? 'selected' : '' }}>{{ $y }}</option>
+                    @endfor
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="btn-action-row">
         <button type="submit" class="btn-teal" style="padding:12px 40px">Save</button>
         <button type="reset" class="btn-outline-red" style="padding:12px 40px">Cancel</button>
     </div>

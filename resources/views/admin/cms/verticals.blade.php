@@ -88,7 +88,7 @@
                 </div>
                 <a href="#" onclick="addMemberRow();return false" style="font-size:13px;color:var(--teal);font-weight:600">+ Add row</a>
             </div>
-            <div style="display:flex;gap:12px;margin-top:16px">
+            <div class="btn-action-row">
                 <button type="submit" class="btn-teal">Save</button>
                 <button type="button" class="btn-outline-red" onclick="document.getElementById('addCommitteeModal').classList.remove('open')">Cancel</button>
             </div>

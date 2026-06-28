@@ -64,15 +64,20 @@
 
                 <div id="removeSlideInputs"></div>
 
-                <div class="admin-upload" onclick="document.getElementById('newSlides').click()">
-                    <span style="font-size:20px">➕</span>
-                    <p>Click to add one or more slide images (select multiple at once)</p>
+                <div style="display:flex;align-items:center;gap:15px;">
+                    <div onclick="document.getElementById('newSlides').click()"
+                        style="flex:1;display:flex;align-items:center;gap:10px;background:#E6F3F4;border:1px solid #E6F3F4;border-radius:30px;padding:12px 18px;cursor:pointer;">
+                        <span style="width:22px;height:22px;background:#0B8CA3;color:#fff;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:bold;">+</span>
+                        <span style="font-size:13px;color:#666;">Drag & Drop files here or click to select file(s)</span>
+                        <input type="file" id="newSlides" name="new_slides[]" accept="image/*" multiple style="display:none"
+                            onchange="previewNewSlides(this)">
+                    </div>
                 </div>
-                <input type="file" id="newSlides" name="new_slides[]" accept="image/*" multiple style="display:none"
-                    onchange="previewNewSlides(this)">
+
                 <div id="newSlidesPreview" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:10px"></div>
             </div>
         </div>
+
         {{-- About Section --}}
         <div style="background:#fff;border-radius:var(--radius);padding:28px;margin-bottom:24px;box-shadow:var(--shadow)">
             <div class="cms-section-title">About Section</div>
@@ -83,32 +88,23 @@
                     <input type="text" name="about_title" class="admin-input"
                         value="{{ $settings['about_title'] ?? 'About POBA' }}" required>
                 </div>
-                <!-- <div class="admin-form-group">
-                    <label class="admin-form-label">About Section Background Color:</label>
-                    <div class="cms-color-field">
-                        <input type="color" id="about_bg_color_picker"
-                            value="{{ $settings['about_bg_color'] ?? '#ffffff' }}"
-                            onchange="document.getElementById('about_bg_color_text').value=this.value">
-                        <input type="text" id="about_bg_color_text" name="about_bg_color"
-                            value="{{ $settings['about_bg_color'] ?? '#ffffff' }}"
-                            oninput="document.getElementById('about_bg_color_picker').value=this.value">
-                    </div>
-                </div> -->
             </div>
 
             <div class="admin-form-group">
                 <label class="admin-form-label">Upload Image: *</label>
-                @if (!empty($settings['about_image']))
-                    <img src="{{ asset('storage/' . $settings['about_image']) }}" alt="About"
-                        style="height:60px;border-radius:6px;display:block;margin-bottom:8px">
-                @endif
-                <div class="admin-upload" onclick="document.getElementById('aboutImg').click()">
-                    <span style="font-size:18px">➕</span>
-                    <p style="font-size:12px">Click to upload</p>
+                <div style="display:flex;align-items:center;gap:15px;">
+                    <div onclick="document.getElementById('aboutImg').click()"
+                        style="flex:1;display:flex;align-items:center;gap:10px;background:#E6F3F4;border:1px solid #E6F3F4;border-radius:30px;padding:12px 18px;cursor:pointer;">
+                        <span style="width:22px;height:22px;background:#0B8CA3;color:#fff;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:bold;">+</span>
+                        <span id="aboutName" style="font-size:13px;color:#666;">Drag & Drop files here or click to select file(s)</span>
+                        <input type="file" id="aboutImg" name="about_image" accept="image/*" style="display:none"
+                            onchange="document.getElementById('aboutName').textContent='✓ '+this.files[0].name">
+                    </div>
+                    @if (!empty($settings['about_image']))
+                        <img src="{{ asset('storage/' . $settings['about_image']) }}" alt="About"
+                            style="width:55px;height:55px;object-fit:cover;border-radius:8px;border:1px solid #ddd;">
+                    @endif
                 </div>
-                <input type="file" id="aboutImg" name="about_image" accept="image/*" style="display:none"
-                    onchange="document.getElementById('aboutName').textContent='✓ '+this.files[0].name">
-                <p id="aboutName" style="font-size:12px;color:var(--teal);margin-top:4px"></p>
             </div>
 
             <div class="admin-form-group">
@@ -128,6 +124,7 @@
                         value="{{ $settings['about_btn_url'] ?? '' }}" placeholder="https://...">
                 </div>
             </div>
+
             <div class="admin-form-group">
                 <label class="admin-form-label">Stat Badges (Excellence, Community, etc.):</label>
 
@@ -186,11 +183,11 @@
                 </button>
             </div>
 
-
-            <div style="display:flex;gap:14px">
+            <div class="btn-action-row">
                 <button type="submit" class="btn-teal" style="padding:12px 40px">Save</button>
                 <button type="reset" class="btn-outline-red" style="padding:12px 40px">Cancel</button>
             </div>
+        </div>
     </form>
 
     <script>
@@ -220,6 +217,7 @@
             });
         });
     </script>
+
     <script>
         let statIndex = {{ count($aboutStats) }};
 

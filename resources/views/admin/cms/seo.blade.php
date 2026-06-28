@@ -24,7 +24,7 @@
             <textarea name="meta_description" class="admin-input" rows="4"
                       placeholder="Official Pakistan Ocean & Bay Alumni (POBA) network connecting naval officers across generations...">{{ $settings['seo_description'] ?? '' }}</textarea>
         </div>
-        <div style="display:flex;gap:14px;margin-top:10px">
+        <div class="btn-action-row">
             <button type="submit" class="btn-teal" style="padding:12px 40px">Save</button>
             <button type="reset" class="btn-outline-red" style="padding:12px 40px">Cancel</button>
         </div>

@@ -208,7 +208,7 @@
                 style="font-size:13px;color:var(--teal);font-weight:600">+ Add row</a>
         </div>
 
-        <div style="display:flex;gap:14px">
+        <div class="btn-action-row">
             <button type="submit" class="btn-teal" style="padding:12px 40px">Save</button>
             <button type="reset" class="btn-outline-red" style="padding:12px 40px">Cancel</button>
         </div>

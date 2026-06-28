@@ -80,7 +80,7 @@
                 <label class="admin-form-label">URL:</label>
                 <input type="url" name="url" class="admin-input" placeholder="https://www.example.com">
             </div>
-            <div style="display:flex;gap:12px;margin-top:16px">
+            <div class="btn-action-row">
                 <button type="submit" class="btn-teal">Save</button>
                 <button type="button" class="btn-outline-red" onclick="document.getElementById('addPromoModal').classList.remove('open')">Cancel</button>
             </div>

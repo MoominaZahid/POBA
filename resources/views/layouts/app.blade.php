@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'POBA - Palandarians Old Boys Association')</title>
     <meta name="description" content="@yield('meta_description', 'Official POBA Alumni Network')">
-    <link rel="stylesheet" href="{{ asset('css/poba.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/poba.css') }}?v={{ filemtime(public_path('css/poba.css')) }}">
     @include('partials.theme-css')
     @stack('styles')
 </head>
@@ -50,10 +50,10 @@
                     </div>
                 </li>
                 <li><a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}">Contact</a></li>
-                <li>
+                <li class="nav-cta-group">
                     @auth('alumni')
                         <a href="{{ route('profile.edit') }}" class="btn-teal-nav">My Profile</a>
-                        <form method="POST" action="{{ route('logout') }}" style="display:inline;margin-left:8px;">
+                        <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" class="btn-teal-nav" style="border:none;cursor:pointer">Logout</button>
                         </form>

@@ -109,14 +109,14 @@
             </div>
         @endforeach
 
-        <div class="hero-overlay" style="width:100%;padding-left:60px;padding-right:60px;box-sizing:border-box">
+        <div class="hero-overlay">
             <div class="hero-content-custom">
                 <h1>{{ $settings['hero_title'] ?? 'Welcome to POBA Alumni Network' }}</h1>
                 <p class="tagline">{{ $settings['hero_tagline'] ?? 'Serving with Valour' }}</p>
                 <p class="desc">
                     {{ $settings['hero_description'] ?? 'Join our prestigious community of Pakistan Ocean & Bay Alumni. Stay connected, share experiences, and build lasting professional relationships.' }}
                 </p>
-                <a href="{{ $settings['hero_btn_url'] ?? route('member.index') }}" class="btn-teal-capsule" target="_blank">
+                <a href="{{ $settings['hero_btn_url'] ?? route('member.index') }}" class="btn-teal-capsule">
                     {{ $settings['hero_btn_text'] ?? 'Become a Member' }}
                 </a>
             </div>
@@ -132,12 +132,6 @@
     </section>
 
     <style>
-        .hero-custom {
-            position: relative;
-            overflow: hidden;
-            min-height: 480px;
-        }
-
         .hero-slide {
             position: absolute;
             inset: 0;
@@ -151,39 +145,8 @@
             opacity: 1;
         }
 
-        .hero-overlay {
-            position: relative;
-            z-index: 2;
-            padding-top: 100px;
-            padding-bottom: 60px;
-        }
-
-        .hero-content-custom {
-            text-align: left !important;
-            max-width: 640px;
-        }
-
         .hero-content-custom h1 {
             color: var(--theme-on-hero, #ffffff) !important;
-            white-space: nowrap;
-        }
-
-        .hero-dots {
-            display: flex;
-            gap: 8px;
-            margin-top: 30px;
-        }
-
-        .hero-dots .dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
-            cursor: pointer;
-        }
-
-        .hero-dots .dot.active {
-            background: #fff;
         }
 
         @media (max-width: 768px) {
@@ -192,10 +155,7 @@
             }
 
             .hero-overlay {
-                padding-top: 60px;
-                padding-bottom: 30px;
-                padding-left: 20px;
-                padding-right: 20px;
+                padding: 60px 20px 30px;
             }
 
             .hero-content-custom {
@@ -303,7 +263,7 @@
                     </div>
                     <div style="margin-top:35px">
                         <a href="{{ $settings['about_btn_url'] ?? route('member.index') }}"
-                            class="btn-outline-orange-capsule" target="_blank">
+                            class="btn-outline-orange-capsule">
                             {{ $settings['about_btn_text'] ?? 'Become a Member' }}
                         </a>
                     </div>

@@ -41,7 +41,9 @@
                 <li class="dropdown">
                     <a href="#" class="{{ request()->routeIs('alumni.*') || request()->routeIs('gallery.*') ? 'active' : '' }}">Alumni ▾</a>
                     <div class="dropdown-menu">
+                        @guest('alumni')
                         <a href="{{ route('member.index') }}">Become Member</a>
+                        @endguest
                         <a href="{{ route('alumni.index') }}">Alumni Directory</a>
                         <a href="#">Achievements</a>
                         <a href="#">Networking</a>

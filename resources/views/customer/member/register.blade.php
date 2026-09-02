@@ -137,17 +137,27 @@
                 </div>
             </div>
 
-            {{-- Entry + CCP No --}}
-            <div class="bam-row bam-row-2">
+            {{-- Batch + Class Year + CCP No --}}
+            <div class="bam-row" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:16px;margin-bottom:16px;">
                 <div class="bam-group">
-                    <label class="bam-label">Entry <span>*</span></label>
+                    <label class="bam-label">Batch <span>*</span></label>
                     <select name="entry" class="bam-select {{ $errors->has('entry') ? 'is-invalid' : '' }}" required>
-                        <option value="">Select Entry</option>
-                        @foreach(range(1,30) as $e)
-                        <option value="{{ $e }}" {{ old('entry')==$e ? 'selected' : '' }}>{{ $e }}</option>
+                        <option value="">Select Batch</option>
+                        @foreach(range(1,50) as $e)
+                        <option value="{{ $e }}" {{ old('entry')==$e ? 'selected' : '' }}>Batch {{ $e }}</option>
                         @endforeach
                     </select>
                     @error('entry')<div class="bam-error">{{ $message }}</div>@enderror
+                </div>
+                <div class="bam-group">
+                    <label class="bam-label">Class Year (Class of) <span>*</span></label>
+                    <select name="class_year" class="bam-select {{ $errors->has('class_year') ? 'is-invalid' : '' }}" required>
+                        <option value="">Select Class Year</option>
+                        @foreach(range(date('Y'), 1947, -1) as $y)
+                        <option value="{{ $y }}" {{ old('class_year')==$y ? 'selected' : '' }}>{{ $y }}</option>
+                        @endforeach
+                    </select>
+                    @error('class_year')<div class="bam-error">{{ $message }}</div>@enderror
                 </div>
                 <div class="bam-group">
                     <label class="bam-label">CCP No. <span>*</span></label>
@@ -401,7 +411,32 @@
                 </div>
             </div>
 
-            {{-- ⛔ reCAPTCHA removed --}}
+            {{-- 🛡️ reCAPTCHA / Security Verification --}}
+            <div class="bam-row bam-row-1" style="margin-top:10px;margin-bottom:20px;">
+                <div style="background:#f8fafc;border:1.5px solid #cbd5e1;border-radius:10px;padding:16px 20px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <div style="width:40px;height:40px;background:#e2e8f0;border-radius:8px;display:flex;align-items:center;justify-content:center;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2.2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                <path d="m9 12 2 2 4-4"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div style="font-size:13px;font-weight:700;color:#1e293b;">Security Verification (reCAPTCHA)</div>
+                            <div style="font-size:12px;color:#64748b;">Please calculate: <strong style="color:#0d9488;font-size:14px;">{{ session('captcha_n1', $n1 ?? rand(2,8)) }} + {{ session('captcha_n2', $n2 ?? rand(1,9)) }}</strong></div>
+                        </div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <input type="number" name="captcha_answer" placeholder="Answer"
+                               class="bam-input {{ $errors->has('captcha_answer') ? 'is-invalid' : '' }}"
+                               style="width:100px;text-align:center;font-weight:700;font-size:15px;padding:8px;" required>
+                        <span style="font-size:11px;color:#94a3b8;line-height:1.2;text-align:right;">Protected by<br><strong style="color:#64748b;">reCAPTCHA</strong></span>
+                    </div>
+                </div>
+                @error('captcha_answer')
+                <div class="bam-error" style="margin-top:6px;">{{ $message }}</div>
+                @enderror
+            </div>
 
             <button type="submit" class="bam-submit">Submit</button>
 

@@ -63,14 +63,43 @@ class GalleryController extends Controller
     }
 
     public function addImages(Request $request, $id) {
-        $request->validate(['images.*'=>'image|max:5120']);
         $folder = GalleryFolder::findOrFail($id);
-        $order  = $folder->images()->max('sort_order') ?? 0;
-        foreach ($request->file('images',[]) as $file) {
-            $path = $file->store('gallery','public');
-            GalleryImage::create(['gallery_folder_id'=>$id,'image_path'=>$path,'sort_order'=>++$order]);
+        $files  = $request->file('images', []);
+
+        if (empty($files)) {
+            return back()->with('error', 'Please select at least one image to upload.');
         }
-        return back()->with('success','Images uploaded.');
+
+        $oversized = [];
+        $invalidType = [];
+        foreach ($files as $file) {
+            if ($file->getSize() > 5120 * 1024) {
+                $oversized[] = '"' . $file->getClientOriginalName() . '" (' . round($file->getSize() / (1024 * 1024), 2) . ' MB)';
+            }
+            $ext = strtolower($file->getClientOriginalExtension());
+            if (!in_array($ext, ['jpg', 'jpeg', 'png', 'webp'])) {
+                $invalidType[] = '"' . $file->getClientOriginalName() . '"';
+            }
+        }
+
+        if (!empty($oversized) || !empty($invalidType)) {
+            $msgs = [];
+            if (!empty($oversized)) {
+                $msgs[] = 'The following file(s) exceed the 5MB limit: ' . implode(', ', $oversized);
+            }
+            if (!empty($invalidType)) {
+                $msgs[] = 'The following file(s) have unsupported formats: ' . implode(', ', $invalidType);
+            }
+            return back()->with('error', 'Upload failed: ' . implode(' | ', $msgs));
+        }
+
+        $order = $folder->images()->max('sort_order') ?? 0;
+        foreach ($files as $file) {
+            $path = $file->store('gallery', 'public');
+            GalleryImage::create(['gallery_folder_id' => $id, 'image_path' => $path, 'sort_order' => ++$order]);
+        }
+
+        return back()->with('success', count($files) . ' image(s) uploaded successfully.');
     }
 
     public function deleteImage($imageId) {

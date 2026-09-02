@@ -33,17 +33,27 @@
                     @endforeach
                 </select>
                 <button type="submit" class="btn-teal" style="padding:10px 24px">Search</button>
+                <a href="{{ route('star.alumni') }}" class="btn-outline-teal" style="padding:8px 22px">Reset</a>
             </div>
         </form>
+
+        {{-- Auto-submit dropdowns for real-time filtering --}}
+        <script>
+            document.querySelectorAll('.filter-select').forEach(function(sel) {
+                sel.addEventListener('change', function() {
+                    this.closest('form').submit();
+                });
+            });
+        </script>
 
         <div class="grid-4">
             @forelse($alumni as $a)
             <div class="alumni-card">
                 <img src="{{ $a->profile_photo ? asset('storage/'.$a->profile_photo) : 'https://placehold.co/120x120/1a7a7a/fff?text='.urlencode(substr($a->full_name,0,1)) }}" alt="{{ $a->full_name }}">
                 <h4>{{ $a->full_name }}</h4>
-                <div class="position">{{ $a->current_designation }}</div>
+                <div class="position">{{ $a->current_designation ?? $a->field_of_work }}</div>
                 <div class="desc">{{ Str::limit($a->star_description ?? $a->achievements, 80) }}</div>
-                <div class="class-year">Class of {{ $a->class_year }}</div>
+                @if($a->class_year)<div class="class-year">Class of {{ $a->class_year }}</div>@endif
                 <a href="{{ route('alumni.show', $a->id) }}" class="btn-teal" style="font-size:13px;padding:8px 20px">View Details</a>
             </div>
             @empty

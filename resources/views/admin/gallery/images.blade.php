@@ -212,6 +212,7 @@
     @if(session('error'))
         <div class="ai-flash-err">✕ {{ session('error') }}</div>
     @endif
+    <div id="clientErrorContainer"></div>
 
     <form method="POST" action="{{ route('admin.gallery.addImages', $folder->id) }}"
           enctype="multipart/form-data" id="uploadForm">
@@ -296,9 +297,26 @@ function onDrop(e) {
 }
 
 var selectedFiles = [];
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 function previewImages(files) {
-    Array.from(files).forEach(function(f) { selectedFiles.push(f); });
+    var errBox = document.getElementById('clientErrorContainer');
+    if (errBox) errBox.innerHTML = '';
+
+    var oversized = [];
+    Array.from(files).forEach(function(f) {
+        if (f.size > MAX_FILE_SIZE) {
+            var sizeMB = (f.size / (1024 * 1024)).toFixed(2);
+            oversized.push('"' + f.name + '" (' + sizeMB + ' MB)');
+        } else {
+            selectedFiles.push(f);
+        }
+    });
+
+    if (oversized.length > 0 && errBox) {
+        errBox.innerHTML = '<div class="ai-flash-err">⚠️ The following file(s) exceed the 5MB limit and were not added: ' + oversized.join(', ') + '</div>';
+    }
+
     rebuildPreview();
 }
 

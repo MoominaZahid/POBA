@@ -15,18 +15,37 @@ class MemberController extends Controller
 {
     public function index()
     {
-        return view('customer.member.register');
+        if (\Illuminate\Support\Facades\Auth::guard('alumni')->check()) {
+            return redirect()->route('home')->with('info', 'You are already a registered and logged-in member.');
+        }
+
+        // Generate math captcha challenge for security verification
+        $n1 = rand(1, 9);
+        $n2 = rand(1, 9);
+        session([
+            'captcha_n1'  => $n1,
+            'captcha_n2'  => $n2,
+            'captcha_ans' => $n1 + $n2,
+        ]);
+
+        return view('customer.member.register', compact('n1', 'n2'));
     }
 
     public function store(Request $request)
     {
+        if (\Illuminate\Support\Facades\Auth::guard('alumni')->check()) {
+            return redirect()->route('home')->with('info', 'You are already a registered and logged-in member.');
+        }
+        $expectedCaptcha = session('captcha_ans');
+
         $request->validate([
             'full_name'       => 'required|string|max:255',
             'email'           => 'required|email|unique:alumni_users,email',
             'phone_code'      => 'required|string|in:+92,+1,+44,+971,+966,+91,+86,+81,+61,+49,+33,+39,+34,+55,+27',
             'phone_number'    => ['required', 'string', 'regex:/^[0-9]+$/'],
             'entry'           => 'required|string|max:20',
-            'ccp_no'          => 'required|string|max:50',
+            'class_year'      => 'required|numeric|digits:4',
+            'ccp_no'          => 'required|string|max:50|unique:alumni_users,ccp_no',
             'house'           => 'required|string|max:100',
             'education'       => 'required|string|max:100',
             'field_of_study'  => 'required|string|max:100',
@@ -35,10 +54,14 @@ class MemberController extends Controller
             'current_country' => 'required|string|max:100',
             'cnic_file'       => 'required|file|mimes:jpg,jpeg,png,pdf|max:5120',
             'profile_photo'   => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
+            'captcha_answer'  => 'required|in:' . ($expectedCaptcha ?? 'none'),
             'consent_sharing' => 'accepted',
             'agree_terms'     => 'accepted',
         ], [
-            'phone_number.regex' => 'The phone number must contain only digits.',
+            'phone_number.regex'   => 'The phone number must contain only digits.',
+            'ccp_no.unique'        => 'This CCP No. is already associated with an existing active user account.',
+            'captcha_answer.required' => 'Please solve the Security Captcha verification.',
+            'captcha_answer.in'       => 'Incorrect Security Captcha answer. Please try again.',
         ]);
 
         // ── Combine phone code and number ─────────────────────────────────────

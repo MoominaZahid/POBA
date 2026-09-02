@@ -86,6 +86,7 @@
     border-color: var(--teal, #1a7a7a);
     background: #d6eeee;
 }
+/* ── Filter action buttons use site-wide btn-teal / btn-outline-teal ── */
 
 /* ── 4-col card grid ── */
 .gal-grid {
@@ -202,8 +203,9 @@
                 </select>
             </div>
 
-            {{-- hidden submit: pressing Enter or changing select submits --}}
-            <button type="submit" style="display:none"></button>
+            {{-- Search & Reset buttons (match site-wide styles) --}}
+            <button type="submit" class="btn-teal" style="padding:9px 24px;font-size:13px">Search</button>
+            <a href="{{ route('gallery.index') }}" class="btn-outline-teal" style="padding:7px 22px;font-size:13px">Reset</a>
         </div>
 
         {{-- auto-submit selects --}}

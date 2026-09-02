@@ -35,17 +35,21 @@ class EventController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title'               => 'required|string|max:255',
-            'description'         => 'required|string',
-            'start_date'          => 'required|date|after_or_equal:today',
-            'end_date'            => 'required|date|after_or_equal:start_date',
-            'start_time'          => 'required',
-            'location'            => 'required|string|max:255',
-            'entry_batches'       => 'nullable|array',
-            'entry_batches.*'     => 'integer|min:1|max:100',
-            'gallery_link'        => 'nullable|url|max:500',
-            'logo'                => 'nullable|image|max:2048',
-            'registration_required' => 'required|in:0,1',
+            'title'                  => 'required|string|max:255',
+            'description'            => 'required|string',
+            'start_date'             => 'required|date|after_or_equal:today',
+            'end_date'               => 'required|date|after_or_equal:start_date',
+            'start_time'             => 'required',
+            'location'               => 'required|string|max:255',
+            'focal_person_name'      => 'required|string|max:255',
+            'focal_person_number'    => ['required', 'regex:/^[0-9]{11}$/'],
+            'entry_batches'          => 'nullable|array',
+            'entry_batches.*'        => 'integer|min:1|max:100',
+            'gallery_link'           => 'nullable|url|max:500',
+            'logo'                   => 'nullable|image|max:2048',
+            'registration_required'  => 'required|in:0,1',
+        ], [
+            'focal_person_number.regex' => 'The focal person number must be exactly 11 digits (numbers only).',
         ]);
 
         $data = $request->except(['_token', 'logo']);
@@ -73,17 +77,21 @@ class EventController extends Controller
         $event = Event::findOrFail($id);
 
         $request->validate([
-            'title'               => 'required|string|max:255',
-            'description'         => 'required|string',
-            'start_date'          => 'required|date',
-            'end_date'            => 'required|date|after_or_equal:start_date',
-            'start_time'          => 'required',
-            'location'            => 'required|string|max:255',
-            'entry_batches'       => 'nullable|array',
-            'entry_batches.*'     => 'integer|min:1|max:100',
-            'gallery_link'        => 'nullable|url|max:500',
-            'logo'                => 'nullable|image|max:2048',
-            'registration_required' => 'required|in:0,1',
+            'title'                  => 'required|string|max:255',
+            'description'            => 'required|string',
+            'start_date'             => 'required|date',
+            'end_date'               => 'required|date|after_or_equal:start_date',
+            'start_time'             => 'required',
+            'location'               => 'required|string|max:255',
+            'focal_person_name'      => 'required|string|max:255',
+            'focal_person_number'    => ['required', 'regex:/^[0-9]{11}$/'],
+            'entry_batches'          => 'nullable|array',
+            'entry_batches.*'        => 'integer|min:1|max:100',
+            'gallery_link'           => 'nullable|url|max:500',
+            'logo'                   => 'nullable|image|max:2048',
+            'registration_required'  => 'required|in:0,1',
+        ], [
+            'focal_person_number.regex' => 'The focal person number must be exactly 11 digits (numbers only).',
         ]);
 
         $data = $request->except(['_token', '_method', 'logo']);

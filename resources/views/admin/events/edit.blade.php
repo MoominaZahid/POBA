@@ -388,7 +388,7 @@ input[type="time"].cef-input::-webkit-calendar-picker-indicator {
     @endif
 
     <form method="POST" action="{{ route('admin.events.update', $event->id) }}"
-          enctype="multipart/form-data">
+          enctype="multipart/form-data" id="eventForm">
         @csrf
         @method('PUT')
 
@@ -464,9 +464,15 @@ input[type="time"].cef-input::-webkit-calendar-picker-indicator {
                        value="{{ old('focal_person_name', $event->focal_person_name) }}" required>
             </div>
             <div class="cef-group">
-                <label class="cef-label">Focal Person Number: *</label>
-                <input type="text" name="focal_person_number" class="cef-input"
-                       value="{{ old('focal_person_number', $event->focal_person_number) }}" required>
+                <label class="cef-label">Focal Person Number: * <small>(11 digits)</small></label>
+                <input type="tel" name="focal_person_number" id="focal_person_number" class="cef-input"
+                       value="{{ old('focal_person_number', $event->focal_person_number) }}"
+                       inputmode="numeric"
+                       pattern="[0-9]{11}"
+                       maxlength="11"
+                       title="Enter exactly 11 digits, numbers only"
+                       required>
+                <small class="cef-hint" id="focalNumberHint">Numbers only, exactly 11 digits.</small>
             </div>
         </div>
 
@@ -558,6 +564,41 @@ input[type="time"].cef-input::-webkit-calendar-picker-indicator {
 
 @push('scripts')
 <script>
+/* ═══════════════════════════════════════════════
+   FOCAL PERSON NUMBER – digits only, max 11
+   ═══════════════════════════════════════════════ */
+(function () {
+    var numField = document.getElementById('focal_person_number');
+    var hint     = document.getElementById('focalNumberHint');
+
+    numField.addEventListener('input', function () {
+        var digitsOnly = this.value.replace(/[^0-9]/g, '').slice(0, 11);
+        this.value = digitsOnly;
+    });
+
+    numField.addEventListener('keypress', function (e) {
+        if (!/[0-9]/.test(e.key)) {
+            e.preventDefault();
+        }
+    });
+
+    numField.addEventListener('paste', function (e) {
+        e.preventDefault();
+        var pasted = (e.clipboardData || window.clipboardData).getData('text');
+        var digitsOnly = pasted.replace(/[^0-9]/g, '').slice(0, 11);
+        this.value = digitsOnly;
+    });
+
+    document.getElementById('eventForm').addEventListener('submit', function (e) {
+        if (!/^[0-9]{11}$/.test(numField.value)) {
+            e.preventDefault();
+            hint.style.color = '#e24b4a';
+            hint.textContent = 'Please enter exactly 11 digits (numbers only).';
+            numField.focus();
+        }
+    });
+})();
+
 /* ═══════════════════════════════════════════════
    BATCH TAG WIDGET
    ═══════════════════════════════════════════════ */

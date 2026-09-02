@@ -165,8 +165,8 @@
             <div class="pf-alert-success">✅ {{ session('success') }}</div>
             @endif
 
-            @if($errors->has('full_name') || $errors->has('phone_number') || $errors->has('current_city'))
-            <div class="pf-alert-error">{{ $errors->first() }}</div>
+            @if($errors->any())
+            <div class="pf-alert-error">❌ {{ $errors->first() }}</div>
             @endif
 
             <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data" id="infoForm">
@@ -221,10 +221,11 @@
                                value="{{ old('current_country', $alumni->current_country) }}" required>
                     </div>
                     <div class="pf-group">
-                        <label class="pf-label">Entry *</label>
-                        <select name="entry" class="pf-select">
-                            @foreach(range(1,30) as $e)
-                            <option value="{{ $e }}" {{ old('entry', $alumni->entry)==$e ? 'selected' : '' }}>{{ $e }}</option>
+                        <label class="pf-label">Batch *</label>
+                        <select name="entry" class="pf-select" required>
+                            <option value="">Select Batch</option>
+                            @foreach(range(1,50) as $e)
+                            <option value="{{ $e }}" {{ old('entry', $alumni->entry)==$e ? 'selected' : '' }}>Batch {{ $e }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -232,10 +233,22 @@
 
                 <div class="pf-row pf-row-2">
                     <div class="pf-group">
+                        <label class="pf-label">Class Year (Class of) *</label>
+                        <select name="class_year" class="pf-select" required>
+                            <option value="">Select Class Year</option>
+                            @foreach(range(date('Y'), 1947, -1) as $y)
+                            <option value="{{ $y }}" {{ old('class_year', $alumni->class_year)==$y ? 'selected' : '' }}>{{ $y }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="pf-group">
                         <label class="pf-label">CCP No. *</label>
                         <input type="text" name="ccp_no" class="pf-input"
                                value="{{ old('ccp_no', $alumni->ccp_no) }}" required>
                     </div>
+                </div>
+
+                <div class="pf-row pf-row-1">
                     <div class="pf-group">
                         <label class="pf-label">House *</label>
                         <select name="house" class="pf-select">
@@ -265,18 +278,12 @@
             <div class="pf-alert-success">✅ {{ session('success') }}</div>
             @endif
 
+            @if($errors->any())
+            <div class="pf-alert-error">❌ {{ $errors->first() }}</div>
+            @endif
+
             <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
                 @csrf @method('PUT')
-
-                {{-- carry over all other fields as hidden so they don't get wiped --}}
-                <input type="hidden" name="full_name"       value="{{ $alumni->full_name }}">
-                <input type="hidden" name="phone_number"    value="{{ $alumni->phone_number }}">
-                <input type="hidden" name="entry"           value="{{ $alumni->entry }}">
-                <input type="hidden" name="ccp_no"          value="{{ $alumni->ccp_no }}">
-                <input type="hidden" name="house"           value="{{ $alumni->house }}">
-                <input type="hidden" name="current_city"    value="{{ $alumni->current_city }}">
-                <input type="hidden" name="current_country" value="{{ $alumni->current_country }}">
-                <input type="hidden" name="achievements"    value="{{ $alumni->achievements }}">
 
                 <div class="pf-row pf-row-2">
                     <div class="pf-group">
@@ -327,20 +334,12 @@
             <div class="pf-alert-success">✅ {{ session('success') }}</div>
             @endif
 
+            @if($errors->any())
+            <div class="pf-alert-error">❌ {{ $errors->first() }}</div>
+            @endif
+
             <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
                 @csrf @method('PUT')
-
-                {{-- carry over required fields --}}
-                <input type="hidden" name="full_name"       value="{{ $alumni->full_name }}">
-                <input type="hidden" name="phone_number"    value="{{ $alumni->phone_number }}">
-                <input type="hidden" name="entry"           value="{{ $alumni->entry }}">
-                <input type="hidden" name="ccp_no"          value="{{ $alumni->ccp_no }}">
-                <input type="hidden" name="house"           value="{{ $alumni->house }}">
-                <input type="hidden" name="education"       value="{{ $alumni->education }}">
-                <input type="hidden" name="field_of_study"  value="{{ $alumni->field_of_study }}">
-                <input type="hidden" name="field_of_work"   value="{{ $alumni->field_of_work }}">
-                <input type="hidden" name="current_city"    value="{{ $alumni->current_city }}">
-                <input type="hidden" name="current_country" value="{{ $alumni->current_country }}">
 
                 {{-- Profile Photo --}}
                 <div class="pf-row pf-row-1" style="margin-bottom:24px">
@@ -399,20 +398,12 @@
             <div class="pf-alert-success">✅ {{ session('success') }}</div>
             @endif
 
+            @if($errors->any())
+            <div class="pf-alert-error">❌ {{ $errors->first() }}</div>
+            @endif
+
             <form method="POST" action="{{ route('profile.update') }}" enctype="multipart/form-data">
                 @csrf @method('PUT')
-
-                {{-- carry over required fields --}}
-                <input type="hidden" name="full_name"       value="{{ $alumni->full_name }}">
-                <input type="hidden" name="phone_number"    value="{{ $alumni->phone_number }}">
-                <input type="hidden" name="entry"           value="{{ $alumni->entry }}">
-                <input type="hidden" name="ccp_no"          value="{{ $alumni->ccp_no }}">
-                <input type="hidden" name="house"           value="{{ $alumni->house }}">
-                <input type="hidden" name="education"       value="{{ $alumni->education }}">
-                <input type="hidden" name="field_of_study"  value="{{ $alumni->field_of_study }}">
-                <input type="hidden" name="field_of_work"   value="{{ $alumni->field_of_work }}">
-                <input type="hidden" name="current_city"    value="{{ $alumni->current_city }}">
-                <input type="hidden" name="current_country" value="{{ $alumni->current_country }}">
 
                 @php
                     $privacyFields  = ['Email Address','City','Phone Number','Designation','Organization','Field of Study','Field of Work'];

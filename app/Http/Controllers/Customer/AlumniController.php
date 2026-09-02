@@ -14,8 +14,7 @@ class AlumniController extends Controller
     public function index(Request $request)
     {
         $query = AlumniUser::where('status', 'approved')
-            ->where('is_active', true)
-            ->where('is_star_alumni', false);
+            ->where('is_active', true);
 
         if ($request->filled('search')) {
             $query->where('full_name', 'like', '%' . $request->search . '%');
@@ -46,18 +45,34 @@ class AlumniController extends Controller
         // Always show full profile when viewing your own page
         $isOwnProfile = $viewer && $viewer->id === $alumni->id;
 
-        // Read the target's privacy settings (already cast as array in the model)
-        $privacySettings = $alumni->privacy_settings ?? [];
+        // privacy_settings stores the human-readable labels chosen in the form
+        // (e.g. "Email Address", "Phone Number", "City", "Designation", etc.)
+        // We normalise to a flat array of hidden labels for easy lookup.
+        $hidden = [];
+        if (!$isOwnProfile) {
+            $raw = $alumni->privacy_settings ?? [];
+            // Stored as a flat array of label strings: ["Email Address","Phone Number",…]
+            if (is_array($raw)) {
+                $hidden = array_map('strtolower', $raw);
+            }
+        }
 
-        // Build a simple true/false map for the blade to use
+        // Map each label (lower-cased) to the DB column it controls.
+        // A field is VISIBLE when its label is NOT in the hidden list.
+        $isHidden = function (string $label) use ($hidden): bool {
+            return in_array(strtolower($label), $hidden, true);
+        };
+
         $visibleFields = [
-            'phone_number'         => $isOwnProfile || ($privacySettings['phone_number']         ?? true),
-            'email'                => $isOwnProfile || ($privacySettings['email']                ?? true),
-            'current_city'          => $isOwnProfile || ($privacySettings['current_city']          ?? true),
-            'current_organization' => $isOwnProfile || ($privacySettings['current_organization'] ?? true),
-            'current_designation'  => $isOwnProfile || ($privacySettings['current_designation']  ?? true),
-            'achievements'         => $isOwnProfile || ($privacySettings['achievements']          ?? true),
-            'cnic_file'            => $isOwnProfile || ($privacySettings['cnic_file']             ?? false),
+            'email'                => $isOwnProfile || !$isHidden('email address'),
+            'phone_number'         => $isOwnProfile || !$isHidden('phone number'),
+            'current_city'         => $isOwnProfile || !$isHidden('city'),
+            'current_designation'  => $isOwnProfile || !$isHidden('designation'),
+            'current_organization' => $isOwnProfile || !$isHidden('organization'),
+            'field_of_study'       => $isOwnProfile || !$isHidden('field of study'),
+            'field_of_work'        => $isOwnProfile || !$isHidden('field of work'),
+            'achievements'         => $isOwnProfile || !$isHidden('achievements'),
+            'cnic_file'            => false, // always hidden from public
         ];
 
         return view('customer.alumni.show', compact('alumni', 'visibleFields', 'isOwnProfile'));

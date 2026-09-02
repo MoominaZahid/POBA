@@ -116,8 +116,8 @@
                 <p class="desc">
                     {{ $settings['hero_description'] ?? 'Join our prestigious community of Pakistan Ocean & Bay Alumni. Stay connected, share experiences, and build lasting professional relationships.' }}
                 </p>
-                <a href="{{ $settings['hero_btn_url'] ?? route('member.index') }}" class="btn-teal-capsule">
-                    {{ $settings['hero_btn_text'] ?? 'Become a Member' }}
+                <a href="{{ Auth::guard('alumni')->check() ? route('alumni.index') : ($settings['hero_btn_url'] ?? route('member.index')) }}" class="btn-teal-capsule">
+                    {{ Auth::guard('alumni')->check() ? 'Explore Directory' : ($settings['hero_btn_text'] ?? 'Become a Member') }}
                 </a>
             </div>
 
@@ -168,6 +168,18 @@
             box-shadow: none !important;
             width: auto !important;
             height: auto !important;
+        }
+
+        .card-news {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            cursor: pointer;
+        }
+
+        .card-news:hover {
+            text-decoration: none;
+            color: inherit;
         }
     </style>
 
@@ -262,9 +274,9 @@
                         @endforeach
                     </div>
                     <div style="margin-top:35px">
-                        <a href="{{ $settings['about_btn_url'] ?? route('member.index') }}"
+                        <a href="{{ Auth::guard('alumni')->check() ? route('alumni.index') : ($settings['about_btn_url'] ?? route('member.index')) }}"
                             class="btn-outline-orange-capsule">
-                            {{ $settings['about_btn_text'] ?? 'Become a Member' }}
+                            {{ Auth::guard('alumni')->check() ? 'Alumni Directory' : ($settings['about_btn_text'] ?? 'Become a Member') }}
                         </a>
                     </div>
                 </div>
@@ -277,7 +289,10 @@
             <h2 class="section-title-center">Latest News</h2>
             <div class="grid-4" style="margin-top:40px">
                 @foreach ($displayNews as $item)
-                    <div class="card-news">
+                    @php
+                        $newsUrl = (isset($item->id) && $item->id !== '#') ? route('news.show', $item->id) : '#';
+                    @endphp
+                    <a href="{{ $newsUrl }}" class="card-news">
                         <div class="card-news-img-container">
                             <img class="card-news-img"
                                 src="{{ isset($item->image_url) ? $item->image_url : ($item->image ? asset('storage/' . $item->image) : 'https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=400&h=250&q=80') }}"
@@ -289,7 +304,7 @@
                             <h3 class="card-news-title">{{ $item->title }}</h3>
                             <p class="card-news-text">{{ Str::limit(strip_tags($item->description), 110) }}</p>
                         </div>
-                    </div>
+                    </a>
                 @endforeach
             </div>
             <div style="text-align:center;margin-top:45px">
@@ -311,10 +326,10 @@
                         </div>
                         <div class="alumni-info-custom">
                             <h4>{{ $alumni->full_name }}</h4>
-                            <div class="position-custom">{{ $alumni->current_designation }}</div>
+                            <div class="position-custom">{{ $alumni->current_designation ?? $alumni->field_of_work }}</div>
                             <div class="desc-custom">
                                 {{ Str::limit($alumni->star_description ?? ($alumni->achievements ?? ''), 80) }}</div>
-                            <div class="class-year-custom">Class of {{ $alumni->class_year }}</div>
+                            @if($alumni->class_year)<div class="class-year-custom">Class of {{ $alumni->class_year }}</div>@endif
                             <div style="text-align:center;margin-top:15px">
                                 <a href="{{ $alumni->id === '#' ? '#' : route('alumni.show', $alumni->id) }}"
                                     class="btn-teal-alumni-details">View Details</a>

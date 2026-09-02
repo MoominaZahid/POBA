@@ -125,7 +125,7 @@
 
     {{-- ── Left Sidebar ── --}}
     <div class="ap-sidebar">
-        <a href="{{ url()->previous() }}" class="ap-back">← Back</a>
+        <a href="{{ $user->status === 'pending' ? route('admin.alumni.approvals') : route('admin.alumni.index') }}" class="ap-back">← Back</a>
 
         <img src="{{ $user->profile_photo
                 ? asset('storage/'.$user->profile_photo)
@@ -201,13 +201,22 @@
                 </div>
             </div>
 
-            {{-- Entry + CCP No --}}
-            <div class="ap-row ap-row-2">
+            {{-- Batch + Class Year + CCP No --}}
+            <div class="ap-row ap-row-3" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));gap:16px;margin-bottom:16px;">
                 <div class="ap-group">
-                    <label class="ap-label">Entry: *</label>
+                    <label class="ap-label">Batch: *</label>
                     <select name="entry" class="ap-select" disabled id="inp_entry">
-                        @foreach(range(1,30) as $e)
-                            <option value="{{ $e }}" {{ $user->entry==$e ? 'selected' : '' }}>{{ $e }}</option>
+                        @foreach(range(1,50) as $e)
+                            <option value="{{ $e }}" {{ $user->entry==$e ? 'selected' : '' }}>Batch {{ $e }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="ap-group">
+                    <label class="ap-label">Class Year (Class of): *</label>
+                    <select name="class_year" class="ap-select" disabled id="inp_class_year">
+                        <option value="">Select Class Year</option>
+                        @foreach(range(date('Y'), 1947, -1) as $y)
+                            <option value="{{ $y }}" {{ $user->class_year==$y ? 'selected' : '' }}>{{ $y }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -511,7 +520,7 @@ document.addEventListener('keydown', e => {
 let editing = false;
 
 const editableInputs   = ['inp_full_name','inp_email','inp_ccp','inp_phone','inp_ach','inp_fos','inp_fow'];
-const editableSelects  = ['inp_entry','inp_house','inp_edu','inp_city','inp_country','inp_desig','inp_org','inp_phone_code'];
+const editableSelects  = ['inp_entry','inp_class_year','inp_house','inp_edu','inp_city','inp_country','inp_desig','inp_org','inp_phone_code'];
 
 function toggleEdit() {
     editing = !editing;

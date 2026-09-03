@@ -14,12 +14,6 @@
         </div>
     </div>
 
-    @if(session('success'))
-        <div style="margin:0 24px 16px;padding:12px 16px;background:#e1f5ee;border:1px solid #5dcaa5;border-radius:8px;color:#0f6e56;font-size:14px">
-            ✓ {{ session('success') }}
-        </div>
-    @endif
-
     <table class="admin-table">
         <thead>
             <tr>

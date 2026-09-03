@@ -45,7 +45,7 @@ class EventController extends Controller
             'focal_person_number'    => ['required', 'regex:/^[0-9]{11}$/'],
             'entry_batches'          => 'nullable|array',
             'entry_batches.*'        => 'integer|min:1|max:100',
-            'gallery_link'           => 'nullable|url|max:500',
+            'gallery_link'           => 'nullable|string|max:500',
             'logo'                   => 'nullable|image|max:2048',
             'registration_required'  => 'required|in:0,1',
         ], [
@@ -87,7 +87,7 @@ class EventController extends Controller
             'focal_person_number'    => ['required', 'regex:/^[0-9]{11}$/'],
             'entry_batches'          => 'nullable|array',
             'entry_batches.*'        => 'integer|min:1|max:100',
-            'gallery_link'           => 'nullable|url|max:500',
+            'gallery_link'           => 'nullable|string|max:500',
             'logo'                   => 'nullable|image|max:2048',
             'registration_required'  => 'required|in:0,1',
         ], [
@@ -158,20 +158,20 @@ class EventController extends Controller
         return view('admin.events.participants', compact('event', 'participants'));
     }
 
-    /** Change a participant's status (confirmed / pending / cancelled). */
+    /** Change a participant's status (confirmed / pending / cancelled / declined). */
     public function updateParticipantStatus(Request $request, $eventId, $pId)
     {
-        $request->validate(['status' => 'required|in:confirmed,pending,cancelled']);
+        $request->validate(['status' => 'required|in:confirmed,pending,cancelled,declined']);
         EventParticipant::where('event_id', $eventId)->findOrFail($pId)
             ->update(['status' => $request->status]);
         return back()->with('success', 'Status updated to ' . ucfirst($request->status) . '.');
     }
 
-    /** Cancel a participant's registration. */
+    /** Decline a participant's registration. */
     public function cancelParticipant($eventId, $pId)
     {
-        EventParticipant::where('event_id', $eventId)->findOrFail($pId)->update(['status' => 'cancelled']);
-        return back()->with('success', 'Registration cancelled.');
+        EventParticipant::where('event_id', $eventId)->findOrFail($pId)->update(['status' => 'declined']);
+        return back()->with('success', 'Registration declined.');
     }
 
     /** Restore a cancelled registration (back to pending). */

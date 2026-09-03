@@ -202,6 +202,7 @@
 .ec-badge-confirmed  { background: #e1f5ee; color: #0f6e56; border: 1px solid #5dcaa5; }
 .ec-badge-pending    { background: #faeeda; color: #854f0b; border: 1px solid #fac775; }
 .ec-badge-ineligible { background: #fcebeb; color: #a32d2d; border: 1px solid #f09595; }
+.ec-badge-declined   { background: #fcebeb; color: #a32d2d; border: 1px solid #f09595; }
 
 .ec-no-reg {
     font-size: .75rem;
@@ -215,6 +216,13 @@
     color: #888;
     margin: 4px 0 0;
     text-align: center;
+}
+.ec-declined-msg {
+    font-size: .75rem;
+    color: #a32d2d;
+    margin: 4px 0 0;
+    text-align: center;
+    line-height: 1.4;
 }
 
 /* Load more */
@@ -306,14 +314,6 @@
                 Events
             </h1>
         </div>
-
-        {{-- Flash messages --}}
-        @if(session('success'))
-            <div class="flash-success">✓ {{ session('success') }}</div>
-        @endif
-        @if(session('error'))
-            <div class="flash-error">✕ {{ session('error') }}</div>
-        @endif
 
         {{-- Tab buttons --}}
         <div class="tab-btns">

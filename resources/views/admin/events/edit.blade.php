@@ -378,14 +378,7 @@ input[type="time"].cef-input::-webkit-calendar-picker-indicator {
 
     <!-- <h2 class="cef-heading">Edit Event</h2> -->
 
-    @if($errors->any())
-        <div class="cef-errors">
-            <strong>Please fix the following errors:</strong>
-            <ul>
-                @foreach($errors->all() as $err)<li>{{ $err }}</li>@endforeach
-            </ul>
-        </div>
-    @endif
+
 
     <form method="POST" action="{{ route('admin.events.update', $event->id) }}"
           enctype="multipart/form-data" id="eventForm">
@@ -516,8 +509,8 @@ input[type="time"].cef-input::-webkit-calendar-picker-indicator {
 
             <div class="cef-group">
                 <label class="cef-label">Gallery Link:</label>
-                <input type="url" name="gallery_link" class="cef-input"
-                       placeholder="https://palandrians.org/gallery"
+                <input type="text" name="gallery_link" class="cef-input"
+                       placeholder="e.g. /gallery/2 or https://..."
                        value="{{ old('gallery_link', $event->gallery_link) }}">
             </div>
         </div>

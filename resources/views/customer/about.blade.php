@@ -91,12 +91,12 @@
                 <div class="vertical-card">
                     <h4>Executive Committee</h4>
                     <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                    <a href="#" class="btn-teal" style="font-size:13px;padding:9px 22px">View Details</a>
+                    <a href="{{ route('verticals.executive') }}" class="btn-teal" style="font-size:13px;padding:9px 22px">View Details</a>
                 </div>
                 <div class="vertical-card">
                     <h4>Working Committees</h4>
                     <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
-                    <a href="#" class="btn-teal" style="font-size:13px;padding:9px 22px">View Details</a>
+                    <a href="{{ route('verticals.working') }}" class="btn-teal" style="font-size:13px;padding:9px 22px">View Details</a>
                 </div>
             </div>
             <div style="text-align:center;margin-top:40px">

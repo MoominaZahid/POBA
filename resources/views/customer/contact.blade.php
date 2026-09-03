@@ -27,9 +27,6 @@
             <div class="form-box">
                 <h3 style="font-size:20px;font-weight:700;text-align:center;margin-bottom:24px">Contact Form</h3>
 
-                @if(session('success'))
-                    <div class="alert alert-success">{{ session('success') }}</div>
-                @endif
                 @if($errors->any())
                     <div class="alert alert-danger">@foreach($errors->all() as $e)<div>{{ $e }}</div>@endforeach</div>
                 @endif

@@ -25,6 +25,9 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 // ── Public / Customer ─────────────────────────────────────────────────────────
 Route::get('/',                [HomeController::class, 'index'])->name('home');
 Route::get('/about',           [HomeController::class, 'about'])->name('about');
+Route::get('/verticals',           [HomeController::class, 'verticals'])->name('verticals.index');
+Route::get('/verticals/executive', [HomeController::class, 'verticalsExecutive'])->name('verticals.executive');
+Route::get('/verticals/working',   [HomeController::class, 'verticalsWorking'])->name('verticals.working');
 Route::get('/promotions',      [HomeController::class, 'promotions'])->name('promotions');
 Route::get('/contact',         [ContactController::class, 'index'])->name('contact');
 Route::post('/contact',        [ContactController::class, 'send'])->name('contact.send');
@@ -137,7 +140,10 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // ── CMS - Verticals ───────────────────────────────────────────────────────
     Route::middleware('permission:verticals')->group(function () {
         Route::get('/cms/verticals',           [CmsController::class, 'verticals'])->name('cms.verticals');
+        Route::get('/cms/verticals/export',    [CmsController::class, 'exportVerticals'])->name('cms.verticals.export');
+        Route::get('/cms/verticals/create',    [CmsController::class, 'createVertical'])->name('cms.verticals.create');
         Route::post('/cms/verticals',          [CmsController::class, 'storeVertical'])->name('cms.verticals.store');
+        Route::get('/cms/verticals/{id}',      [CmsController::class, 'showVertical'])->name('cms.verticals.show');
         Route::get('/cms/verticals/{id}/edit', [CmsController::class, 'editVertical'])->name('cms.verticals.edit');
         Route::put('/cms/verticals/{id}',      [CmsController::class, 'updateVertical'])->name('cms.verticals.update');
         Route::delete('/cms/verticals/{id}',   [CmsController::class, 'deleteVertical'])->name('cms.verticals.delete');

@@ -205,13 +205,6 @@
 
     <a href="{{ route('admin.gallery.edit', $folder->id) }}" class="ai-back">←</a>
     <h2 class="ai-heading">Add Images</h2>
-
-    @if(session('success'))
-        <div class="ai-flash-ok">✓ {{ session('success') }}</div>
-    @endif
-    @if(session('error'))
-        <div class="ai-flash-err">✕ {{ session('error') }}</div>
-    @endif
     <div id="clientErrorContainer"></div>
 
     <form method="POST" action="{{ route('admin.gallery.addImages', $folder->id) }}"

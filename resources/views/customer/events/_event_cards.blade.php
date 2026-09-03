@@ -74,9 +74,7 @@
                 @if($event->description)
                     <p>{{ $event->description }}</p>
                 @endif
-                @if($event->gallery_link)
-                    <a href="{{ $event->gallery_link }}" target="_blank" class="ec-gallery-link">🖼 View Gallery →</a>
-                @endif
+                <a href="{{ $event->formatted_gallery_url }}" class="ec-gallery-link">🖼 View Gallery →</a>
             </div>
         </div>
 
@@ -88,30 +86,33 @@
     {{-- Actions --}}
     <div class="ec-actions">
         @if($isPrevious)
-            @if($event->gallery_link)
-                <a href="{{ $event->gallery_link }}" target="_blank" class="ec-btn ec-btn-outline">View Gallery</a>
-            @else
-                <a href="{{ route('gallery.index') }}" class="ec-btn ec-btn-outline">View Gallery</a>
-            @endif
+            <a href="{{ $event->formatted_gallery_url }}" class="ec-btn ec-btn-outline">View Gallery</a>
 
         @elseif(!$canRegister)
             <span class="ec-no-reg">No registration needed</span>
 
         @elseif($isRegistered)
-            <div style="text-align:center;margin-bottom:10px">
+            <div style="text-align:center;margin-bottom:6px">
                 @if($myStatus === 'confirmed')
                     <span class="ec-badge ec-badge-confirmed">✓ Confirmed</span>
-                @else
+                @elseif($myStatus === 'pending')
                     <span class="ec-badge ec-badge-pending">⏳ Pending</span>
+                @elseif(in_array($myStatus, ['declined', 'cancelled']))
+                    <span class="ec-badge ec-badge-declined">Declined</span>
                 @endif
             </div>
-            <form method="POST" action="{{ route('events.cancel', $event->id) }}">
-                @csrf
-                <button type="submit" class="ec-btn ec-btn-cancel"
-                        onclick="return confirm('Cancel your registration for this event?')">
-                    Cancel Registration
-                </button>
-            </form>
+
+            @if(in_array($myStatus, ['declined', 'cancelled']))
+                <p class="ec-declined-msg">Your registration request has been declined. Please contact the event organizer for reconsideration.</p>
+            @else
+                <form method="POST" action="{{ route('events.cancel', $event->id) }}">
+                    @csrf
+                    <button type="submit" class="ec-btn ec-btn-cancel"
+                            onclick="return confirm('Cancel your registration for this event?')">
+                        Cancel Registration
+                    </button>
+                </form>
+            @endif
 
         @elseif(!Auth::guard('alumni')->check())
             <a href="{{ route('login') }}" class="ec-btn ec-btn-primary">Register Now</a>

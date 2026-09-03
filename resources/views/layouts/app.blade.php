@@ -27,9 +27,17 @@
 
             {{-- Left Side Links --}}
             <ul class="navbar-nav nav-left" id="navLeft">
-                <li><a href="{{ route('home') }}"        class="{{ request()->routeIs('home')     ? 'active' : '' }}">Home</a></li>
-                <li><a href="{{ route('about') }}"       class="{{ request()->routeIs('about')    ? 'active' : '' }}">About Us</a></li>
-                <li><a href="{{ route('news.index') }}"  class="{{ request()->routeIs('news.*')   ? 'active' : '' }}">Updates</a></li>
+                <li><a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a></li>
+                <li class="dropdown">
+                    <a href="{{ route('about') }}" class="{{ request()->routeIs('about') || request()->routeIs('verticals.*') ? 'active' : '' }}">About Us ▾</a>
+                    <div class="dropdown-menu">
+                        <a href="{{ route('about') }}">About POBA</a>
+                        <a href="{{ route('verticals.index') }}">All Verticals</a>
+                        <a href="{{ route('verticals.executive') }}">Executive Committee</a>
+                        <a href="{{ route('verticals.working') }}">Working Committees</a>
+                    </div>
+                </li>
+                <li><a href="{{ route('news.index') }}" class="{{ request()->routeIs('news.*') ? 'active' : '' }}">Updates</a></li>
                 <li><a href="{{ route('events.index') }}" class="{{ request()->routeIs('events.*') ? 'active' : '' }}">Events</a></li>
             </ul>
 

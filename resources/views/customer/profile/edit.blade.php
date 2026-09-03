@@ -161,9 +161,7 @@
         <div class="pf-section active" id="tab-info">
             <div class="pf-section-title">Personal Information</div>
 
-            @if(session('success'))
-            <div class="pf-alert-success">✅ {{ session('success') }}</div>
-            @endif
+
 
             @if($errors->any())
             <div class="pf-alert-error">❌ {{ $errors->first() }}</div>
@@ -274,9 +272,7 @@
         <div class="pf-section" id="tab-work">
             <div class="pf-section-title">Work & Education</div>
 
-            @if(session('success'))
-            <div class="pf-alert-success">✅ {{ session('success') }}</div>
-            @endif
+
 
             @if($errors->any())
             <div class="pf-alert-error">❌ {{ $errors->first() }}</div>
@@ -330,9 +326,7 @@
         <div class="pf-section" id="tab-documents">
             <div class="pf-section-title">Documents</div>
 
-            @if(session('success'))
-            <div class="pf-alert-success">✅ {{ session('success') }}</div>
-            @endif
+
 
             @if($errors->any())
             <div class="pf-alert-error">❌ {{ $errors->first() }}</div>
@@ -394,9 +388,7 @@
                 Choose which fields are hidden from other alumni when they view your profile.
             </p>
 
-            @if(session('success'))
-            <div class="pf-alert-success">✅ {{ session('success') }}</div>
-            @endif
+
 
             @if($errors->any())
             <div class="pf-alert-error">❌ {{ $errors->first() }}</div>

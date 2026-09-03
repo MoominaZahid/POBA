@@ -7,7 +7,7 @@ use App\Models\News;
 
 class NewsController extends Controller {
     public function index() {
-        $news = News::orderByDesc('published_at')->paginate(12);
+        $news = News::orderByRaw("COALESCE(published_at, created_at) DESC")->paginate(12);
         return view('customer.news.index', compact('news'));
     }
 

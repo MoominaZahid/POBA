@@ -272,13 +272,6 @@
 
 <div class="gi-page">
 
-    @if(session('success'))
-        <div class="gi-flash-ok">✓ {{ session('success') }}</div>
-    @endif
-    @if(session('error'))
-        <div class="gi-flash-err">✕ {{ session('error') }}</div>
-    @endif
-
     {{-- Toolbar --}}
     <div class="gi-toolbar">
         {{-- Search --}}

@@ -63,7 +63,6 @@ class EventController extends Controller
 
         if (Auth::guard('alumni')->check()) {
             $rows = EventParticipant::where('alumni_user_id', Auth::guard('alumni')->id())
-                        ->whereIn('status', ['pending', 'confirmed'])
                         ->get(['event_id', 'status']);
 
             foreach ($rows as $r) {
@@ -126,10 +125,10 @@ class EventController extends Controller
                         ->first();
 
         if ($existing) {
-            if ($existing->status !== 'cancelled') {
-                return back()->with('error', 'You are already registered for this event.');
+            if (in_array($existing->status, ['declined', 'cancelled'])) {
+                return back()->with('error', 'Your registration request has been declined. Please contact the event organizer for reconsideration.');
             }
-            $existing->update(['status' => 'pending']);
+            return back()->with('error', 'You are already registered for this event.');
         } else {
             EventParticipant::create([
                 'event_id'       => $id,

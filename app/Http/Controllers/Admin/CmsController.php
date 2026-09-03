@@ -127,7 +127,7 @@ class CmsController extends Controller
         $query = News::query();
         if ($request->search) $query->where('title', 'like', "%{$request->search}%");
         if ($request->type)   $query->where('type', $request->type);
-        $news = $query->orderByDesc('created_at')->paginate(10);
+        $news = $query->orderByRaw("COALESCE(published_at, created_at) DESC")->paginate(10);
         return view('admin.cms.news', compact('news'));
     }
     public function createNews()
@@ -138,7 +138,7 @@ class CmsController extends Controller
     {
         $request->validate(['title' => 'required']);
         $data = $request->except(['_token', 'image']);
-        $data['published_at'] = now();
+        $data['published_at'] = $request->filled('published_at') ? $request->published_at : now();
         if ($request->hasFile('image')) {
             $data['image'] = $request->file('image')->store('news', 'public');
         }
@@ -154,6 +154,9 @@ class CmsController extends Controller
     {
         $item = News::findOrFail($id);
         $data = $request->except(['_token', '_method', 'image']);
+        if ($request->filled('published_at')) {
+            $data['published_at'] = $request->published_at;
+        }
         if ($request->hasFile('image')) {
             if ($item->image) Storage::disk('public')->delete($item->image);
             $data['image'] = $request->file('image')->store('news', 'public');
@@ -175,11 +178,12 @@ class CmsController extends Controller
     }
     public function exportNews()
     {
-        $news = News::orderByDesc('created_at')->get();
-        $csv = "Title,Date Added,Type,Description\n";
+        $news = News::orderByRaw("COALESCE(published_at, created_at) DESC")->get();
+        $csv = "Title,Published Date,Type,Description\n";
         foreach ($news as $item) {
+            $date = $item->published_at ? $item->published_at->format('d/m/Y') : ($item->created_at ? $item->created_at->format('d/m/Y') : '');
             $csv .= '"' . str_replace('"', '""', $item->title) . '",';
-            $csv .= '"' . ($item->created_at ? $item->created_at->format('d/m/Y') : '') . '",';
+            $csv .= '"' . $date . '",';
             $csv .= '"' . str_replace('"', '""', $item->type ?? '') . '",';
             $csv .= '"' . str_replace('"', '""', strip_tags($item->description ?? '')) . '"' . "\n";
         }
@@ -192,41 +196,140 @@ class CmsController extends Controller
     // ── Verticals (Committees) ────────────────────────────────────────────────
     public function verticals(Request $request)
     {
-        $committees = Committee::with('members')->orderByDesc('created_at')->paginate(10);
+        $query = Committee::with('members');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhere('description', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->filled('type') && $request->type !== 'all') {
+            $query->where('type', $request->type);
+        }
+
+        // Put Executive committee at top if present, then newest
+        $committees = $query->orderByRaw("CASE WHEN LOWER(title) LIKE '%executive%' OR type = 'executive' OR id = 1 THEN 0 ELSE 1 END")
+                            ->orderByDesc('created_at')
+                            ->paginate(10)
+                            ->appends($request->all());
+
         return view('admin.cms.verticals', compact('committees'));
     }
+
+    public function createVertical()
+    {
+        return view('admin.cms.verticals_create');
+    }
+
     public function storeVertical(Request $request)
     {
-        $request->validate(['title' => 'required']);
-        $committee = Committee::create(['title' => $request->title, 'description' => $request->description, 'type' => $request->type ?? 'working']);
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        $committee = Committee::create([
+            'title'       => $request->title,
+            'description' => $request->description,
+            'type'        => $request->type ?? 'working',
+        ]);
+
         if ($request->has('member_names')) {
             foreach ($request->member_names as $i => $name) {
-                if ($name) CommitteeMember::create(['committee_id' => $committee->id, 'member_name' => $name, 'member_url' => $request->member_urls[$i] ?? null, 'sort_order' => $i]);
+                if (!empty(trim($name))) {
+                    CommitteeMember::create([
+                        'committee_id' => $committee->id,
+                        'member_name'  => trim($name),
+                        'member_url'   => $request->member_urls[$i] ?? null,
+                        'sort_order'   => $i,
+                    ]);
+                }
             }
         }
-        return back()->with('success', 'Committee added.');
+
+        return redirect()->route('admin.cms.verticals')->with('success', 'Working Committee created successfully.');
     }
+
+    public function showVertical($id)
+    {
+        $committee = Committee::with('members')->findOrFail($id);
+        return view('admin.cms.verticals_show', compact('committee'));
+    }
+
     public function editVertical($id)
     {
         $committee = Committee::with('members')->findOrFail($id);
         return view('admin.cms.verticals_edit', compact('committee'));
     }
+
     public function updateVertical(Request $request, $id)
     {
         $committee = Committee::findOrFail($id);
-        $committee->update(['title' => $request->title, 'description' => $request->description]);
+
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+        ]);
+
+        $committee->update([
+            'title'       => $request->title,
+            'description' => $request->description,
+        ]);
+
         $committee->members()->delete();
+
         if ($request->has('member_names')) {
             foreach ($request->member_names as $i => $name) {
-                if ($name) CommitteeMember::create(['committee_id' => $id, 'member_name' => $name, 'member_url' => $request->member_urls[$i] ?? null, 'sort_order' => $i]);
+                if (!empty(trim($name))) {
+                    CommitteeMember::create([
+                        'committee_id' => $committee->id,
+                        'member_name'  => trim($name),
+                        'member_url'   => $request->member_urls[$i] ?? null,
+                        'sort_order'   => $i,
+                    ]);
+                }
             }
         }
-        return redirect()->route('admin.cms.verticals')->with('success', 'Committee updated.');
+
+        return redirect()->route('admin.cms.verticals')->with('success', 'Committee updated successfully.');
     }
+
     public function deleteVertical($id)
     {
-        Committee::findOrFail($id)->delete();
-        return back()->with('success', 'Committee deleted.');
+        $committee = Committee::findOrFail($id);
+
+        // Executive Committee protection
+        if ($committee->id == 1 || $committee->type === 'executive' || strtolower(trim($committee->title)) === 'executive committee') {
+            return back()->with('error', 'Executive Committee is hardcoded and cannot be deleted.');
+        }
+
+        $committee->delete();
+
+        return back()->with('success', 'Committee deleted successfully.');
+    }
+
+    public function exportVerticals()
+    {
+        $committees = Committee::with('members')->orderByDesc('created_at')->get();
+        $csv = "Title,Type,Description,Members Count,Members\n";
+
+        foreach ($committees as $item) {
+            $memberList = $item->members->map(fn($m) => $m->member_name . ($m->member_url ? " ({$m->member_url})" : ''))->implode('; ');
+
+            $csv .= '"' . str_replace('"', '""', $item->title) . '",';
+            $csv .= '"' . str_replace('"', '""', $item->type ?? 'working') . '",';
+            $csv .= '"' . str_replace('"', '""', strip_tags($item->description ?? '')) . '",';
+            $csv .= '"' . $item->members->count() . '",';
+            $csv .= '"' . str_replace('"', '""', $memberList) . '"' . "\n";
+        }
+
+        return response($csv, 200, [
+            'Content-Type'        => 'text/csv',
+            'Content-Disposition' => 'attachment; filename="verticals-export.csv"',
+        ]);
     }
 
     // ── Contact ───────────────────────────────────────────────────────────────

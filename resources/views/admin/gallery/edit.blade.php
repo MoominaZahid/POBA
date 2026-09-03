@@ -175,12 +175,7 @@
 
     <h2 class="cgf-heading">Edit {{ $folder->folder_name }}</h2>
 
-    @if($errors->any())
-        <div class="cgf-errors">
-            <strong>Please fix the following errors:</strong>
-            <ul>@foreach($errors->all() as $err)<li>{{ $err }}</li>@endforeach</ul>
-        </div>
-    @endif
+
 
     <form method="POST" action="{{ route('admin.gallery.update', $folder->id) }}">
         @csrf @method('PUT')
@@ -230,7 +225,7 @@
                 <input type="text" name="slug" id="slugField" class="cgf-input"
                        value="{{ old('slug', $folder->slug) }}" readonly>
                 <span class="cgf-slug-preview" id="slugPreview">
-                    {{ $folder->slug ? 'https://www.poba.socialknocks.com/'.$folder->slug.'/' : '' }}
+                    {{ $folder->slug ? url('/gallery/'.$folder->slug) : '' }}
                 </span>
             </div>
         </div>
@@ -249,7 +244,7 @@ function updateSlug(val) {
     var slug = val.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
     document.getElementById('slugField').value = slug;
     document.getElementById('slugPreview').textContent =
-        slug ? 'https://www.poba.socialknocks.com/' + slug + '/' : '';
+        slug ? "{{ url('/gallery') }}/" + slug : '';
 }
 </script>
 @endpush

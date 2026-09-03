@@ -13,7 +13,7 @@
 
         @if(!empty($settings['contact_page_description']))
 <div style="text-align:center;max-width:700px;margin:0 auto 24px">
-    <p id="contactDesc" style="color:var(--text-muted);font-size:15px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">
+    <p id="contactDesc" style="color:#000;font-size:16px !important;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">
         {{ $settings['contact_page_description'] }}
     </p>
     <a href="#" id="descToggle" onclick="toggleDesc(event)"

@@ -113,9 +113,10 @@
             <div class="hero-content-custom">
                 <h1>{{ $settings['hero_title'] ?? 'Welcome to POBA Alumni Network' }}</h1>
                 <p class="tagline">{{ $settings['hero_tagline'] ?? 'Serving with Valour' }}</p>
-                <p class="desc">
+                <p class="desc text-see-more" id="heroDescText">
                     {{ $settings['hero_description'] ?? 'Join our prestigious community of Pakistan Ocean & Bay Alumni. Stay connected, share experiences, and build lasting professional relationships.' }}
                 </p>
+                <button type="button" class="see-more-toggle" data-target="heroDescText" onclick="toggleSeeMore(this)" hidden>See More</button>
                 <a href="{{ Auth::guard('alumni')->check() ? route('alumni.index') : ($settings['hero_btn_url'] ?? route('member.index')) }}" class="btn-teal-capsule">
                     {{ Auth::guard('alumni')->check() ? 'Explore Directory' : ($settings['hero_btn_text'] ?? 'Become a Member') }}
                 </a>
@@ -218,20 +219,45 @@
         </script>
     @endif
 
+    <script>
+        function toggleSeeMore(btn) {
+            var target = document.getElementById(btn.dataset.target);
+            var expanded = target.classList.toggle('expanded');
+            btn.textContent = expanded ? 'See Less' : 'See More';
+        }
+        function checkSeeMoreOverflow() {
+            document.querySelectorAll('.text-see-more').forEach(function(el) {
+                var btn = document.querySelector('.see-more-toggle[data-target="' + el.id + '"]');
+                if (!btn) return;
+                if (el.classList.contains('expanded')) return;
+                var cs = getComputedStyle(el);
+                var lineHeight = parseFloat(cs.lineHeight);
+                if (isNaN(lineHeight)) lineHeight = parseFloat(cs.fontSize) * 1.2;
+                var maxHeight = lineHeight * 3 + 2;
+                btn.hidden = !(el.scrollHeight > maxHeight);
+            });
+        }
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(checkSeeMoreOverflow);
+        }
+        window.addEventListener('load', checkSeeMoreOverflow);
+    </script>
+
     {{-- About Section --}}
     <section class="section-pad" style="background:{{ $settings['about_bg_color'] ?? '#fff' }}">
         <div class="container">
-            <div class="grid-2" style="align-items:center;gap:50px">
+            <div class="grid-2" style="align-items:flex-start;gap:50px">
                 <div>
                     <img src="{{ !empty($settings['about_image']) ? asset('storage/' . $settings['about_image']) : asset('images/about.png') }}"
                         alt="About POBA"
-                        style="border-radius:24px;width:100%;object-fit:cover;max-height:380px;box-shadow: 0 15px 35px rgba(0,0,0,0.1)">
+                        style="border-radius:30px;width:100%;object-fit:cover;max-height:380px;box-shadow: 0 5px 10px rgba(0,0,0,0.33)">
                 </div>
                 <div>
                     <h2 class="section-title-left">{{ $settings['about_title'] ?? 'About POBA' }}</h2>
-                    <p style="color:var(--text-muted);font-size:15px;line-height:1.7;margin-bottom:28px">
+                    <p class="text-see-more" id="aboutDescText" style="color:#000;font-size:16px !important;line-height:1.7;margin-bottom:8px">
                         {{ $settings['about_description'] ?? 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.' }}
                     </p>
+                    <button type="button" class="see-more-toggle" data-target="aboutDescText" onclick="toggleSeeMore(this)" hidden style="margin-bottom:20px">See More</button>
                     @php
                         $aboutStats = json_decode($settings['about_stats'] ?? '[]', true) ?: [];
                         if (empty($aboutStats)) {
@@ -250,9 +276,9 @@
                                 <div class="stat-icon-custom">
                                     @if (!empty($stat['icon']))
                                         <img src="{{ asset('storage/' . $stat['icon']) }}" alt=""
-                                            style="width:40px;height:40px;object-fit:contain">
+                                            style="width:50px;height:50px;object-fit:contain">
                                     @else
-                                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
+                                        <svg width="50" height="50" viewBox="0 0 40 40" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path d="M13 2L20 14L27 2H22L20 6L18 2H13Z" fill="#C0392B" />
                                             <path d="M14 8L20 18L26 8H22L20 12L18 8H14Z" fill="#E74C3C" />
@@ -330,7 +356,7 @@
                             <div class="desc-custom">
                                 {{ Str::limit($alumni->star_description ?? ($alumni->achievements ?? ''), 80) }}</div>
                             @if($alumni->class_year)<div class="class-year-custom">Class of {{ $alumni->class_year }}</div>@endif
-                            <div style="text-align:center;margin-top:15px">
+                            <div class="alumni-card-btn-wrap">
                                 <a href="{{ $alumni->id === '#' ? '#' : route('alumni.show', $alumni->id) }}"
                                     class="btn-teal-alumni-details">View Details</a>
                             </div>

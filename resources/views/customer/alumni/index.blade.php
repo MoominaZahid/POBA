@@ -48,13 +48,19 @@
 
         <div class="grid-4">
             @forelse($alumni as $a)
-            <div class="alumni-card">
-                <img src="{{ $a->profile_photo ? asset('storage/'.$a->profile_photo) : 'https://placehold.co/120x120/1a7a7a/fff?text='.urlencode(substr($a->full_name,0,1)) }}" alt="{{ $a->full_name }}">
-                <h4>{{ $a->full_name }}</h4>
-                <div class="position">{{ $a->current_designation ?? $a->field_of_work }}</div>
-                <div class="desc">{{ Str::limit($a->achievements, 80) }}</div>
-                @if($a->class_year)<div class="class-year">Class of {{ $a->class_year }}</div>@endif
-                <a href="{{ route('alumni.show', $a->id) }}" class="btn-teal" style="font-size:13px;padding:8px 20px">View Details</a>
+            <div class="alumni-card-custom">
+                <div class="alumni-img-container">
+                    <img src="{{ $a->profile_photo ? asset('storage/'.$a->profile_photo) : 'https://placehold.co/260x200/1a7a7a/fff?text='.urlencode(substr($a->full_name,0,1)) }}" alt="{{ $a->full_name }}">
+                </div>
+                <div class="alumni-info-custom">
+                    <h4>{{ $a->full_name }}</h4>
+                    <div class="position-custom">{{ $a->current_designation ?? $a->field_of_work }}</div>
+                    <div class="desc-custom">{{ Str::limit($a->achievements, 80) }}</div>
+                    @if($a->class_year)<div class="class-year-custom">Class of {{ $a->class_year }}</div>@endif
+                    <div class="alumni-card-btn-wrap">
+                        <a href="{{ route('alumni.show', $a->id) }}" class="btn-teal-alumni-details">View Details</a>
+                    </div>
+                </div>
             </div>
             @empty
             <div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--text-muted)">No alumni found.</div>

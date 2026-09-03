@@ -33,6 +33,7 @@ Route::get('/updates/{id}',    [NewsController::class, 'show'])->name('news.show
 Route::get('/events',          [CustomerEventController::class, 'index'])->name('events.index');
 Route::get('/star-alumni',     [AlumniController::class, 'starAlumni'])->name('star.alumni');
 Route::get('/gallery',         [CustomerGalleryController::class, 'index'])->name('gallery.index');
+Route::view('/coming-soon',    'customer.coming-soon')->name('coming.soon');
 Route::get('/become-a-member', [MemberController::class, 'index'])->name('member.index');
 Route::post('/become-a-member', [MemberController::class, 'store'])->name('member.store');
 

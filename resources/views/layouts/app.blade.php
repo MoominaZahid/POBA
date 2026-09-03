@@ -6,7 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'POBA - Palandarians Old Boys Association')</title>
     <meta name="description" content="@yield('meta_description', 'Official POBA Alumni Network')">
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('images/logo.png') }}">
     <link rel="stylesheet" href="{{ asset('css/poba.css') }}?v={{ filemtime(public_path('css/poba.css')) }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     @include('partials.theme-css')
     @stack('styles')
 </head>
@@ -45,9 +50,9 @@
                         <a href="{{ route('member.index') }}">Become Member</a>
                         @endguest
                         <a href="{{ route('alumni.index') }}">Alumni Directory</a>
-                        <a href="#">Achievements</a>
-                        <a href="#">Networking</a>
-                        <a href="#">Career Services</a>
+                        <a href="{{ route('coming.soon', ['feature' => 'Achievements']) }}">Achievements</a>
+                        <a href="{{ route('coming.soon', ['feature' => 'Networking']) }}">Networking</a>
+                        <a href="{{ route('coming.soon', ['feature' => 'Career Services']) }}">Career Services</a>
                         <a href="{{ route('gallery.index') }}">Gallery</a>
                     </div>
                 </li>
@@ -61,7 +66,6 @@
                         </form>
                     @else
                         <a href="{{ route('member.index') }}" class="btn-teal-nav">Become a Member</a>
-                        <a href="{{ route('login') }}" class="btn-teal-nav">Login</a>
                     @endauth
                 </li>
             </ul>
@@ -116,9 +120,9 @@
                     <div class="footer-col">
                         <h5>Alumni</h5>
                         <a href="{{ route('alumni.index') }}">Alumni Directory</a>
-                        <a href="#">Achievements</a>
-                        <a href="#">Networking</a>
-                        <a href="#">Career Services</a>
+                        <a href="{{ route('coming.soon', ['feature' => 'Achievements']) }}">Achievements</a>
+                        <a href="{{ route('coming.soon', ['feature' => 'Networking']) }}">Networking</a>
+                        <a href="{{ route('coming.soon', ['feature' => 'Career Services']) }}">Career Services</a>
                     </div>
                 </div>
             </div>
@@ -161,14 +165,14 @@
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 11.82 19a19.5 19.5 0 0 1-5.9-5.9A19.79 19.79 0 0 1 3 5.18 2 2 0 0 1 5.18 3h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L9.17 10.9a16 16 0 0 0 5.9 5.9l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/>
                         </svg>
-                        +92 21 123 4567
+                        {{ $settings['contact_number'] ?? '+92 21 123 4567' }}
                     </span>
                     <span>
                         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
                             <polyline points="22,6 12,13 2,6"/>
                         </svg>
-                        info@poba.edu.pk
+                        {{ $settings['contact_email'] ?? 'info@poba.edu.pk' }}
                     </span>
                 </div>
             </div>

@@ -14,7 +14,7 @@
                 </div>
                 <div>
                     <h2 class="section-title section-title-left" style="text-align:left">{{ $settings['mission_title'] ?? 'Our Mission' }}</h2>
-                    <p style="color:var(--text-muted);font-size:15px;line-height:1.8;margin-bottom:28px">
+                    <p style="color:#000;font-size:16px !important;line-height:1.8;margin-bottom:28px">
                         {{ $settings['mission_description'] ?? 'Lorem Ipsum is simply dummy text of the printing and typesetting industry.' }}
                     </p>
                     @php

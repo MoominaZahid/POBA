@@ -48,8 +48,9 @@
 }
 .ap-input:focus, .ap-select:focus, .ap-textarea:focus { border-color:#0d9488; }
 .ap-input[readonly], .ap-select:disabled, .ap-textarea[readonly] {
-    background:#fff; cursor:default;
+    background:#eef1f3; cursor:default; color:#555;
 }
+.ap-edit-btn.active { color:#0d9488; background:#e6f7f5; padding:5px 12px; border-radius:16px; }
 .ap-select      { appearance:auto; }
 .ap-textarea    { resize:vertical; }
 
@@ -183,9 +184,9 @@
     <div class="ap-card">
         <div class="ap-card-header">
             <span class="ap-card-title">Alumni Information</span>
-            <button type="button" class="ap-edit-btn" onclick="toggleEdit()">
+            <button type="button" class="ap-edit-btn" id="editBtn" onclick="toggleEdit()">
                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M11.5 2.5a1.414 1.414 0 012 2L5 13H3v-2L11.5 2.5z" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/></svg>
-                Edit
+                <span id="editBtnLabel">Edit</span>
             </button>
         </div>
 
@@ -542,6 +543,10 @@ function toggleEdit() {
     document.getElementById('inp_photo').style.display = editing ? 'block' : 'none';
 
     document.getElementById('editActions').style.display = editing ? 'flex' : 'none';
+
+    // Edit button state
+    document.getElementById('editBtn').classList.toggle('active', editing);
+    document.getElementById('editBtnLabel').textContent = editing ? 'Editing' : 'Edit';
 }
 
 

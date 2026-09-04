@@ -219,30 +219,6 @@
         </script>
     @endif
 
-    <script>
-        function toggleSeeMore(btn) {
-            var target = document.getElementById(btn.dataset.target);
-            var expanded = target.classList.toggle('expanded');
-            btn.textContent = expanded ? 'See Less' : 'See More';
-        }
-        function checkSeeMoreOverflow() {
-            document.querySelectorAll('.text-see-more').forEach(function(el) {
-                var btn = document.querySelector('.see-more-toggle[data-target="' + el.id + '"]');
-                if (!btn) return;
-                if (el.classList.contains('expanded')) return;
-                var cs = getComputedStyle(el);
-                var lineHeight = parseFloat(cs.lineHeight);
-                if (isNaN(lineHeight)) lineHeight = parseFloat(cs.fontSize) * 1.2;
-                var maxHeight = lineHeight * 3 + 2;
-                btn.hidden = !(el.scrollHeight > maxHeight);
-            });
-        }
-        if (document.fonts && document.fonts.ready) {
-            document.fonts.ready.then(checkSeeMoreOverflow);
-        }
-        window.addEventListener('load', checkSeeMoreOverflow);
-    </script>
-
     {{-- About Section --}}
     <section class="section-pad" style="background:{{ $settings['about_bg_color'] ?? '#fff' }}">
         <div class="container">

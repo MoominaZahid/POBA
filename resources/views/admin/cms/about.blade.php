@@ -200,6 +200,11 @@
                             <input type="text" name="descriptions[]" class="admin-input"
                                 value="{{ $row['description'] }}" placeholder="Description...">
                         </div>
+                        <div style="grid-column:1/-1">
+                            <label class="admin-form-label">Detailed Info (shown when visitor clicks "Read More"):</label>
+                            <textarea name="details[]" class="admin-input" rows="3"
+                                placeholder="Optional longer write-up for this milestone...">{{ $row['detail'] ?? '' }}</textarea>
+                        </div>
                     </div>
                 @endforeach
             </div>
@@ -298,6 +303,10 @@
         <div>
             <label class="admin-form-label">Description:</label>
             <input type="text" name="descriptions[]" class="admin-input" placeholder="Description...">
+        </div>
+        <div style="grid-column:1/-1">
+            <label class="admin-form-label">Detailed Info (shown when visitor clicks "Read More"):</label>
+            <textarea name="details[]" class="admin-input" rows="3" placeholder="Optional longer write-up for this milestone..."></textarea>
         </div>
     </div>`;
             document.getElementById('timelineRows').insertAdjacentHTML('beforeend', html);

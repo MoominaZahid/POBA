@@ -17,9 +17,9 @@
         </p>
 
         @if($executive && $executive->members && count($executive->members) > 0)
-        <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(210px, 1fr));gap:16px;max-width:1050px;margin:0 auto">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(180px, 1fr));gap:18px;max-width:1050px;margin:0 auto">
             @foreach($executive->members as $m)
-            <div style="background:#E6F3F4;border:1px solid #cbd5e0;border-radius:30px;padding:12px 22px;text-align:center;color:#02828e;font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 2px 6px rgba(0,0,0,0.02)">
+            <div style="background:#fff;border:1px solid #d8dee3;border-radius:8px;padding:12px 18px;text-align:left;color:#02828e;font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
                 @if($m->member_url)
                     <a href="{{ $m->member_url }}" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none" title="{{ $m->member_name }}">
                         {{ $m->member_name }}

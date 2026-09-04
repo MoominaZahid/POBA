@@ -40,9 +40,9 @@
                     </p>
 
                     @if($c->members && count($c->members) > 0)
-                    <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(210px, 1fr));gap:14px">
+                    <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(180px, 1fr));gap:18px">
                         @foreach($c->members as $m)
-                        <div style="background:#E6F3F4;border:1px solid #cbd5e0;border-radius:30px;padding:10px 20px;text-align:center;color:#02828e;font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
+                        <div style="background:#fff;border:1px solid #d8dee3;border-radius:8px;padding:12px 18px;text-align:left;color:#02828e;font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
                             @if($m->member_url)
                                 <a href="{{ $m->member_url }}" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none" title="{{ $m->member_name }}">
                                     {{ $m->member_name }}

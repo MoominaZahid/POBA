@@ -13,19 +13,20 @@
 
         @if(!empty($settings['contact_page_description']))
 <div style="text-align:center;max-width:700px;margin:0 auto 24px">
-    <p id="contactDesc" style="color:#000;font-size:16px !important;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;">
-        {{ $settings['contact_page_description'] }}
+    <p id="contactDesc" style="color:#000;font-size:16px !important;margin:0">
+        <span id="contactDescText"></span>
+        <a href="#" id="descToggle" onclick="toggleDesc(event)"
+            style="color:var(--orange);font-size:14px;font-weight:600;white-space:nowrap" hidden>see more</a>
     </p>
-    <a href="#" id="descToggle" onclick="toggleDesc(event)"
-        style="color:var(--orange);font-size:14px;font-weight:600;">see more</a>
+    <span id="contactDescFull" hidden>{{ $settings['contact_page_description'] }}</span>
 </div>
 @endif
 
-        <div class="grid-2" style="gap:50px;align-items:flex-start">
+        <div class="grid-2 contact-form-grid" style="gap:50px;align-items:flex-start">
 
             {{-- Contact Form --}}
             <div class="form-box">
-                <h3 style="font-size:20px;font-weight:700;text-align:center;margin-bottom:24px">Contact Form</h3>
+                <h3 style="font-size:26px;font-weight:700;color:#000;text-align:center;margin-bottom:24px">Contact Form</h3>
 
                 @if($errors->any())
                     <div class="alert alert-danger">@foreach($errors->all() as $e)<div>{{ $e }}</div>@endforeach</div>
@@ -73,21 +74,21 @@
             </div>
 
             {{-- Contact Info --}}
-            <div>
+            <div style="margin-top:21px">
                 <div class="contact-info-box">
-                    <h3 style="font-size:22px;font-weight:700;margin-bottom:20px">Let's talk with us</h3>
-                    <p style="color:var(--text-muted);font-size:14px;margin-bottom:24px">Questions, comments, or suggestions? Simply fill in the form and we'll be in touch shortly.</p>
+                    <h3 style="font-size:20px;font-weight:700;color:#000;margin-bottom:20px">Let's talk with us</h3>
+                    <p style="color:#000;font-size:16px;margin-bottom:24px">Questions, comments, or suggestions? Simply fill in the form and we'll be in touch shortly.</p>
 
                     <div class="info-item">
-                        <span class="info-icon">✉️</span>
+                        <span class="info-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg></span>
                         <span style="font-size:14px">{{ $settings['contact_email'] ?? 'info@poba.com' }}</span>
                     </div>
                     <div class="info-item">
-                        <span class="info-icon" style="color:var(--orange)">📍</span>
-                        <a href="{{ $settings['google_map_link'] ?? '#' }}" style="font-size:14px;color:var(--orange)">{{ $settings['location'] ?? 'Cadet College Palandri' }}</a>
+                        <span class="info-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></span>
+                        <a href="{{ $settings['google_map_link'] ?? '#' }}" style="font-size:14px;color:var(--teal);text-decoration:underline">{{ $settings['location'] ?? 'Cadet College Palandri' }}</a>
                     </div>
                     <div class="info-item">
-                        <span class="info-icon">📞</span>
+                        <span class="info-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></span>
                         <span style="font-size:14px">{{ $settings['contact_number'] ?? '+92 21 123 4567' }}</span>
                     </div>
 
@@ -130,16 +131,19 @@
                 <div class="donate-section">
                     <h4>Donate Here</h4>
 
-                    <div style="display:flex;align-items:flex-start;gap:20px">
+                    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px">
                         {{-- Bank Details left --}}
                         <div class="bank-details" style="flex:1">
                             <p><strong>Bank Title</strong><br><span>{{ $settings['bank_title'] ?? 'Bank of AJK' }}</span></p>
                             <p><strong>Account Title</strong><br><span>{{ $settings['account_title'] ?? 'Palandarians Old Boys Association' }}</span></p>
                             <p><strong>Account Number</strong><br><span>{{ $settings['account_number'] ?? '00001234657980' }}</span></p>
                             <p><strong>Branch Number</strong><br><span>{{ $settings['branch_number'] ?? '063' }}</span></p>
+                            @if(!empty($settings['bank_iban']))
+                            <p><strong>IBAN Number</strong><br><span>{{ $settings['bank_iban'] }}</span></p>
+                            @endif
                         </div>
 
-                        {{-- QR Code right --}}
+                        {{-- QR Code right, bottom-aligned with bank details list --}}
                         @if(!empty($settings['qr_code']))
                         <div style="flex-shrink:0;text-align:center">
                             <p style="font-size:13px;color:var(--orange);margin-bottom:8px">Scan to Donate</p>
@@ -174,20 +178,56 @@
 function toggleFaq(el) {
     el.classList.toggle('open');
 }
+let descExpanded = false;
+function fitContactDesc() {
+    const textEl = document.getElementById('contactDescText');
+    const btn    = document.getElementById('descToggle');
+    const fullEl = document.getElementById('contactDescFull');
+    if (!textEl || !btn || !fullEl) return;
+    const full = fullEl.textContent.trim();
+
+    if (descExpanded) {
+        textEl.textContent = full;
+        btn.hidden = false;
+        btn.textContent = 'see less';
+        return;
+    }
+
+    const container = textEl.parentElement;
+    const lineHeight = parseFloat(getComputedStyle(textEl).lineHeight) || 24;
+    const maxHeight  = lineHeight * 2 + 2;
+
+    btn.hidden = true;
+    textEl.textContent = full;
+    if (container.scrollHeight <= maxHeight) {
+        return;
+    }
+
+    btn.hidden = false;
+    btn.textContent = 'see more';
+
+    let lo = 0, hi = full.length, best = 0;
+    while (lo <= hi) {
+        const mid = Math.floor((lo + hi) / 2);
+        textEl.textContent = full.slice(0, mid).trimEnd() + '… ';
+        if (container.scrollHeight <= maxHeight) {
+            best = mid;
+            lo = mid + 1;
+        } else {
+            hi = mid - 1;
+        }
+    }
+    textEl.textContent = full.slice(0, best).trimEnd() + '… ';
+}
 function toggleDesc(e) {
     e.preventDefault();
-    const p   = document.getElementById('contactDesc');
-    const btn = document.getElementById('descToggle');
-    if (p.style.webkitLineClamp === '2' || p.style.webkitLineClamp === '') {
-        p.style.webkitLineClamp = 'unset';
-        p.style.display = 'block';
-        btn.textContent = 'see less';
-    } else {
-        p.style.webkitLineClamp = '2';
-        p.style.display = '-webkit-box';
-        btn.textContent = 'see more';
-    }
+    descExpanded = !descExpanded;
+    fitContactDesc();
 }
+document.addEventListener('DOMContentLoaded', fitContactDesc);
+window.addEventListener('resize', function () {
+    if (!descExpanded) fitContactDesc();
+});
 </script>
 
 @endpush

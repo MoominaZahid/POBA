@@ -112,7 +112,7 @@ class CmsController extends Controller
     if ($request->has('years')) {
         $timeline = [];
         foreach ($request->years as $i => $year) {
-            $timeline[] = ['year'=>$year,'heading'=>$request->headings[$i]??'','description'=>$request->descriptions[$i]??''];
+            $timeline[] = ['year'=>$year,'heading'=>$request->headings[$i]??'','description'=>$request->descriptions[$i]??'','detail'=>$request->details[$i]??''];
         }
         CmsSetting::set('history_timeline', json_encode($timeline));
     }
@@ -352,6 +352,7 @@ class CmsController extends Controller
             'account_title',
             'account_number',
             'branch_number',
+            'bank_iban',
             'social_twitter',
             'social_instagram',
             'social_facebook',

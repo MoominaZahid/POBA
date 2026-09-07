@@ -543,6 +543,10 @@ footer .footer-col a:hover { color: var(--orange); }
     display: flex; justify-content: space-between;
     align-items: center; padding-top: 10px;
 }
+.footer-copyright {
+    text-align: center; font-size: 12px; color: rgba(255,255,255,0.75);
+    margin-top: 16px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.15);
+}
 .footer-socials { display: flex; gap: 8px; align-items: center; }
 .footer-socials a {
     width: 22px; height: 22px; background: transparent;
@@ -664,6 +668,16 @@ footer .footer-col a:hover { color: var(--orange); }
     font-family: 'Cairo', sans-serif; font-size: 12px; color: #575755; line-height: 1.17;
     display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; line-clamp: 3; overflow: hidden;
 }
+.timeline-desc.has-tooltip { cursor: help; }
+.timeline-desc-tooltip {
+    position: absolute; z-index: 500; pointer-events: none;
+    background: #1a2b2b; color: #fff; font-family: 'Cairo', sans-serif;
+    font-size: 12px; line-height: 1.4; padding: 10px 12px; border-radius: 8px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+    opacity: 0; visibility: hidden; transform: translateY(-4px);
+    transition: opacity .15s ease, transform .15s ease;
+}
+.timeline-desc-tooltip.visible { opacity: 1; visibility: visible; transform: translateY(0); }
 .timeline-content.expanded .timeline-heading,
 .timeline-content.expanded .timeline-desc {
     -webkit-line-clamp: unset; line-clamp: unset;
@@ -919,6 +933,49 @@ select.form-control {
     border-radius: 2px;
 }
 
+/* ── Verticals Detail (Executive / Working Committee) ───────────── */
+.vertical-detail-heading {
+    font-family: 'Cairo', sans-serif;
+    font-size: 30px !important;
+    font-weight: 700;
+    color: #2c7465;
+    text-align: center;
+    margin-bottom: 12px;
+}
+.vertical-detail-underline {
+    width: 195px; height: 4px; background: #ff7f40;
+    margin: 0 auto; border-radius: 2px;
+}
+.vertical-detail-intro {
+    text-align: center; max-width: 1131px; margin: 24px auto 20px;
+    color: #575755; font-size: 16px; line-height: 1.4;
+}
+.vertical-member-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+.vertical-member-card {
+    background: rgba(237,237,237,0.1);
+    border-radius: 5px;
+    padding: 6px 15px;
+    box-shadow: 0px 2.85px 8.54px 0px rgba(104,88,46,0.2);
+    display: flex; align-items: center;
+    color: #02828e; font-weight: 600; font-size: 12px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.vertical-member-card a { color: inherit; text-decoration: none; }
+
+.working-committees-stack { display: flex; flex-direction: column; }
+.working-committee-block { margin-bottom: 28px; }
+.working-committee-title {
+    color: #db6429; font-size: 20px; font-weight: 700;
+    text-align: left; margin-bottom: 10px;
+}
+.working-committee-desc {
+    color: #575755; font-size: 14px; line-height: 1.4;
+    text-align: left; margin-bottom: 10px;
+}
+
 /* ================================================================
    ADMIN DASHBOARD
 ================================================================ */
@@ -1125,6 +1182,12 @@ select.admin-input {
     font-size: 13px; flex-shrink: 0;
 }
 .stat-icon-preview { width: 20px; height: 20px; object-fit: contain; border-radius: 4px; flex-shrink: 0; }
+.footer-logo-upload {
+    background: var(--teal-light); border-radius: 12px;
+    width: 90px; height: 90px; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; overflow: hidden; flex-shrink: 0;
+}
+.footer-logo-upload-preview { width: 100%; height: 100%; object-fit: contain; padding: 10px; box-sizing: border-box; }
 .stat-row { grid-template-columns: 110px 1fr 1fr !important; align-items: start; column-gap: 14px !important; }
 .stat-row-header { display: flex; align-items: center; justify-content: flex-start; gap: 6px; margin-bottom: 8px; }
 .remove-stat-btn {

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\AlumniUser;
+use App\Models\City;
+use App\Models\Country;
 use App\Models\User;
 use App\Notifications\AlumniRegistrationReceived;
 use Illuminate\Http\Request;
@@ -28,7 +30,18 @@ class MemberController extends Controller
             'captcha_ans' => $n1 + $n2,
         ]);
 
-        return view('customer.member.register', compact('n1', 'n2'));
+        $countries = Country::orderBy('name')->get(['id', 'name']);
+
+        return view('customer.member.register', compact('n1', 'n2', 'countries'));
+    }
+
+    public function citiesByCountry(Country $country)
+    {
+        $cities = City::where('country_id', $country->id)
+            ->orderBy('name')
+            ->pluck('name');
+
+        return response()->json($cities);
     }
 
     public function store(Request $request)

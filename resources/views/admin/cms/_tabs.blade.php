@@ -22,6 +22,6 @@
         <a href="{{ route('admin.cms.faqs') }}">FAQs</a>
     </div>
     <div class="cms-tab {{ $active === 'membership' ? 'active' : '' }}">
-        <a href="{{ route('member.index') }}" target="_blank">Membership</a>
+        <a href="{{ route('member.index') }}">Membership</a>
     </div>
 </div>

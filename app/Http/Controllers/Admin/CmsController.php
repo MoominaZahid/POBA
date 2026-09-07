@@ -423,6 +423,37 @@ class CmsController extends Controller
     public function saveFooter(Request $request)
     {
         CmsSetting::set('footer_copyright', $request->copyright_text);
+        CmsSetting::set('footer_quick_links_title', $request->quick_links_title);
+        CmsSetting::set('footer_alumni_title', $request->alumni_title);
+
+        if ($request->hasFile('footer_logo')) {
+            $path = $request->file('footer_logo')->store('cms', 'public');
+            CmsSetting::set('footer_logo', $path);
+        }
+
+        $socialFields = ['social_twitter', 'social_linkedin', 'social_facebook', 'social_instagram', 'social_tiktok', 'contact_number', 'contact_email'];
+        foreach ($socialFields as $f) {
+            CmsSetting::set($f, $request->$f);
+        }
+
+        $quickLinks = [];
+        if ($request->has('quick_link_labels')) {
+            foreach ($request->quick_link_labels as $i => $label) {
+                if (!$label) continue;
+                $quickLinks[] = ['label' => $label, 'url' => $request->quick_link_urls[$i] ?? '#'];
+            }
+        }
+        CmsSetting::set('footer_quick_links', json_encode($quickLinks));
+
+        $alumniLinks = [];
+        if ($request->has('alumni_link_labels')) {
+            foreach ($request->alumni_link_labels as $i => $label) {
+                if (!$label) continue;
+                $alumniLinks[] = ['label' => $label, 'url' => $request->alumni_link_urls[$i] ?? '#'];
+            }
+        }
+        CmsSetting::set('footer_alumni_links', json_encode($alumniLinks));
+
         return back()->with('success', 'Footer saved.');
     }
     public function seo()

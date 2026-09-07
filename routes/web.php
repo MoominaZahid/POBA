@@ -44,6 +44,7 @@ Route::get('/gallery',         [CustomerGalleryController::class, 'index'])->nam
 Route::view('/coming-soon',    'customer.coming-soon')->name('coming.soon');
 Route::get('/become-a-member', [MemberController::class, 'index'])->name('member.index');
 Route::post('/become-a-member', [MemberController::class, 'store'])->name('member.store');
+Route::get('/cities-by-country/{country}', [MemberController::class, 'citiesByCountry'])->name('cities.by.country');
 
 // Alumni-only routes
 Route::middleware('alumni')->group(function () {

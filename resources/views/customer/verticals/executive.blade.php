@@ -5,23 +5,23 @@
 
 <div class="page-header" style="background:#fff;padding:50px 0 30px;text-align:center">
     <div class="container">
-        <h1 style="font-size:2.5rem;font-weight:800;color:var(--teal);margin-bottom:8px">Executive Committee</h1>
-        <div class="underline" style="width:140px;height:3.5px;background:var(--orange);margin:0 auto;border-radius:2px"></div>
+        <h1 class="vertical-detail-heading">Executive Committee</h1>
+        <div class="vertical-detail-underline"></div>
     </div>
 </div>
 
 <section class="section-pad" style="background:#fff;padding-top:20px">
     <div class="container">
-        <p style="text-align:center;max-width:850px;margin:0 auto 40px;color:#4a5568;font-size:15px;line-height:1.8">
+        <p class="vertical-detail-intro">
             {{ $executive->description ?? "Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged." }}
         </p>
 
         @if($executive && $executive->members && count($executive->members) > 0)
-        <div style="display:grid;grid-template-columns:repeat(auto-fill, minmax(180px, 1fr));gap:18px;max-width:1050px;margin:0 auto">
+        <div class="vertical-member-grid">
             @foreach($executive->members as $m)
-            <div style="background:#fff;border:1px solid #d8dee3;border-radius:8px;padding:12px 18px;text-align:left;color:#02828e;font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">
+            <div class="vertical-member-card">
                 @if($m->member_url)
-                    <a href="{{ $m->member_url }}" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none" title="{{ $m->member_name }}">
+                    <a href="{{ $m->member_url }}" target="_blank" rel="noopener noreferrer" title="{{ $m->member_name }}">
                         {{ $m->member_name }}
                     </a>
                 @else

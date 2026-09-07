@@ -207,49 +207,22 @@
                 </div>
             </div>
 
-            {{-- Current Country (Dropdown) + Current City (Dropdown) --}}
+            {{-- Current Country (Dropdown) + Current City (Dropdown, populated dynamically) --}}
             <div class="bam-row bam-row-2">
                 <div class="bam-group">
                     <label class="bam-label">Current Country <span>*</span></label>
-                    <select name="current_country" class="bam-select {{ $errors->has('current_country') ? 'is-invalid' : '' }}" required>
+                    <select name="current_country" id="currentCountry" class="bam-select {{ $errors->has('current_country') ? 'is-invalid' : '' }}" required>
                         <option value="">Select Country</option>
-                        @php
-                            $countries = [
-                                'Pakistan', 'Afghanistan', 'Bangladesh', 'China', 'India',
-                                'Iran', 'Iraq', 'Saudi Arabia', 'UAE', 'UK', 'USA',
-                                'Canada', 'Australia', 'Germany', 'France', 'Turkey',
-                                'Egypt', 'South Africa', 'Nigeria', 'Japan', 'South Korea',
-                                'Malaysia', 'Singapore', 'Italy', 'Spain', 'Netherlands',
-                                'Switzerland', 'Sweden', 'Norway', 'Denmark', 'Belgium',
-                                'Austria', 'Greece', 'Portugal', 'Poland', 'Ukraine',
-                                'Russia', 'Brazil', 'Argentina', 'Mexico', 'Colombia'
-                            ];
-                        @endphp
                         @foreach($countries as $c)
-                        <option value="{{ $c }}" {{ old('current_country')==$c ? 'selected' : '' }}>{{ $c }}</option>
+                        <option value="{{ $c->name }}" data-id="{{ $c->id }}" {{ old('current_country')==$c->name ? 'selected' : '' }}>{{ $c->name }}</option>
                         @endforeach
                     </select>
                     @error('current_country')<div class="bam-error">{{ $message }}</div>@enderror
                 </div>
                 <div class="bam-group">
                     <label class="bam-label">Current City <span>*</span></label>
-                    <select name="current_city" class="bam-select {{ $errors->has('current_city') ? 'is-invalid' : '' }}" required>
-                        <option value="">Select City</option>
-                        @php
-                            $cities = [
-                                'Karachi', 'Lahore', 'Islamabad', 'Rawalpindi', 'Peshawar',
-                                'Quetta', 'Faisalabad', 'Multan', 'Hyderabad', 'Gujranwala',
-                                'Sialkot', 'Sukkur', 'Jhelum', 'Sargodha', 'Bahawalpur',
-                                'Mardan', 'Mingora', 'Dera Ghazi Khan', 'Rahim Yar Khan',
-                                'Dubai', 'Abu Dhabi', 'London', 'New York', 'Toronto',
-                                'Sydney', 'Berlin', 'Paris', 'Tokyo', 'Seoul',
-                                'Kuala Lumpur', 'Singapore', 'Istanbul', 'Cairo', 'Riyadh',
-                                'Jeddah', 'Mumbai', 'Delhi', 'Dhaka', 'Kabul'
-                            ];
-                        @endphp
-                        @foreach($cities as $ct)
-                        <option value="{{ $ct }}" {{ old('current_city')==$ct ? 'selected' : '' }}>{{ $ct }}</option>
-                        @endforeach
+                    <select name="current_city" id="currentCity" class="bam-select {{ $errors->has('current_city') ? 'is-invalid' : '' }}" required>
+                        <option value="">Select Country First</option>
                     </select>
                     @error('current_city')<div class="bam-error">{{ $message }}</div>@enderror
                 </div>
@@ -549,6 +522,50 @@ phoneInput.addEventListener('paste', function (e) {
     this.value = final;
     this.dispatchEvent(new Event('input'));
 });
+
+// ── Country → City: load cities dynamically for the selected country ──────────
+const countrySelect = document.getElementById('currentCountry');
+const citySelect     = document.getElementById('currentCity');
+const oldCity         = @json(old('current_city'));
+
+function loadCitiesForSelectedCountry(preselectCity) {
+    const selectedOption = countrySelect.options[countrySelect.selectedIndex];
+    const countryId = selectedOption ? selectedOption.dataset.id : null;
+
+    citySelect.innerHTML = '';
+    if (!countryId) {
+        citySelect.innerHTML = '<option value="">Select Country First</option>';
+        return;
+    }
+
+    citySelect.innerHTML = '<option value="">Loading cities...</option>';
+    citySelect.disabled = true;
+
+    fetch('/cities-by-country/' + countryId)
+        .then(res => res.json())
+        .then(cities => {
+            citySelect.innerHTML = '<option value="">Select City</option>';
+            cities.forEach(city => {
+                const opt = document.createElement('option');
+                opt.value = city;
+                opt.textContent = city;
+                if (preselectCity && city === preselectCity) opt.selected = true;
+                citySelect.appendChild(opt);
+            });
+            citySelect.disabled = false;
+        })
+        .catch(() => {
+            citySelect.innerHTML = '<option value="">Could not load cities</option>';
+            citySelect.disabled = false;
+        });
+}
+
+countrySelect.addEventListener('change', () => loadCitiesForSelectedCountry(null));
+
+// Repopulate on page load if a country was already selected (validation-failed redisplay)
+if (countrySelect.value) {
+    loadCitiesForSelectedCountry(oldCity);
+}
 </script>
 @endpush
 @endsection

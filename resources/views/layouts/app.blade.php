@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'POBA - Palandarians Old Boys Association')</title>
     <meta name="description" content="@yield('meta_description', 'Official POBA Alumni Network')">
-    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
-    <link rel="shortcut icon" type="image/png" href="{{ asset('images/logo.png') }}">
+    <link rel="icon" type="image/png" href="{{ asset('images/favicon.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ asset('images/favicon.png') }}">
     <link rel="stylesheet" href="{{ asset('css/poba.css') }}?v={{ filemtime(public_path('css/poba.css')) }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -112,25 +112,44 @@
             {{-- Main Row: Logo on left, links pushed right --}}
             <div class="footer-inner">
                 <div class="footer-brand">
-                    <img src="{{ asset('images/footerLogo.png') }}" alt="POBA Logo" class="footer-logo-img"
+                    <img src="{{ !empty($settings['footer_logo']) ? asset('storage/'.$settings['footer_logo']) : asset('images/footerLogo.png') }}" alt="POBA Logo" class="footer-logo-img"
                         onerror="this.style.display='none'">
                 </div>
 
+                @php
+                    $footerQuickLinks = json_decode($settings['footer_quick_links'] ?? '[]', true);
+                    if (empty($footerQuickLinks)) {
+                        $footerQuickLinks = [
+                            ['label' => 'About Us', 'url' => route('about')],
+                            ['label' => 'News', 'url' => route('news.index')],
+                            ['label' => 'Events', 'url' => route('events.index')],
+                            ['label' => 'Star Alumni', 'url' => route('star.alumni')],
+                        ];
+                    }
+                    $footerAlumniLinks = json_decode($settings['footer_alumni_links'] ?? '[]', true);
+                    if (empty($footerAlumniLinks)) {
+                        $footerAlumniLinks = [
+                            ['label' => 'Alumni Directory', 'url' => route('alumni.index')],
+                            ['label' => 'Achievements', 'url' => route('coming.soon', ['feature' => 'Achievements'])],
+                            ['label' => 'Networking', 'url' => route('coming.soon', ['feature' => 'Networking'])],
+                            ['label' => 'Career Services', 'url' => route('coming.soon', ['feature' => 'Career Services'])],
+                        ];
+                    }
+                @endphp
+
                 <div class="footer-links-wrapper">
                     <div class="footer-col">
-                        <h5>Quick Links</h5>
-                        <a href="{{ route('about') }}">About Us</a>
-                        <a href="{{ route('news.index') }}">News</a>
-                        <a href="{{ route('events.index') }}">Events</a>
-                        <a href="{{ route('star.alumni') }}">Star Alumni</a>
+                        <h5>{{ $settings['footer_quick_links_title'] ?? 'Quick Links' }}</h5>
+                        @foreach ($footerQuickLinks as $link)
+                            <a href="{{ $link['url'] }}">{{ $link['label'] }}</a>
+                        @endforeach
                     </div>
 
                     <div class="footer-col">
-                        <h5>Alumni</h5>
-                        <a href="{{ route('alumni.index') }}">Alumni Directory</a>
-                        <a href="{{ route('coming.soon', ['feature' => 'Achievements']) }}">Achievements</a>
-                        <a href="{{ route('coming.soon', ['feature' => 'Networking']) }}">Networking</a>
-                        <a href="{{ route('coming.soon', ['feature' => 'Career Services']) }}">Career Services</a>
+                        <h5>{{ $settings['footer_alumni_title'] ?? 'Alumni' }}</h5>
+                        @foreach ($footerAlumniLinks as $link)
+                            <a href="{{ $link['url'] }}">{{ $link['label'] }}</a>
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -138,30 +157,30 @@
             {{-- Bottom Bar --}}
             <div class="footer-bottom">
                 <div class="footer-socials">
-                    <a href="#" title="Twitter / X" aria-label="Twitter">
+                    <a href="{{ $settings['social_twitter'] ?? '#' }}" target="_blank" rel="noopener noreferrer" title="Twitter / X" aria-label="Twitter">
                         <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                         </svg>
                     </a>
-                    <a href="#" title="LinkedIn" aria-label="LinkedIn">
+                    <a href="{{ $settings['social_linkedin'] ?? '#' }}" target="_blank" rel="noopener noreferrer" title="LinkedIn" aria-label="LinkedIn">
                         <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/>
                             <circle cx="4" cy="4" r="2"/>
                         </svg>
                     </a>
-                    <a href="#" title="Facebook" aria-label="Facebook">
+                    <a href="{{ $settings['social_facebook'] ?? '#' }}" target="_blank" rel="noopener noreferrer" title="Facebook" aria-label="Facebook">
                         <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
                         </svg>
                     </a>
-                    <a href="#" title="Instagram" aria-label="Instagram">
+                    <a href="{{ $settings['social_instagram'] ?? '#' }}" target="_blank" rel="noopener noreferrer" title="Instagram" aria-label="Instagram">
                         <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <rect x="2" y="2" width="20" height="20" rx="5"/>
                             <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
                             <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
                         </svg>
                     </a>
-                    <a href="#" title="TikTok" aria-label="TikTok">
+                    <a href="{{ $settings['social_tiktok'] ?? '#' }}" target="_blank" rel="noopener noreferrer" title="TikTok" aria-label="TikTok">
                         <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 0 0-.79-.05 6.34 6.34 0 1 0 6.34 6.34V8.69a8.18 8.18 0 0 0 4.78 1.52V6.75a4.85 4.85 0 0 1-1.02-.06z"/>
                         </svg>
@@ -183,6 +202,10 @@
                         {{ $settings['contact_email'] ?? 'info@poba.edu.pk' }}
                     </span>
                 </div>
+            </div>
+
+            <div class="footer-copyright">
+                {{ $settings['footer_copyright'] ?? '© 2025 POBA. All rights reserved.' }}
             </div>
 
         </div>
@@ -252,6 +275,38 @@
         if (document.fonts && document.fonts.ready) {
             document.fonts.ready.then(checkSeeMoreOverflow);
         }
+
+        // ── Timeline description: hover tooltip for truncated text ───────
+        function initTimelineDescTooltips() {
+            var tooltip = document.getElementById('timelineDescTooltip');
+            if (!tooltip) {
+                tooltip = document.createElement('div');
+                tooltip.id = 'timelineDescTooltip';
+                tooltip.className = 'timeline-desc-tooltip';
+                document.body.appendChild(tooltip);
+            }
+
+            document.querySelectorAll('.timeline-desc').forEach(function (el) {
+                if (el.scrollHeight <= el.clientHeight + 1) return; // not truncated
+                el.classList.add('has-tooltip');
+
+                el.addEventListener('mouseenter', function () {
+                    tooltip.textContent = el.textContent.trim();
+                    var rect = el.getBoundingClientRect();
+                    tooltip.style.left = (rect.left + window.scrollX) + 'px';
+                    tooltip.style.top = (rect.bottom + window.scrollY + 8) + 'px';
+                    tooltip.style.width = Math.max(rect.width, 180) + 'px';
+                    tooltip.classList.add('visible');
+                });
+                el.addEventListener('mouseleave', function () {
+                    tooltip.classList.remove('visible');
+                });
+            });
+        }
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(initTimelineDescTooltips);
+        }
+        window.addEventListener('load', initTimelineDescTooltips);
         window.addEventListener('load', checkSeeMoreOverflow);
     </script>
 

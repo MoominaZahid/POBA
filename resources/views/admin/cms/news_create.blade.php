@@ -26,11 +26,11 @@
         color: #1a1a2e;
     }
 
-    /* 3-column top row */
+        /* 4-column top row */
     .news-top-row {
         display: grid;
-        grid-template-columns: 180px 1fr 1fr;
-        gap: 20px;
+        grid-template-columns: 140px 1fr 1.5fr 160px;
+        gap: 16px;
         align-items: start;
         margin-bottom: 24px;
     }
@@ -210,8 +210,14 @@
 
             {{-- Title --}}
             <div>
-                <span class="news-field-label">Title 1:</span>
-                <input type="text" name="title" class="news-input" placeholder="Executive Committee" value="{{ old('title') }}" required>
+                <span class="news-field-label">Title:</span>
+                <input type="text" name="title" class="news-input" value="{{ old('title') }}" required>
+            </div>
+
+            {{-- Published Date --}}
+            <div>
+                <span class="news-field-label">Published Date:</span>
+                <input type="date" name="published_at" class="news-input" value="{{ old('published_at', date('Y-m-d')) }}">
             </div>
         </div>
 

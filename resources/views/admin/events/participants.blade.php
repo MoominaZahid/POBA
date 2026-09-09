@@ -14,12 +14,6 @@
         <p style="font-size:14px;color:var(--text-muted)">{{ $event->start_date }} – {{ $event->end_date }}</p>
     </div>
 
-    @if(session('success'))
-        <div style="margin:0 24px 16px;padding:12px 16px;background:#e1f5ee;border:1px solid #5dcaa5;border-radius:8px;color:#0f6e56;font-size:14px">
-            ✓ {{ session('success') }}
-        </div>
-    @endif
-
     <div class="admin-table-toolbar">
         <form method="GET" action="{{ route('admin.events.participants', $event->id) }}" style="display:flex;gap:10px;align-items:center">
             <input type="text" name="search" class="search-input" placeholder="Search" style="width:260px" value="{{ request('search') }}">
@@ -27,6 +21,7 @@
                 <option value="">All Statuses</option>
                 <option value="confirmed" {{ request('status') === 'confirmed' ? 'selected' : '' }}>Confirmed</option>
                 <option value="pending"   {{ request('status') === 'pending'   ? 'selected' : '' }}>Pending</option>
+                <option value="declined"  {{ request('status') === 'declined'  ? 'selected' : '' }}>Declined</option>
                 <option value="cancelled" {{ request('status') === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
             </select>
         </form>
@@ -62,23 +57,24 @@
                         <select name="status" onchange="this.form.submit()"
                             style="font-size:12px;padding:4px 8px;border-radius:20px;border:1px solid;cursor:pointer;font-weight:500;
                             {{ $p->status === 'confirmed' ? 'border-color:#5dcaa5;background:#e1f5ee;color:#0f6e56' :
-                               ($p->status === 'pending'  ? 'border-color:#fac775;background:#faeeda;color:#854f0b' :
-                                                            'border-color:#f09595;background:#fcebeb;color:#a32d2d') }}">
+                               ($p->status === 'pending'   ? 'border-color:#fac775;background:#faeeda;color:#854f0b' :
+                                                             'border-color:#f09595;background:#fcebeb;color:#a32d2d') }}">
                             <option value="confirmed" {{ $p->status === 'confirmed' ? 'selected' : '' }}>Confirmed</option>
                             <option value="pending"   {{ $p->status === 'pending'   ? 'selected' : '' }}>Pending</option>
+                            <option value="declined"  {{ $p->status === 'declined'  ? 'selected' : '' }}>Declined</option>
                             <option value="cancelled" {{ $p->status === 'cancelled' ? 'selected' : '' }}>Cancelled</option>
                         </select>
                     </form>
                 </td>
                 <td>
                     <div class="action-icons">
-                        {{-- Cancel / restore registration --}}
-                        @if($p->status !== 'cancelled')
+                        {{-- Decline / restore registration --}}
+                        @if(!in_array($p->status, ['declined', 'cancelled']))
                             <form method="POST"
                                   action="{{ route('admin.events.participants.cancel', [$event->id, $p->id]) }}"
-                                  onsubmit="return confirm('Cancel this participant\'s registration?')">
+                                  onsubmit="return confirm('Decline this participant\'s registration?')">
                                 @csrf @method('PATCH')
-                                <button type="submit" class="btn-delete" title="Cancel registration"
+                                <button type="submit" class="btn-delete" title="Decline registration"
                                         style="color:#e24b4a">
                                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                         <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>

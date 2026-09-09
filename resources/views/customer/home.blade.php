@@ -109,15 +109,16 @@
             </div>
         @endforeach
 
-        <div class="hero-overlay" style="width:100%;padding-left:60px;padding-right:60px;box-sizing:border-box">
+        <div class="hero-overlay">
             <div class="hero-content-custom">
                 <h1>{{ $settings['hero_title'] ?? 'Welcome to POBA Alumni Network' }}</h1>
                 <p class="tagline">{{ $settings['hero_tagline'] ?? 'Serving with Valour' }}</p>
-                <p class="desc">
+                <p class="desc text-see-more" id="heroDescText">
                     {{ $settings['hero_description'] ?? 'Join our prestigious community of Pakistan Ocean & Bay Alumni. Stay connected, share experiences, and build lasting professional relationships.' }}
                 </p>
-                <a href="{{ $settings['hero_btn_url'] ?? route('member.index') }}" class="btn-teal-capsule" target="_blank">
-                    {{ $settings['hero_btn_text'] ?? 'Become a Member' }}
+                <button type="button" class="see-more-toggle" data-target="heroDescText" onclick="toggleSeeMore(this)" hidden>See More</button>
+                <a href="{{ Auth::guard('alumni')->check() ? route('alumni.index') : ($settings['hero_btn_url'] ?? route('member.index')) }}" class="btn-teal-capsule">
+                    {{ Auth::guard('alumni')->check() ? 'Explore Directory' : ($settings['hero_btn_text'] ?? 'Become a Member') }}
                 </a>
             </div>
 
@@ -132,131 +133,56 @@
     </section>
 
     <style>
-    .hero-custom {
-        position: relative;
-        overflow: hidden;
-        min-height: 480px;
-    }
-
-    .hero-slide {
-        position: absolute;
-        inset: 0;
-        background-size: cover;
-        background-position: center;
-        opacity: 0;
-        transition: opacity 1.2s ease-in-out;
-    }
+        .hero-slide {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 1.2s ease-in-out;
+        }
 
     .hero-slide.active {
         opacity: 1;
     }
 
-    .hero-overlay {
-        position: relative;
-        z-index: 2;
-        padding: 100px 60px 60px 60px;
-        box-sizing: border-box;
-        width: 100%;
-    }
-
-    .hero-content-custom {
-        text-align: left !important;
-        max-width: 640px;
-        width: 100%;
-    }
-
-    .hero-content-custom h1 {
-        color: var(--theme-on-hero, #ffffff) !important;
-        white-space: normal;         /* was nowrap — this was breaking mobile */
-        word-break: break-word;
-        font-size: clamp(1.4rem, 4vw, 2.4rem);  /* fluid font size */
-        line-height: 1.25;
-    }
-
-    .hero-content-custom .tagline {
-        color: #FF7E40;
-        font-size: clamp(1rem, 2.5vw, 1.25rem);
-    }
-
-    .hero-content-custom .desc {
-        color: rgba(255,255,255,0.88);
-        font-size: clamp(0.875rem, 2vw, 1rem);
-    }
-
-    .hero-dots {
-        display: flex;
-        gap: 8px;
-        margin-top: 30px;
-    }
-
-    .hero-dots .dot {
-        width: 10px;
-        height: 10px;
-        border-radius: 50%;
-        background: rgba(255, 255, 255, 0.5);
-        cursor: pointer;
-    }
-
-    .hero-dots .dot.active {
-        background: #fff;
-    }
-
-    /* Tablet */
-    @media (max-width: 1024px) {
-        .hero-overlay {
-            padding: 80px 40px 50px 40px;
+        .hero-content-custom h1 {
+            color: var(--theme-on-hero, #ffffff) !important;
         }
 
-        .hero-content-custom {
-            max-width: 100%;
-        }
-    }
+        @media (max-width: 768px) {
+            .hero-custom {
+                min-height: 360px;
+            }
 
-    /* Mobile */
-    @media (max-width: 768px) {
-        .hero-custom {
-            min-height: 300px;
-        }
+            .hero-overlay {
+                padding: 60px 20px 30px;
+            }
 
-        .hero-overlay {
-            padding: 60px 20px 40px 20px;
-        }
-
-        .hero-content-custom {
-            max-width: 100%;
+            .hero-content-custom {
+                max-width: 100%;
+            }
         }
 
-        .btn-teal-capsule {
-            display: inline-block;
-            width: auto;
-            max-width: 100%;
-            white-space: normal;
-            text-align: center;
-        }
-    }
-
-    /* Small mobile */
-    @media (max-width: 480px) {
-        .hero-custom {
-            min-height: 260px;
+        .stat-icon-custom {
+            background: transparent !important;
+            box-shadow: none !important;
+            width: auto !important;
+            height: auto !important;
         }
 
-        .hero-overlay {
-            padding: 50px 16px 30px 16px;
+        .card-news {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            cursor: pointer;
         }
 
-        .hero-dots {
-            margin-top: 20px;
+        .card-news:hover {
+            text-decoration: none;
+            color: inherit;
         }
-    }
-
-    .stat-icon-custom {
-        background: transparent !important;
-        box-shadow: none !important;
-        width: auto !important;
-        height: auto !important;
-    }
-</style>
+    </style>
 
     @if (count($heroImages) > 1)
         <script>
@@ -296,17 +222,18 @@
     {{-- About Section --}}
     <section class="section-pad" style="background:{{ $settings['about_bg_color'] ?? '#fff' }}">
         <div class="container">
-            <div class="grid-2" style="align-items:center;gap:50px">
+            <div class="grid-2" style="align-items:flex-start;gap:50px">
                 <div>
                     <img src="{{ !empty($settings['about_image']) ? asset('storage/' . $settings['about_image']) : asset('images/about.png') }}"
                         alt="About POBA"
-                        style="border-radius:24px;width:100%;object-fit:cover;max-height:380px;box-shadow: 0 15px 35px rgba(0,0,0,0.1)">
+                        style="border-radius:30px;width:100%;object-fit:cover;max-height:380px;box-shadow: 0 5px 10px rgba(0,0,0,0.33)">
                 </div>
                 <div>
                     <h2 class="section-title-left">{{ $settings['about_title'] ?? 'About POBA' }}</h2>
-                    <p style="color:var(--text-muted);font-size:15px;line-height:1.7;margin-bottom:28px">
+                    <p class="text-see-more" id="aboutDescText" style="color:#000;font-size:16px !important;line-height:1.7;margin-bottom:8px">
                         {{ $settings['about_description'] ?? 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.' }}
                     </p>
+                    <button type="button" class="see-more-toggle" data-target="aboutDescText" onclick="toggleSeeMore(this)" hidden style="margin-bottom:20px">See More</button>
                     @php
                         $aboutStats = json_decode($settings['about_stats'] ?? '[]', true) ?: [];
                         if (empty($aboutStats)) {
@@ -325,9 +252,9 @@
                                 <div class="stat-icon-custom">
                                     @if (!empty($stat['icon']))
                                         <img src="{{ asset('storage/' . $stat['icon']) }}" alt=""
-                                            style="width:40px;height:40px;object-fit:contain">
+                                            style="width:50px;height:50px;object-fit:contain">
                                     @else
-                                        <svg width="40" height="40" viewBox="0 0 40 40" fill="none"
+                                        <svg width="50" height="50" viewBox="0 0 40 40" fill="none"
                                             xmlns="http://www.w3.org/2000/svg">
                                             <path d="M13 2L20 14L27 2H22L20 6L18 2H13Z" fill="#C0392B" />
                                             <path d="M14 8L20 18L26 8H22L20 12L18 8H14Z" fill="#E74C3C" />
@@ -349,9 +276,9 @@
                         @endforeach
                     </div>
                     <div style="margin-top:35px">
-                        <a href="{{ $settings['about_btn_url'] ?? route('member.index') }}"
-                            class="btn-outline-orange-capsule" target="_blank">
-                            {{ $settings['about_btn_text'] ?? 'Become a Member' }}
+                        <a href="{{ Auth::guard('alumni')->check() ? route('alumni.index') : ($settings['about_btn_url'] ?? route('member.index')) }}"
+                            class="btn-outline-orange-capsule">
+                            {{ Auth::guard('alumni')->check() ? 'Alumni Directory' : ($settings['about_btn_text'] ?? 'Become a Member') }}
                         </a>
                     </div>
                 </div>
@@ -364,7 +291,10 @@
             <h2 class="section-title-center">Latest News</h2>
             <div class="grid-4" style="margin-top:40px">
                 @foreach ($displayNews as $item)
-                    <div class="card-news">
+                    @php
+                        $newsUrl = (isset($item->id) && $item->id !== '#') ? route('news.show', $item->id) : '#';
+                    @endphp
+                    <a href="{{ $newsUrl }}" class="card-news">
                         <div class="card-news-img-container">
                             <img class="card-news-img"
                                 src="{{ isset($item->image_url) ? $item->image_url : ($item->image ? asset('storage/' . $item->image) : 'https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=400&h=250&q=80') }}"
@@ -376,7 +306,7 @@
                             <h3 class="card-news-title">{{ $item->title }}</h3>
                             <p class="card-news-text">{{ Str::limit(strip_tags($item->description), 110) }}</p>
                         </div>
-                    </div>
+                    </a>
                 @endforeach
             </div>
             <div style="text-align:center;margin-top:45px">
@@ -398,11 +328,11 @@
                         </div>
                         <div class="alumni-info-custom">
                             <h4>{{ $alumni->full_name }}</h4>
-                            <div class="position-custom">{{ $alumni->current_designation }}</div>
+                            <div class="position-custom">{{ $alumni->current_designation ?? $alumni->field_of_work }}</div>
                             <div class="desc-custom">
                                 {{ Str::limit($alumni->star_description ?? ($alumni->achievements ?? ''), 80) }}</div>
-                            <div class="class-year-custom">Class of {{ $alumni->class_year }}</div>
-                            <div style="text-align:center;margin-top:15px">
+                            @if($alumni->class_year)<div class="class-year-custom">Class of {{ $alumni->class_year }}</div>@endif
+                            <div class="alumni-card-btn-wrap">
                                 <a href="{{ $alumni->id === '#' ? '#' : route('alumni.show', $alumni->id) }}"
                                     class="btn-teal-alumni-details">View Details</a>
                             </div>

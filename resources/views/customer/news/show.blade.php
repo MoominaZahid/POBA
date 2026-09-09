@@ -9,7 +9,7 @@
             <div>
                 <h1 style="font-size:2rem;font-weight:700;color:var(--teal);margin-bottom:12px;line-height:1.3">{{ $item->title }}</h1>
                 <p style="font-size:14px;color:var(--text-muted);margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border)">
-                    Published on {{ $item->published_at ? $item->published_at->format('F j, Y') : 'N/A' }}
+                    Published on {{ $item->published_at ? $item->published_at->format('F j, Y') : ($item->created_at ? $item->created_at->format('F j, Y') : 'N/A') }}
                 </p>
                 <div style="font-size:15px;line-height:1.9;color:var(--text-dark)">{!! $item->description !!}</div>
             </div>

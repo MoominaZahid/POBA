@@ -173,14 +173,7 @@
 
     <h2 class="cgf-heading">Create a Gallery Folder</h2>
 
-    @if($errors->any())
-        <div class="cgf-errors">
-            <strong>Please fix the following errors:</strong>
-            <ul>
-                @foreach($errors->all() as $err)<li>{{ $err }}</li>@endforeach
-            </ul>
-        </div>
-    @endif
+
 
     <form method="POST" action="{{ route('admin.gallery.store') }}">
         @csrf
@@ -257,7 +250,7 @@ function updateSlug(val) {
     document.getElementById('slugField').value = slug;
     var preview = document.getElementById('slugPreview');
     preview.textContent = slug
-        ? 'https://www.poba.socialknocks.com/' + slug + '/'
+        ? "{{ url('/gallery') }}/" + slug
         : '';
 }
 
@@ -266,7 +259,7 @@ function updateSlug(val) {
     var existing = document.getElementById('slugField').value;
     if (existing) {
         document.getElementById('slugPreview').textContent =
-            'https://www.poba.socialknocks.com/' + existing + '/';
+            "{{ url('/gallery') }}/" + existing;
     }
 })();
 </script>

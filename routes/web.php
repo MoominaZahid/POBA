@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Customer\HomeController;
 use App\Http\Controllers\Customer\AlumniController;
 use App\Http\Controllers\Customer\EventController as CustomerEventController;
@@ -21,10 +22,17 @@ use App\Http\Controllers\Customer\ProfileController;
 Route::get('/login', [LoginController::class, 'showLogin'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.post');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showForgotForm'])->name('password.request');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLink'])->name('password.email');
+Route::get('/reset-password/{token}', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [ForgotPasswordController::class, 'reset'])->name('password.update');
 
 // ── Public / Customer ─────────────────────────────────────────────────────────
 Route::get('/',                [HomeController::class, 'index'])->name('home');
 Route::get('/about',           [HomeController::class, 'about'])->name('about');
+Route::get('/verticals',           [HomeController::class, 'verticals'])->name('verticals.index');
+Route::get('/verticals/executive', [HomeController::class, 'verticalsExecutive'])->name('verticals.executive');
+Route::get('/verticals/working',   [HomeController::class, 'verticalsWorking'])->name('verticals.working');
 Route::get('/promotions',      [HomeController::class, 'promotions'])->name('promotions');
 Route::get('/contact',         [ContactController::class, 'index'])->name('contact');
 Route::post('/contact',        [ContactController::class, 'send'])->name('contact.send');
@@ -33,8 +41,10 @@ Route::get('/updates/{id}',    [NewsController::class, 'show'])->name('news.show
 Route::get('/events',          [CustomerEventController::class, 'index'])->name('events.index');
 Route::get('/star-alumni',     [AlumniController::class, 'starAlumni'])->name('star.alumni');
 Route::get('/gallery',         [CustomerGalleryController::class, 'index'])->name('gallery.index');
+Route::view('/coming-soon',    'customer.coming-soon')->name('coming.soon');
 Route::get('/become-a-member', [MemberController::class, 'index'])->name('member.index');
 Route::post('/become-a-member', [MemberController::class, 'store'])->name('member.store');
+Route::get('/cities-by-country/{country}', [MemberController::class, 'citiesByCountry'])->name('cities.by.country');
 
 // Alumni-only routes
 Route::middleware('alumni')->group(function () {
@@ -136,7 +146,10 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // ── CMS - Verticals ───────────────────────────────────────────────────────
     Route::middleware('permission:verticals')->group(function () {
         Route::get('/cms/verticals',           [CmsController::class, 'verticals'])->name('cms.verticals');
+        Route::get('/cms/verticals/export',    [CmsController::class, 'exportVerticals'])->name('cms.verticals.export');
+        Route::get('/cms/verticals/create',    [CmsController::class, 'createVertical'])->name('cms.verticals.create');
         Route::post('/cms/verticals',          [CmsController::class, 'storeVertical'])->name('cms.verticals.store');
+        Route::get('/cms/verticals/{id}',      [CmsController::class, 'showVertical'])->name('cms.verticals.show');
         Route::get('/cms/verticals/{id}/edit', [CmsController::class, 'editVertical'])->name('cms.verticals.edit');
         Route::put('/cms/verticals/{id}',      [CmsController::class, 'updateVertical'])->name('cms.verticals.update');
         Route::delete('/cms/verticals/{id}',   [CmsController::class, 'deleteVertical'])->name('cms.verticals.delete');

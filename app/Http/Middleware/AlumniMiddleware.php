@@ -12,7 +12,11 @@ class AlumniMiddleware
     public function handle(Request $request, Closure $next): Response
     {
         if (! Auth::guard('alumni')->check()) {
-            return redirect()->route('login')
+            // redirect()->guest() stores the current URL in the
+            // 'url.intended' session key, so LoginController's
+            // redirect()->intended() can send the user back here
+            // after a successful login instead of falling back to home.
+            return redirect()->guest(route('login'))
                 ->with('error', 'Please login to continue.');
         }
 

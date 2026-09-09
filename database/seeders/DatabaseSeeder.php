@@ -273,5 +273,41 @@ AlumniUser::updateOrCreate(
         foreach ($faqs as $faq) {
             Faq::firstOrCreate(['question' => $faq['question']], $faq);
         }
+
+        // ── Default Committees & Members ───────────────────────────────────────
+        $exec = \App\Models\Committee::firstOrCreate(
+            ['title' => 'Executive Committee'],
+            [
+                'description' => "Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+                'type' => 'executive'
+            ]
+        );
+        $execMembers = [
+            'Muhammad Saqib Hameed', 'Muhammad Furqan Abbasi', 'Nafay Hameed Satti',
+            'Ahsan Ali Khan', 'Raja Tariq Mehmood', 'Lt Col (R) Tariq Awan', 'Dr. Sajid Abbasi'
+        ];
+        foreach ($execMembers as $i => $mName) {
+            \App\Models\CommitteeMember::firstOrCreate(['committee_id' => $exec->id, 'member_name' => $mName], ['sort_order' => $i]);
+        }
+
+        $workingCommittees = [
+            'Admin Committee' => ['Muhammad Saqib Hameed', 'Muhammad Furqan Abbasi', 'Nafay Hameed Satti', 'Ahsan Ali Khan'],
+            'IT Committee' => ['Muhammad Saqib Hameed', 'Muhammad Furqan Abbasi', 'Nafay Hameed Satti', 'Ahsan Ali Khan'],
+            'Marketing Committee' => ['Muhammad Saqib Hameed', 'Muhammad Furqan Abbasi', 'Nafay Hameed Satti', 'Ahsan Ali Khan'],
+            'Management Committee' => ['Muhammad Saqib Hameed', 'Muhammad Furqan Abbasi', 'Nafay Hameed Satti', 'Ahsan Ali Khan'],
+        ];
+
+        foreach ($workingCommittees as $wTitle => $members) {
+            $wComm = \App\Models\Committee::firstOrCreate(
+                ['title' => $wTitle],
+                [
+                    'description' => "Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text.",
+                    'type' => 'working'
+                ]
+            );
+            foreach ($members as $i => $mName) {
+                \App\Models\CommitteeMember::firstOrCreate(['committee_id' => $wComm->id, 'member_name' => $mName], ['sort_order' => $i]);
+            }
+        }
     }
 }

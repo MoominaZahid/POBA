@@ -84,6 +84,12 @@
                 <input type="text" name="branch_number" class="admin-input" value="{{ $settings['branch_number'] ?? '' }}" placeholder="063">
             </div>
         </div>
+        <div class="admin-form-row">
+            <div class="admin-form-group">
+                <label class="admin-form-label">IBAN Number:</label>
+                <input type="text" name="bank_iban" class="admin-input" value="{{ $settings['bank_iban'] ?? '' }}" placeholder="PK01ABL0214567980">
+            </div>
+        </div>
         <div class="admin-form-group">
             <label class="admin-form-label">Upload QR Code:</label>
             <div style="display:flex;align-items:center;gap:15px;">

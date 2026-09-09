@@ -36,7 +36,9 @@
                             @endif
                         </p>
                     @endif
+                    @if($alumni->class_year)
                     <p style="color:var(--text-muted);margin-bottom:14px">Class of {{ $alumni->class_year }}</p>
+                    @endif
 
                     <div
                         style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--border)">
@@ -75,14 +77,18 @@
                             <p style="font-size:12px;color:var(--text-muted);margin-bottom:2px">Education</p>
                             <p style="font-weight:600">{{ $alumni->education }}</p>
                         </div>
+                        @if($visibleFields['field_of_study'])
                         <div>
                             <p style="font-size:12px;color:var(--text-muted);margin-bottom:2px">Field of Study</p>
                             <p style="font-weight:600">{{ $alumni->field_of_study }}</p>
                         </div>
+                        @endif
+                        @if($visibleFields['field_of_work'])
                         <div>
                             <p style="font-size:12px;color:var(--text-muted);margin-bottom:2px">Field of Work</p>
                             <p style="font-weight:600">{{ $alumni->field_of_work }}</p>
                         </div>
+                        @endif
                         @if ($visibleFields['current_city'])
                             <div>
                                 <p style="font-size:12px;color:var(--text-muted);margin-bottom:2px">Current City</p>

@@ -35,17 +35,21 @@ class EventController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title'               => 'required|string|max:255',
-            'description'         => 'required|string',
-            'start_date'          => 'required|date|after_or_equal:today',
-            'end_date'            => 'required|date|after_or_equal:start_date',
-            'start_time'          => 'required',
-            'location'            => 'required|string|max:255',
-            'entry_batches'       => 'nullable|array',
-            'entry_batches.*'     => 'integer|min:1|max:100',
-            'gallery_link'        => 'nullable|url|max:500',
-            'logo'                => 'nullable|image|max:2048',
-            'registration_required' => 'required|in:0,1',
+            'title'                  => 'required|string|max:255',
+            'description'            => 'required|string',
+            'start_date'             => 'required|date|after_or_equal:today',
+            'end_date'               => 'required|date|after_or_equal:start_date',
+            'start_time'             => 'required',
+            'location'               => 'required|string|max:255',
+            'focal_person_name'      => 'required|string|max:255',
+            'focal_person_number'    => ['required', 'regex:/^[0-9]{11}$/'],
+            'entry_batches'          => 'nullable|array',
+            'entry_batches.*'        => 'integer|min:1|max:100',
+            'gallery_link'           => 'nullable|string|max:500',
+            'logo'                   => 'nullable|image|max:2048',
+            'registration_required'  => 'required|in:0,1',
+        ], [
+            'focal_person_number.regex' => 'The focal person number must be exactly 11 digits (numbers only).',
         ]);
 
         $data = $request->except(['_token', 'logo']);
@@ -73,17 +77,21 @@ class EventController extends Controller
         $event = Event::findOrFail($id);
 
         $request->validate([
-            'title'               => 'required|string|max:255',
-            'description'         => 'required|string',
-            'start_date'          => 'required|date',
-            'end_date'            => 'required|date|after_or_equal:start_date',
-            'start_time'          => 'required',
-            'location'            => 'required|string|max:255',
-            'entry_batches'       => 'nullable|array',
-            'entry_batches.*'     => 'integer|min:1|max:100',
-            'gallery_link'        => 'nullable|url|max:500',
-            'logo'                => 'nullable|image|max:2048',
-            'registration_required' => 'required|in:0,1',
+            'title'                  => 'required|string|max:255',
+            'description'            => 'required|string',
+            'start_date'             => 'required|date',
+            'end_date'               => 'required|date|after_or_equal:start_date',
+            'start_time'             => 'required',
+            'location'               => 'required|string|max:255',
+            'focal_person_name'      => 'required|string|max:255',
+            'focal_person_number'    => ['required', 'regex:/^[0-9]{11}$/'],
+            'entry_batches'          => 'nullable|array',
+            'entry_batches.*'        => 'integer|min:1|max:100',
+            'gallery_link'           => 'nullable|string|max:500',
+            'logo'                   => 'nullable|image|max:2048',
+            'registration_required'  => 'required|in:0,1',
+        ], [
+            'focal_person_number.regex' => 'The focal person number must be exactly 11 digits (numbers only).',
         ]);
 
         $data = $request->except(['_token', '_method', 'logo']);
@@ -150,20 +158,20 @@ class EventController extends Controller
         return view('admin.events.participants', compact('event', 'participants'));
     }
 
-    /** Change a participant's status (confirmed / pending / cancelled). */
+    /** Change a participant's status (confirmed / pending / cancelled / declined). */
     public function updateParticipantStatus(Request $request, $eventId, $pId)
     {
-        $request->validate(['status' => 'required|in:confirmed,pending,cancelled']);
+        $request->validate(['status' => 'required|in:confirmed,pending,cancelled,declined']);
         EventParticipant::where('event_id', $eventId)->findOrFail($pId)
             ->update(['status' => $request->status]);
         return back()->with('success', 'Status updated to ' . ucfirst($request->status) . '.');
     }
 
-    /** Cancel a participant's registration. */
+    /** Decline a participant's registration. */
     public function cancelParticipant($eventId, $pId)
     {
-        EventParticipant::where('event_id', $eventId)->findOrFail($pId)->update(['status' => 'cancelled']);
-        return back()->with('success', 'Registration cancelled.');
+        EventParticipant::where('event_id', $eventId)->findOrFail($pId)->update(['status' => 'declined']);
+        return back()->with('success', 'Registration declined.');
     }
 
     /** Restore a cancelled registration (back to pending). */

@@ -137,17 +137,27 @@
                 </div>
             </div>
 
-            {{-- Entry + CCP No --}}
-            <div class="bam-row bam-row-2">
+            {{-- Batch + Class Year + CCP No --}}
+            <div class="bam-row" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));gap:16px;margin-bottom:16px;">
                 <div class="bam-group">
-                    <label class="bam-label">Entry <span>*</span></label>
+                    <label class="bam-label">Batch <span>*</span></label>
                     <select name="entry" class="bam-select {{ $errors->has('entry') ? 'is-invalid' : '' }}" required>
-                        <option value="">Select Entry</option>
-                        @foreach(range(1,30) as $e)
-                        <option value="{{ $e }}" {{ old('entry')==$e ? 'selected' : '' }}>{{ $e }}</option>
+                        <option value="">Select Batch</option>
+                        @foreach(range(1,50) as $e)
+                        <option value="{{ $e }}" {{ old('entry')==$e ? 'selected' : '' }}>Batch {{ $e }}</option>
                         @endforeach
                     </select>
                     @error('entry')<div class="bam-error">{{ $message }}</div>@enderror
+                </div>
+                <div class="bam-group">
+                    <label class="bam-label">Class Year (Class of) <span>*</span></label>
+                    <select name="class_year" class="bam-select {{ $errors->has('class_year') ? 'is-invalid' : '' }}" required>
+                        <option value="">Select Class Year</option>
+                        @foreach(range(date('Y'), 1947, -1) as $y)
+                        <option value="{{ $y }}" {{ old('class_year')==$y ? 'selected' : '' }}>{{ $y }}</option>
+                        @endforeach
+                    </select>
+                    @error('class_year')<div class="bam-error">{{ $message }}</div>@enderror
                 </div>
                 <div class="bam-group">
                     <label class="bam-label">CCP No. <span>*</span></label>
@@ -197,49 +207,22 @@
                 </div>
             </div>
 
-            {{-- Current Country (Dropdown) + Current City (Dropdown) --}}
+            {{-- Current Country (Dropdown) + Current City (Dropdown, populated dynamically) --}}
             <div class="bam-row bam-row-2">
                 <div class="bam-group">
                     <label class="bam-label">Current Country <span>*</span></label>
-                    <select name="current_country" class="bam-select {{ $errors->has('current_country') ? 'is-invalid' : '' }}" required>
+                    <select name="current_country" id="currentCountry" class="bam-select {{ $errors->has('current_country') ? 'is-invalid' : '' }}" required>
                         <option value="">Select Country</option>
-                        @php
-                            $countries = [
-                                'Pakistan', 'Afghanistan', 'Bangladesh', 'China', 'India',
-                                'Iran', 'Iraq', 'Saudi Arabia', 'UAE', 'UK', 'USA',
-                                'Canada', 'Australia', 'Germany', 'France', 'Turkey',
-                                'Egypt', 'South Africa', 'Nigeria', 'Japan', 'South Korea',
-                                'Malaysia', 'Singapore', 'Italy', 'Spain', 'Netherlands',
-                                'Switzerland', 'Sweden', 'Norway', 'Denmark', 'Belgium',
-                                'Austria', 'Greece', 'Portugal', 'Poland', 'Ukraine',
-                                'Russia', 'Brazil', 'Argentina', 'Mexico', 'Colombia'
-                            ];
-                        @endphp
                         @foreach($countries as $c)
-                        <option value="{{ $c }}" {{ old('current_country')==$c ? 'selected' : '' }}>{{ $c }}</option>
+                        <option value="{{ $c->name }}" data-id="{{ $c->id }}" {{ old('current_country')==$c->name ? 'selected' : '' }}>{{ $c->name }}</option>
                         @endforeach
                     </select>
                     @error('current_country')<div class="bam-error">{{ $message }}</div>@enderror
                 </div>
                 <div class="bam-group">
                     <label class="bam-label">Current City <span>*</span></label>
-                    <select name="current_city" class="bam-select {{ $errors->has('current_city') ? 'is-invalid' : '' }}" required>
-                        <option value="">Select City</option>
-                        @php
-                            $cities = [
-                                'Karachi', 'Lahore', 'Islamabad', 'Rawalpindi', 'Peshawar',
-                                'Quetta', 'Faisalabad', 'Multan', 'Hyderabad', 'Gujranwala',
-                                'Sialkot', 'Sukkur', 'Jhelum', 'Sargodha', 'Bahawalpur',
-                                'Mardan', 'Mingora', 'Dera Ghazi Khan', 'Rahim Yar Khan',
-                                'Dubai', 'Abu Dhabi', 'London', 'New York', 'Toronto',
-                                'Sydney', 'Berlin', 'Paris', 'Tokyo', 'Seoul',
-                                'Kuala Lumpur', 'Singapore', 'Istanbul', 'Cairo', 'Riyadh',
-                                'Jeddah', 'Mumbai', 'Delhi', 'Dhaka', 'Kabul'
-                            ];
-                        @endphp
-                        @foreach($cities as $ct)
-                        <option value="{{ $ct }}" {{ old('current_city')==$ct ? 'selected' : '' }}>{{ $ct }}</option>
-                        @endforeach
+                    <select name="current_city" id="currentCity" class="bam-select {{ $errors->has('current_city') ? 'is-invalid' : '' }}" required>
+                        <option value="">Select Country First</option>
                     </select>
                     @error('current_city')<div class="bam-error">{{ $message }}</div>@enderror
                 </div>
@@ -401,7 +384,32 @@
                 </div>
             </div>
 
-            {{-- ⛔ reCAPTCHA removed --}}
+            {{-- 🛡️ reCAPTCHA / Security Verification --}}
+            <div class="bam-row bam-row-1" style="margin-top:10px;margin-bottom:20px;">
+                <div style="background:#f8fafc;border:1.5px solid #cbd5e1;border-radius:10px;padding:16px 20px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;">
+                    <div style="display:flex;align-items:center;gap:12px;">
+                        <div style="width:40px;height:40px;background:#e2e8f0;border-radius:8px;display:flex;align-items:center;justify-content:center;">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2.2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                <path d="m9 12 2 2 4-4"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div style="font-size:13px;font-weight:700;color:#1e293b;">Security Verification (reCAPTCHA)</div>
+                            <div style="font-size:12px;color:#64748b;">Please calculate: <strong style="color:#0d9488;font-size:14px;">{{ session('captcha_n1', $n1 ?? rand(2,8)) }} + {{ session('captcha_n2', $n2 ?? rand(1,9)) }}</strong></div>
+                        </div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <input type="number" name="captcha_answer" placeholder="Answer"
+                               class="bam-input {{ $errors->has('captcha_answer') ? 'is-invalid' : '' }}"
+                               style="width:100px;text-align:center;font-weight:700;font-size:15px;padding:8px;" required>
+                        <span style="font-size:11px;color:#94a3b8;line-height:1.2;text-align:right;">Protected by<br><strong style="color:#64748b;">reCAPTCHA</strong></span>
+                    </div>
+                </div>
+                @error('captcha_answer')
+                <div class="bam-error" style="margin-top:6px;">{{ $message }}</div>
+                @enderror
+            </div>
 
             <button type="submit" class="bam-submit">Submit</button>
 
@@ -514,6 +522,50 @@ phoneInput.addEventListener('paste', function (e) {
     this.value = final;
     this.dispatchEvent(new Event('input'));
 });
+
+// ── Country → City: load cities dynamically for the selected country ──────────
+const countrySelect = document.getElementById('currentCountry');
+const citySelect     = document.getElementById('currentCity');
+const oldCity         = @json(old('current_city'));
+
+function loadCitiesForSelectedCountry(preselectCity) {
+    const selectedOption = countrySelect.options[countrySelect.selectedIndex];
+    const countryId = selectedOption ? selectedOption.dataset.id : null;
+
+    citySelect.innerHTML = '';
+    if (!countryId) {
+        citySelect.innerHTML = '<option value="">Select Country First</option>';
+        return;
+    }
+
+    citySelect.innerHTML = '<option value="">Loading cities...</option>';
+    citySelect.disabled = true;
+
+    fetch('/cities-by-country/' + countryId)
+        .then(res => res.json())
+        .then(cities => {
+            citySelect.innerHTML = '<option value="">Select City</option>';
+            cities.forEach(city => {
+                const opt = document.createElement('option');
+                opt.value = city;
+                opt.textContent = city;
+                if (preselectCity && city === preselectCity) opt.selected = true;
+                citySelect.appendChild(opt);
+            });
+            citySelect.disabled = false;
+        })
+        .catch(() => {
+            citySelect.innerHTML = '<option value="">Could not load cities</option>';
+            citySelect.disabled = false;
+        });
+}
+
+countrySelect.addEventListener('change', () => loadCitiesForSelectedCountry(null));
+
+// Repopulate on page load if a country was already selected (validation-failed redisplay)
+if (countrySelect.value) {
+    loadCitiesForSelectedCountry(oldCity);
+}
 </script>
 @endpush
 @endsection

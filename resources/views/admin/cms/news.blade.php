@@ -41,7 +41,7 @@
         <thead>
             <tr>
                 <th>Title <span class="sort-icon">⇅</span></th>
-                <th>Date Added <span class="sort-icon">⇅</span></th>
+                <th>Published Date <span class="sort-icon">⇅</span></th>
                 <th>Type <span class="sort-icon">⇅</span></th>
                 <th>Description <span class="sort-icon">⇅</span></th>
                 <th>Actions</th>
@@ -51,7 +51,7 @@
             @forelse($news as $item)
             <tr>
                 <td>{{ $item->title }}</td>
-                <td>{{ $item->created_at ? $item->created_at->format('d/m/Y') : '—' }}</td>
+                <td>{{ $item->published_at ? $item->published_at->format('d/m/Y') : ($item->created_at ? $item->created_at->format('d/m/Y') : '—') }}</td>
                 <td>{{ $item->type }}</td>
                 <td>{{ Str::limit(strip_tags($item->description), 120) }}</td>
                 <td>

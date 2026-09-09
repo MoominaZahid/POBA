@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->string('focal_person_name')->nullable();
             $table->string('focal_person_number')->nullable();
             $table->json('entry_batches')->nullable(); // e.g. [3,9]
+            $table->string('gallery_link', 500)->nullable();
             $table->string('logo')->nullable();
             $table->boolean('is_upcoming')->default(true);
             $table->timestamps();
@@ -29,7 +30,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('event_id')->constrained()->onDelete('cascade');
             $table->foreignId('alumni_user_id')->constrained()->onDelete('cascade');
-            $table->enum('status', ['confirmed','pending','cancelled'])->default('pending');
+            $table->enum('status', ['confirmed','pending','cancelled','declined'])->default('pending');
             $table->timestamps();
         });
     }

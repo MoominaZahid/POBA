@@ -48,8 +48,9 @@
 }
 .ap-input:focus, .ap-select:focus, .ap-textarea:focus { border-color:#0d9488; }
 .ap-input[readonly], .ap-select:disabled, .ap-textarea[readonly] {
-    background:#fff; cursor:default;
+    background:#eef1f3; cursor:default; color:#555;
 }
+.ap-edit-btn.active { color:#0d9488; background:#e6f7f5; padding:5px 12px; border-radius:16px; }
 .ap-select      { appearance:auto; }
 .ap-textarea    { resize:vertical; }
 
@@ -125,7 +126,7 @@
 
     {{-- ── Left Sidebar ── --}}
     <div class="ap-sidebar">
-        <a href="{{ url()->previous() }}" class="ap-back">← Back</a>
+        <a href="{{ $user->status === 'pending' ? route('admin.alumni.approvals') : route('admin.alumni.index') }}" class="ap-back">← Back</a>
 
         <img src="{{ $user->profile_photo
                 ? asset('storage/'.$user->profile_photo)
@@ -183,9 +184,9 @@
     <div class="ap-card">
         <div class="ap-card-header">
             <span class="ap-card-title">Alumni Information</span>
-            <button type="button" class="ap-edit-btn" onclick="toggleEdit()">
+            <button type="button" class="ap-edit-btn" id="editBtn" onclick="toggleEdit()">
                 <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M11.5 2.5a1.414 1.414 0 012 2L5 13H3v-2L11.5 2.5z" stroke="#0d9488" stroke-width="1.4" stroke-linejoin="round"/></svg>
-                Edit
+                <span id="editBtnLabel">Edit</span>
             </button>
         </div>
 
@@ -201,13 +202,22 @@
                 </div>
             </div>
 
-            {{-- Entry + CCP No --}}
-            <div class="ap-row ap-row-2">
+            {{-- Batch + Class Year + CCP No --}}
+            <div class="ap-row ap-row-3" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));gap:16px;margin-bottom:16px;">
                 <div class="ap-group">
-                    <label class="ap-label">Entry: *</label>
+                    <label class="ap-label">Batch: *</label>
                     <select name="entry" class="ap-select" disabled id="inp_entry">
-                        @foreach(range(1,30) as $e)
-                            <option value="{{ $e }}" {{ $user->entry==$e ? 'selected' : '' }}>{{ $e }}</option>
+                        @foreach(range(1,50) as $e)
+                            <option value="{{ $e }}" {{ $user->entry==$e ? 'selected' : '' }}>Batch {{ $e }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="ap-group">
+                    <label class="ap-label">Class Year (Class of): *</label>
+                    <select name="class_year" class="ap-select" disabled id="inp_class_year">
+                        <option value="">Select Class Year</option>
+                        @foreach(range(date('Y'), 1947, -1) as $y)
+                            <option value="{{ $y }}" {{ $user->class_year==$y ? 'selected' : '' }}>{{ $y }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -511,7 +521,7 @@ document.addEventListener('keydown', e => {
 let editing = false;
 
 const editableInputs   = ['inp_full_name','inp_email','inp_ccp','inp_phone','inp_ach','inp_fos','inp_fow'];
-const editableSelects  = ['inp_entry','inp_house','inp_edu','inp_city','inp_country','inp_desig','inp_org','inp_phone_code'];
+const editableSelects  = ['inp_entry','inp_class_year','inp_house','inp_edu','inp_city','inp_country','inp_desig','inp_org','inp_phone_code'];
 
 function toggleEdit() {
     editing = !editing;
@@ -533,6 +543,10 @@ function toggleEdit() {
     document.getElementById('inp_photo').style.display = editing ? 'block' : 'none';
 
     document.getElementById('editActions').style.display = editing ? 'flex' : 'none';
+
+    // Edit button state
+    document.getElementById('editBtn').classList.toggle('active', editing);
+    document.getElementById('editBtnLabel').textContent = editing ? 'Editing' : 'Edit';
 }
 
 

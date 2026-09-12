@@ -147,7 +147,7 @@
                         @if(!empty($settings['qr_code']))
                         <div style="flex-shrink:0;text-align:center">
                             <p style="font-size:13px;color:var(--orange);margin-bottom:8px">Scan to Donate</p>
-                            <img src="{{ asset('storage/'.$settings['qr_code']) }}" alt="QR Code" style="width:110px;border-radius:8px">
+                            <img src="{{ media_url($settings['qr_code']) }}" alt="QR Code" style="width:110px;border-radius:8px">
                         </div>
                         @endif
                     </div>

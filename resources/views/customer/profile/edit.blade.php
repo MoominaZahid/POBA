@@ -122,7 +122,7 @@
         {{-- Avatar --}}
         <div class="pf-avatar-wrap">
             <img id="avatarPreview"
-                 src="{{ $alumni->profile_photo ? asset('storage/'.$alumni->profile_photo) : 'https://placehold.co/110x110/1a7a7a/fff?text='.urlencode(substr($alumni->full_name,0,1)) }}"
+                 src="{{ $alumni->profile_photo ? media_url($alumni->profile_photo) : 'https://placehold.co/110x110/1a7a7a/fff?text='.urlencode(substr($alumni->full_name,0,1)) }}"
                  alt="{{ $alumni->full_name }}" class="pf-avatar">
             <label for="quickPhotoInput" class="pf-avatar-edit" title="Change photo">✎</label>
         </div>
@@ -343,7 +343,7 @@
                             <span>{{ $alumni->profile_photo ? basename($alumni->profile_photo) : 'No file uploaded' }}</span>
                             @if($alumni->profile_photo)
                             <button type="button" class="pf-file-eye" title="View"
-                                    onclick="openLb('{{ asset('storage/'.$alumni->profile_photo) }}', 'Profile Photo', '{{ pathinfo($alumni->profile_photo, PATHINFO_EXTENSION) }}')">
+                                    onclick="openLb('{{ media_url($alumni->profile_photo) }}', 'Profile Photo', '{{ pathinfo($alumni->profile_photo, PATHINFO_EXTENSION) }}')">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z" stroke="#0d9488" stroke-width="1.8"/><circle cx="12" cy="12" r="3" stroke="#0d9488" stroke-width="1.8"/></svg>
                             </button>
                             @endif
@@ -364,7 +364,7 @@
                             <span>{{ $alumni->cnic_file ? basename($alumni->cnic_file) : 'No file uploaded' }}</span>
                             @if($alumni->cnic_file)
                             <button type="button" class="pf-file-eye" title="View"
-                                    onclick="openLb('{{ asset('storage/'.$alumni->cnic_file) }}', 'CNIC Document', '{{ pathinfo($alumni->cnic_file, PATHINFO_EXTENSION) }}')">
+                                    onclick="openLb('{{ cnic_url($alumni->cnic_file) }}', 'CNIC Document', '{{ pathinfo($alumni->cnic_file, PATHINFO_EXTENSION) }}')">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z" stroke="#0d9488" stroke-width="1.8"/><circle cx="12" cy="12" r="3" stroke="#0d9488" stroke-width="1.8"/></svg>
                             </button>
                             @endif

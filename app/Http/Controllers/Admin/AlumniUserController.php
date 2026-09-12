@@ -61,7 +61,7 @@ class AlumniUserController extends Controller
         if ($request->hasFile('profile_photo')) {
             // Delete old file if exists
             if ($user->profile_photo) {
-                Storage::disk('public')->delete($user->profile_photo);
+                Storage::delete($user->profile_photo);
             }
             // Meaningful name: profile_{user_id}_{timestamp}.{ext}
             // e.g. profile_42_1718123456.jpg
@@ -69,20 +69,20 @@ class AlumniUserController extends Controller
             // Timestamp ensures no collision on re-upload.
             $ext = $request->file('profile_photo')->getClientOriginalExtension();
             $filename = 'profile_' . $user->id . '_' . time() . '.' . $ext;
-            $request->file('profile_photo')->storeAs('profiles', $filename, 'public');
+            $request->file('profile_photo')->storeAs('profiles', $filename);
             $data['profile_photo'] = 'profiles/' . $filename;
         }
 
         if ($request->hasFile('cnic_file')) {
             // Delete old file if exists
             if ($user->cnic_file) {
-                Storage::disk('public')->delete($user->cnic_file);
+                Storage::delete($user->cnic_file);
             }
             // Meaningful name: cnic_{user_id}_{timestamp}.{ext}
             // e.g. cnic_42_1718123456.png
             $ext = $request->file('cnic_file')->getClientOriginalExtension();
             $filename = 'cnic_' . $user->id . '_' . time() . '.' . $ext;
-            $request->file('cnic_file')->storeAs('cnics', $filename, 'public');
+            $request->file('cnic_file')->storeAs('cnics', $filename);
             $data['cnic_file'] = 'cnics/' . $filename;
         }
 

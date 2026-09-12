@@ -101,7 +101,7 @@
                         onchange="document.getElementById('qrFileName').textContent='✓ '+this.files[0].name">
                 </div>
                 @if(!empty($settings['qr_code']))
-                    <img src="{{ asset('storage/'.$settings['qr_code']) }}" alt="QR"
+                    <img src="{{ media_url($settings['qr_code']) }}" alt="QR"
                         style="width:55px;height:55px;object-fit:cover;border-radius:8px;border:1px solid #ddd;">
                 @endif
             </div>

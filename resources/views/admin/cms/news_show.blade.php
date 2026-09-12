@@ -105,7 +105,7 @@
     </div>
 
     @if($item->image)
-        <img src="{{ asset('storage/'.$item->image) }}" alt="{{ $item->title }}" class="news-show-img">
+        <img src="{{ media_url($item->image) }}" alt="{{ $item->title }}" class="news-show-img">
     @endif
 
     <div class="news-show-body">

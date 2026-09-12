@@ -112,7 +112,7 @@
             {{-- Main Row: Logo on left, links pushed right --}}
             <div class="footer-inner">
                 <div class="footer-brand">
-                    <img src="{{ !empty($settings['footer_logo']) ? asset('storage/'.$settings['footer_logo']) : asset('images/footerLogo.png') }}" alt="POBA Logo" class="footer-logo-img"
+                    <img src="{{ !empty($settings['footer_logo']) ? media_url($settings['footer_logo']) : asset('images/footerLogo.png') }}" alt="POBA Logo" class="footer-logo-img"
                         onerror="this.style.display='none'">
                 </div>
 

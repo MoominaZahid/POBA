@@ -16,7 +16,7 @@
                 <label class="admin-form-label">Footer Logo:</label>
                 <div class="footer-logo-upload" onclick="this.querySelector('input').click()">
                     @if (!empty($settings['footer_logo']))
-                        <img src="{{ asset('storage/' . $settings['footer_logo']) }}" class="footer-logo-upload-preview" id="footerLogoPreview">
+                        <img src="{{ media_url($settings['footer_logo']) }}" class="footer-logo-upload-preview" id="footerLogoPreview">
                     @else
                         <img src="{{ asset('images/footerLogo.png') }}" class="footer-logo-upload-preview" id="footerLogoPreview">
                     @endif

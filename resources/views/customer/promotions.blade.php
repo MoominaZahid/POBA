@@ -12,7 +12,7 @@
     <div class="container">
         @forelse($promos as $promo)
         <div class="promo-card">
-            <img src="{{ $promo->image ? asset('storage/'.$promo->image) : 'https://placehold.co/280x180/1a7a7a/fff?text=Promo' }}" alt="{{ $promo->title }}">
+            <img src="{{ $promo->image ? media_url($promo->image) : 'https://placehold.co/280x180/1a7a7a/fff?text=Promo' }}" alt="{{ $promo->title }}">
             <div class="promo-body">
                 <h4>{{ $promo->title }}</h4>
                 <p>{{ $promo->description }}</p>

@@ -59,7 +59,7 @@ class EventController extends Controller
         $data['entry_batches'] = $request->filled('entry_batches') ? array_map('intval', $request->entry_batches) : null;
 
         if ($request->hasFile('logo')) {
-            $data['logo'] = $request->file('logo')->store('events', 'public');
+            $data['logo'] = $request->file('logo')->store('events');
         }
 
         Event::create($data);
@@ -100,8 +100,8 @@ class EventController extends Controller
         $data['entry_batches'] = $request->filled('entry_batches') ? array_map('intval', $request->entry_batches) : null;
 
         if ($request->hasFile('logo')) {
-            if ($event->logo) Storage::disk('public')->delete($event->logo);
-            $data['logo'] = $request->file('logo')->store('events', 'public');
+            if ($event->logo) Storage::delete($event->logo);
+            $data['logo'] = $request->file('logo')->store('events');
         }
 
         $event->update($data);
@@ -111,7 +111,7 @@ class EventController extends Controller
     public function destroy($id)
     {
         $event = Event::findOrFail($id);
-        if ($event->logo) Storage::disk('public')->delete($event->logo);
+        if ($event->logo) Storage::delete($event->logo);
         $event->delete();
         return redirect()->route('admin.events.index')->with('success', 'Event deleted.');
     }

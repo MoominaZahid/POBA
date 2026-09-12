@@ -218,7 +218,7 @@
             @forelse($folder->images->take(12) as $i => $image)
                 <div class="show-thumb" onclick="openLightbox({{ $i }})">
                     <img
-                        src="{{ asset('storage/' . $image->image_path) }}"
+                        src="{{ media_url($image->image_path) }}"
                         alt="Image {{ $i + 1 }}"
                         loading="lazy"
                         onerror="this.src='https://placehold.co/400x400/1a7a7a/fff?text=Image'">
@@ -258,8 +258,8 @@
 @push('scripts')
 <script>
     // ── Data ──────────────────────────────────────────────
-    const BASE    = '{{ asset('storage') }}/';
-    const ALL     = @json($folder->images->values());   // full collection (id, image_path …)
+    const BASE    = '{{ media_url('') }}/';
+    const ALL     = @json($folder->images->map(fn($img) => array_merge($img->toArray(), ['url' => media_url($img->image_path)]))->values());   // full collection (id, image_path …)
     let current   = 0;
     let shownCount = Math.min(12, ALL.length);
 
@@ -280,7 +280,7 @@
     }
 
     function updateLightbox() {
-        const src = BASE + ALL[current].image_path;
+        const src = ALL[current].url || (BASE + ALL[current].image_path);
         document.getElementById('lbxImg').src        = src;
         document.getElementById('lbxDownload').href  = src;
         document.getElementById('lbxCounter').textContent =
@@ -313,7 +313,7 @@
             div.onclick     = () => openLightbox(globalIdx);
 
             const im        = document.createElement('img');
-            im.src          = BASE + img.image_path;
+            im.src          = img.url || (BASE + img.image_path);
             im.alt          = 'Image ' + (globalIdx + 1);
             im.loading      = 'lazy';
             im.onerror      = () => { im.src = 'https://placehold.co/400x400/1a7a7a/fff?text=Image'; };

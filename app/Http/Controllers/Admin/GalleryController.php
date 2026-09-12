@@ -51,7 +51,7 @@ class GalleryController extends Controller
     public function destroy($id) {
         $folder = GalleryFolder::with('images')->findOrFail($id);
         foreach ($folder->images as $img) {
-            Storage::disk('public')->delete($img->image_path);
+            Storage::delete($img->image_path);
         }
         $folder->delete();
         return back()->with('success','Folder deleted.');
@@ -95,7 +95,7 @@ class GalleryController extends Controller
 
         $order = $folder->images()->max('sort_order') ?? 0;
         foreach ($files as $file) {
-            $path = $file->store('gallery', 'public');
+            $path = $file->store('gallery');
             GalleryImage::create(['gallery_folder_id' => $id, 'image_path' => $path, 'sort_order' => ++$order]);
         }
 
@@ -104,7 +104,7 @@ class GalleryController extends Controller
 
     public function deleteImage($imageId) {
         $image = GalleryImage::findOrFail($imageId);
-        Storage::disk('public')->delete($image->image_path);
+        Storage::delete($image->image_path);
         $image->delete();
         return back()->with('success','Image deleted.');
     }

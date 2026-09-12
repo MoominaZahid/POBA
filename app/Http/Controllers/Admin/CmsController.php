@@ -30,7 +30,7 @@ class CmsController extends Controller
         }
 
         if ($request->hasFile('about_image')) {
-            $path = $request->file('about_image')->store('cms', 'public');
+            $path = $request->file('about_image')->store('cms');
             CmsSetting::set('about_image', $path);
         }
 
@@ -40,13 +40,13 @@ class CmsController extends Controller
         if ($request->filled('remove_slides')) {
             foreach ($request->remove_slides as $removePath) {
                 $slides = array_values(array_filter($slides, fn($s) => $s !== $removePath));
-                Storage::disk('public')->delete($removePath);
+                Storage::delete($removePath);
             }
         }
 
         if ($request->hasFile('new_slides')) {
             foreach ($request->file('new_slides') as $file) {
-                $slides[] = $file->store('cms/hero', 'public');
+                $slides[] = $file->store('cms/hero');
             }
         }
 
@@ -60,7 +60,7 @@ class CmsController extends Controller
 
                 $icon = $row['icon_existing'] ?? null;
                 if ($request->hasFile("stats.$idx.icon_new")) {
-                    $icon = $request->file("stats.$idx.icon_new")->store('cms/stats', 'public');
+                    $icon = $request->file("stats.$idx.icon_new")->store('cms/stats');
                 }
 
                 $stats[] = [
@@ -87,7 +87,7 @@ class CmsController extends Controller
     foreach ($fields as $f) CmsSetting::set($f, $request->$f);
 
     if ($request->hasFile('mission_image')) {
-        $path = $request->file('mission_image')->store('cms','public');
+        $path = $request->file('mission_image')->store('cms');
         CmsSetting::set('mission_image', $path);
     }
 
@@ -100,7 +100,7 @@ class CmsController extends Controller
 
             $icon = $row['icon_existing'] ?? null;
             if ($request->hasFile("mission_stats.$idx.icon_new")) {
-                $icon = $request->file("mission_stats.$idx.icon_new")->store('cms/stats', 'public');
+                $icon = $request->file("mission_stats.$idx.icon_new")->store('cms/stats');
             }
 
             $stats[] = ['icon' => $icon, 'heading' => $heading, 'subheading' => $row['subheading'] ?? ''];
@@ -140,7 +140,7 @@ class CmsController extends Controller
         $data = $request->except(['_token', 'image']);
         $data['published_at'] = $request->filled('published_at') ? $request->published_at : now();
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('news', 'public');
+            $data['image'] = $request->file('image')->store('news');
         }
         News::create($data);
         return redirect()->route('admin.cms.news')->with('success', 'News added.');
@@ -158,8 +158,8 @@ class CmsController extends Controller
             $data['published_at'] = $request->published_at;
         }
         if ($request->hasFile('image')) {
-            if ($item->image) Storage::disk('public')->delete($item->image);
-            $data['image'] = $request->file('image')->store('news', 'public');
+            if ($item->image) Storage::delete($item->image);
+            $data['image'] = $request->file('image')->store('news');
         }
         $item->update($data);
         return redirect()->route('admin.cms.news')->with('success', 'News updated.');
@@ -167,7 +167,7 @@ class CmsController extends Controller
     public function deleteNews($id)
     {
         $item = News::findOrFail($id);
-        if ($item->image) Storage::disk('public')->delete($item->image);
+        if ($item->image) Storage::delete($item->image);
         $item->delete();
         return back()->with('success', 'News deleted.');
     }
@@ -366,7 +366,7 @@ class CmsController extends Controller
         foreach ($fields as $f) CmsSetting::set($f, $request->$f);
 
         if ($request->hasFile('qr_code')) {
-            $path = $request->file('qr_code')->store('cms', 'public');
+            $path = $request->file('qr_code')->store('cms');
             CmsSetting::set('qr_code', $path);
         }
 
@@ -384,7 +384,7 @@ class CmsController extends Controller
         $request->validate(['title' => 'required']);
         $data = $request->except(['_token', 'image']);
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('promotions', 'public');
+            $data['image'] = $request->file('image')->store('promotions');
         }
         Promotion::create($data);
         return back()->with('success', 'Promotion added.');
@@ -392,7 +392,7 @@ class CmsController extends Controller
     public function deletePromotion($id)
     {
         $promo = Promotion::findOrFail($id);
-        if ($promo->image) Storage::disk('public')->delete($promo->image);
+        if ($promo->image) Storage::delete($promo->image);
         $promo->delete();
         return back()->with('success', 'Promotion deleted.');
     }
@@ -427,7 +427,7 @@ class CmsController extends Controller
         CmsSetting::set('footer_alumni_title', $request->alumni_title);
 
         if ($request->hasFile('footer_logo')) {
-            $path = $request->file('footer_logo')->store('cms', 'public');
+            $path = $request->file('footer_logo')->store('cms');
             CmsSetting::set('footer_logo', $path);
         }
 

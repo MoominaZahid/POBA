@@ -18,6 +18,10 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        if (file_exists(app_path('helpers.php'))) {
+            require_once app_path('helpers.php');
+        }
+
         // 2. Add this block to force secure HTTPS links on Render
         if (config('app.env') === 'production' || app()->environment('production')) {
             URL::forceScheme('https');

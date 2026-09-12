@@ -524,7 +524,7 @@ input[type="time"].cef-input::-webkit-calendar-picker-indicator {
             {{-- Show current logo if exists --}}
             @if($event->logo)
                 <div class="cef-current-logo">
-                    <img src="{{ asset('storage/'.$event->logo) }}" alt="Current logo">
+                    <img src="{{ media_url($event->logo) }}" alt="Current logo">
                     <span class="cef-current-logo-label">Current logo — upload a new one below to replace it</span>
                 </div>
             @endif

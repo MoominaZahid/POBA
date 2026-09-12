@@ -54,7 +54,7 @@
                 <div id="slidesContainer" style="display:flex;flex-wrap:wrap;gap:14px;margin-bottom:16px">
                     @foreach ($heroSlides as $slide)
                         <div class="slide-thumb" style="position:relative;width:140px">
-                            <img src="{{ asset('storage/' . $slide) }}"
+                            <img src="{{ media_url($slide) }}"
                                 style="width:100%;height:90px;object-fit:cover;border-radius:8px">
                             <button type="button" class="remove-slide-btn" data-path="{{ $slide }}"
                                 style="position:absolute;top:-8px;right:-8px;background:#e74c3c;color:#fff;border:none;border-radius:50%;width:24px;height:24px;cursor:pointer">×</button>
@@ -101,7 +101,7 @@
                             onchange="document.getElementById('aboutName').textContent='✓ '+this.files[0].name">
                     </div>
                     @if (!empty($settings['about_image']))
-                        <img src="{{ asset('storage/' . $settings['about_image']) }}" alt="About"
+                        <img src="{{ media_url($settings['about_image']) }}" alt="About"
                             style="width:55px;height:55px;object-fit:cover;border-radius:8px;border:1px solid #ddd;">
                     @endif
                 </div>
@@ -150,7 +150,7 @@
                                 </div>
                                 <div class="stat-icon-upload" onclick="this.querySelector('input').click()">
                                     @if (!empty($stat['icon']))
-                                        <img src="{{ asset('storage/' . $stat['icon']) }}" class="stat-icon-preview">
+                                        <img src="{{ media_url($stat['icon']) }}" class="stat-icon-preview">
                                     @else
                                         <span class="stat-icon-plus">+</span>
                                     @endif

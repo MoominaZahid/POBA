@@ -98,14 +98,14 @@ class MemberController extends Controller
         if ($request->hasFile('profile_photo')) {
             $ext      = $request->file('profile_photo')->getClientOriginalExtension();
             $filename = 'profile_' . $alumni->id . '_' . time() . '.' . $ext;
-            $request->file('profile_photo')->storeAs('profiles', $filename, 'public');
+            $request->file('profile_photo')->storeAs('profiles', $filename);
             $alumni->update(['profile_photo' => 'profiles/' . $filename]);
         }
 
         if ($request->hasFile('cnic_file')) {
             $ext      = $request->file('cnic_file')->getClientOriginalExtension();
             $filename = 'cnic_' . $alumni->id . '_' . time() . '.' . $ext;
-            $request->file('cnic_file')->storeAs('cnics', $filename, 'public');
+            $request->file('cnic_file')->storeAs('cnics', $filename);
             $alumni->update(['cnic_file' => 'cnics/' . $filename]);
         }
 

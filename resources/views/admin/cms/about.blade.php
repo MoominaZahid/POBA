@@ -45,7 +45,7 @@
 
         <!-- Image Preview -->
         @if (!empty($settings['mission_image']))
-            <img src="{{ asset('storage/' . $settings['mission_image']) }}"
+            <img src="{{ media_url($settings['mission_image']) }}"
                 alt="Mission"
                 style="width:55px;height:55px;object-fit:cover;border-radius:8px;border:1px solid #ddd;">
         @endif
@@ -100,7 +100,7 @@
                                 </div>
                                 <div class="stat-icon-upload" onclick="this.querySelector('input').click()">
                                     @if (!empty($stat['icon']))
-                                        <img src="{{ asset('storage/' . $stat['icon']) }}" class="stat-icon-preview">
+                                        <img src="{{ media_url($stat['icon']) }}" class="stat-icon-preview">
                                     @else
                                         <span class="stat-icon-plus">+</span>
                                     @endif

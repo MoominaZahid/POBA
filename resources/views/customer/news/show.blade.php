@@ -14,7 +14,7 @@
                 <div style="font-size:15px;line-height:1.9;color:var(--text-dark)">{!! $item->description !!}</div>
             </div>
             <div>
-                <img src="{{ $item->image ? asset('storage/'.$item->image) : 'https://placehold.co/600x400/1a7a7a/fff?text=News' }}"
+                <img src="{{ $item->image ? media_url($item->image) : 'https://placehold.co/600x400/1a7a7a/fff?text=News' }}"
                      alt="{{ $item->title }}" style="border-radius:16px;width:100%;object-fit:cover;max-height:420px">
             </div>
         </div>

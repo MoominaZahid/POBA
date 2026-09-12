@@ -61,22 +61,22 @@ class ProfileController extends Controller
         // Profile photo
         if ($request->hasFile('profile_photo')) {
             if ($user->profile_photo) {
-                Storage::disk('public')->delete($user->profile_photo);
+                Storage::delete($user->profile_photo);
             }
             $ext      = $request->file('profile_photo')->getClientOriginalExtension();
             $filename = 'profile_' . $user->id . '_' . time() . '.' . $ext;
-            $request->file('profile_photo')->storeAs('profiles', $filename, 'public');
+            $request->file('profile_photo')->storeAs('profiles', $filename);
             $data['profile_photo'] = 'profiles/' . $filename;
         }
 
         // CNIC file
         if ($request->hasFile('cnic_file')) {
             if ($user->cnic_file) {
-                Storage::disk('public')->delete($user->cnic_file);
+                Storage::delete($user->cnic_file);
             }
             $ext      = $request->file('cnic_file')->getClientOriginalExtension();
             $filename = 'cnic_' . $user->id . '_' . time() . '.' . $ext;
-            $request->file('cnic_file')->storeAs('cnics', $filename, 'public');
+            $request->file('cnic_file')->storeAs('cnics', $filename);
             $data['cnic_file'] = 'cnics/' . $filename;
         }
 

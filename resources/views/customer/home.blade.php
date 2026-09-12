@@ -98,7 +98,7 @@
         }
         $heroImages =
             count($heroSlides) > 0
-                ? array_map(fn($s) => asset('storage/' . $s), $heroSlides)
+                ? array_map(fn($s) => media_url($s), $heroSlides)
                 : [asset('images/hero.png')];
     @endphp
 
@@ -224,7 +224,7 @@
         <div class="container">
             <div class="grid-2" style="align-items:flex-start;gap:50px">
                 <div>
-                    <img src="{{ !empty($settings['about_image']) ? asset('storage/' . $settings['about_image']) : asset('images/about.png') }}"
+                    <img src="{{ !empty($settings['about_image']) ? media_url($settings['about_image']) : asset('images/about.png') }}"
                         alt="About POBA"
                         style="border-radius:30px;width:100%;object-fit:cover;max-height:380px;box-shadow: 0 5px 10px rgba(0,0,0,0.33)">
                 </div>
@@ -251,7 +251,7 @@
                             <div class="stat-item-custom">
                                 <div class="stat-icon-custom">
                                     @if (!empty($stat['icon']))
-                                        <img src="{{ asset('storage/' . $stat['icon']) }}" alt=""
+                                        <img src="{{ media_url($stat['icon']) }}" alt=""
                                             style="width:50px;height:50px;object-fit:contain">
                                     @else
                                         <svg width="50" height="50" viewBox="0 0 40 40" fill="none"
@@ -297,7 +297,7 @@
                     <a href="{{ $newsUrl }}" class="card-news">
                         <div class="card-news-img-container">
                             <img class="card-news-img"
-                                src="{{ isset($item->image_url) ? $item->image_url : ($item->image ? asset('storage/' . $item->image) : 'https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=400&h=250&q=80') }}"
+                                src="{{ isset($item->image_url) ? $item->image_url : ($item->image ? media_url($item->image) : 'https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=400&h=250&q=80') }}"
                                 alt="{{ $item->title }}">
                         </div>
                         <div class="card-news-body">
@@ -323,7 +323,7 @@
                 @foreach ($displayAlumni as $alumni)
                     <div class="alumni-card-custom">
                         <div class="alumni-img-container">
-                            <img src="{{ isset($alumni->image_url) ? $alumni->image_url : ($alumni->profile_photo ? asset('storage/' . $alumni->profile_photo) : 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=300&h=350&q=80') }}"
+                            <img src="{{ isset($alumni->image_url) ? $alumni->image_url : ($alumni->profile_photo ? media_url($alumni->profile_photo) : 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=300&h=350&q=80') }}"
                                 alt="{{ $alumni->full_name }}">
                         </div>
                         <div class="alumni-info-custom">

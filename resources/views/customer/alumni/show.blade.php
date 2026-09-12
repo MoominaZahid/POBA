@@ -8,7 +8,7 @@
             <div style="display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap">
                 {{-- Sidebar --}}
                 <div style="min-width:200px;text-align:center">
-                    <img src="{{ $alumni->profile_photo ? asset('storage/' . $alumni->profile_photo) : 'https://placehold.co/160x160/1a7a7a/fff?text=' . urlencode(substr($alumni->full_name, 0, 1)) }}"
+                    <img src="{{ $alumni->profile_photo ? media_url($alumni->profile_photo) : 'https://placehold.co/160x160/1a7a7a/fff?text=' . urlencode(substr($alumni->full_name, 0, 1)) }}"
                         alt="{{ $alumni->full_name }}"
                         style="width:160px;height:160px;border-radius:12px;object-fit:cover;margin-bottom:14px">
                 </div>

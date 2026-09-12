@@ -266,7 +266,7 @@
         <div class="ai-gallery-grid">
             @foreach($folder->images as $img)
                 <div class="ai-gallery-thumb">
-                    <img src="{{ asset('storage/'.$img->image_path) }}" alt="Gallery image"
+                    <img src="{{ media_url($img->image_path) }}" alt="Gallery image"
                          onerror="this.src='https://placehold.co/300x200/eee/999?text=No+Image'">
                     <form method="POST" action="{{ route('admin.gallery.deleteImage', $img->id) }}"
                           onsubmit="return confirm('Delete this image?')">

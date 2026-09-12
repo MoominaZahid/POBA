@@ -43,7 +43,7 @@
 
     {{-- Thumbnail --}}
     <img class="ec-thumb"
-         src="{{ $event->logo ? asset('storage/'.$event->logo) : 'https://placehold.co/80x90/086666/ffffff?text=Event' }}"
+         src="{{ $event->logo ? media_url($event->logo) : 'https://placehold.co/80x90/086666/ffffff?text=Event' }}"
          alt="{{ $event->title }}">
 
     {{-- Main info --}}

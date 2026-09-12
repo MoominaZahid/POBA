@@ -50,7 +50,7 @@
             @forelse($alumni as $a)
             <div class="alumni-card-custom">
                 <div class="alumni-img-container">
-                    <img src="{{ $a->profile_photo ? asset('storage/'.$a->profile_photo) : 'https://placehold.co/260x200/1a7a7a/fff?text='.urlencode(substr($a->full_name,0,1)) }}" alt="{{ $a->full_name }}">
+                    <img src="{{ $a->profile_photo ? media_url($a->profile_photo) : 'https://placehold.co/260x200/1a7a7a/fff?text='.urlencode(substr($a->full_name,0,1)) }}" alt="{{ $a->full_name }}">
                 </div>
                 <div class="alumni-info-custom">
                     <h4>{{ $a->full_name }}</h4>

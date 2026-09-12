@@ -58,7 +58,7 @@
         <div class="grid-4" style="align-items: stretch;">
             @forelse($news as $item)
             <a href="{{ route('news.show', $item->id) }}" class="news-grid-card">
-                <img class="card-img" src="{{ $item->image ? asset('storage/'.$item->image) : 'https://placehold.co/400x200/1a7a7a/fff?text=News' }}" alt="{{ $item->title }}" style="width:100%;height:180px;object-fit:cover">
+                <img class="card-img" src="{{ $item->image ? media_url($item->image) : 'https://placehold.co/400x200/1a7a7a/fff?text=News' }}" alt="{{ $item->title }}" style="width:100%;height:180px;object-fit:cover">
                 <div class="news-card-body">
                     <div class="card-type" style="font-size:12px;font-weight:700;color:var(--orange);text-transform:uppercase;margin-bottom:6px">{{ strtoupper($item->type ?? 'NEWS') }}</div>
                     <h3 class="card-title" style="font-size:16px;font-weight:700;color:var(--text-dark);line-height:1.4;margin-bottom:8px">{{ $item->title }}</h3>

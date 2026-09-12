@@ -129,7 +129,7 @@
         <a href="{{ $user->status === 'pending' ? route('admin.alumni.approvals') : route('admin.alumni.index') }}" class="ap-back">← Back</a>
 
         <img src="{{ $user->profile_photo
-                ? asset('storage/'.$user->profile_photo)
+                ? media_url($user->profile_photo)
                 : 'https://placehold.co/180x180/1a7a7a/fff?text='.urlencode(substr($user->full_name,0,1)) }}"
              alt="{{ $user->full_name }}" class="ap-avatar">
 
@@ -336,7 +336,7 @@
                         <span>{{ $user->cnic_file ? basename($user->cnic_file) : 'No file uploaded' }}</span>
                         @if($user->cnic_file)
                         <button type="button" class="ap-eye-btn" title="View CNIC"
-                                onclick="openLightbox('{{ asset('storage/'.$user->cnic_file) }}', 'CNIC Document', '{{ pathinfo($user->cnic_file, PATHINFO_EXTENSION) }}')">
+                                onclick="openLightbox('{{ cnic_url($user->cnic_file) }}', 'CNIC Document', '{{ pathinfo($user->cnic_file, PATHINFO_EXTENSION) }}')">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z" stroke="#0d9488" stroke-width="1.8"/><circle cx="12" cy="12" r="3" stroke="#0d9488" stroke-width="1.8"/></svg>
                         </button>
                         @else
@@ -357,7 +357,7 @@
                         <span>{{ $user->profile_photo ? basename($user->profile_photo) : 'No file uploaded' }}</span>
                         @if($user->profile_photo)
                         <button type="button" class="ap-eye-btn" title="View Profile Photo"
-                                onclick="openLightbox('{{ asset('storage/'.$user->profile_photo) }}', 'Profile Photo', '{{ pathinfo($user->profile_photo, PATHINFO_EXTENSION) }}')">
+                                onclick="openLightbox('{{ media_url($user->profile_photo) }}', 'Profile Photo', '{{ pathinfo($user->profile_photo, PATHINFO_EXTENSION) }}')">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8S1 12 1 12z" stroke="#0d9488" stroke-width="1.8"/><circle cx="12" cy="12" r="3" stroke="#0d9488" stroke-width="1.8"/></svg>
                         </button>
                         @else

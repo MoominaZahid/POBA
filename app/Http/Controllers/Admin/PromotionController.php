@@ -23,7 +23,7 @@ class PromotionController extends Controller
         $data = $request->except(['_token', 'image']);
 
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('promotions', 'public');
+            $data['image'] = $request->file('image')->store('promotions');
         }
 
         Promotion::create($data);
@@ -36,7 +36,7 @@ class PromotionController extends Controller
         $promo = Promotion::findOrFail($id);
 
         if ($promo->image) {
-            Storage::disk('public')->delete($promo->image);
+            Storage::delete($promo->image);
         }
 
         $promo->delete();

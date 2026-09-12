@@ -8,7 +8,7 @@
         <div class="container">
             <div class="grid-2 mission-grid" style="align-items:flex-start">
                 <div>
-                    <img src="{{ isset($settings['mission_image']) ? asset('storage/' . $settings['mission_image']) : asset('images/mission.jpg') }}"
+                    <img src="{{ !empty($settings['mission_image']) ? media_url($settings['mission_image']) : asset('images/mission.jpg') }}"
                         alt="Our Mission" style="border-radius:30px;width:100%;aspect-ratio:541/409;object-fit:cover"
                         onerror="this.src='https://placehold.co/600x360/1a7a7a/fff?text=Our+Mission'">
                 </div>
@@ -34,7 +34,7 @@
                             <div class="stat-item-custom">
                                 <div class="stat-icon-custom">
                                     @if (!empty($stat['icon']))
-                                        <img src="{{ asset('storage/' . $stat['icon']) }}" alt=""
+                                        <img src="{{ media_url($stat['icon']) }}" alt=""
                                             style="width:50px;height:50px;object-fit:contain">
                                     @endif
                                 </div>

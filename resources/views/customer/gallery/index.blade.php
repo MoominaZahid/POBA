@@ -223,7 +223,7 @@
                 <div class="gal-card">
                     <div class="gal-card-img">
                         <img
-                            src="{{ $folder->images->first() ? asset('storage/'.$folder->images->first()->image_path) : 'https://placehold.co/400x220/e8f5f5/1a7a7a?text=Gallery' }}"
+                            src="{{ $folder->images->first() ? media_url($folder->images->first()->image_path) : 'https://placehold.co/400x220/e8f5f5/1a7a7a?text=Gallery' }}"
                             alt="{{ $folder->folder_name }}"
                             loading="lazy"
                             onerror="this.src='https://placehold.co/400x220/e8f5f5/1a7a7a?text=Gallery'">

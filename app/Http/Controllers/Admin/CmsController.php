@@ -46,7 +46,7 @@ class CmsController extends Controller
 
         if ($request->hasFile('new_slides')) {
             foreach ($request->file('new_slides') as $file) {
-                $slides[] = $file->store('cms/hero');
+                $slides[] = $file->store('cms/hero', 'public');
             }
         }
 
@@ -60,7 +60,7 @@ class CmsController extends Controller
 
                 $icon = $row['icon_existing'] ?? null;
                 if ($request->hasFile("stats.$idx.icon_new")) {
-                    $icon = $request->file("stats.$idx.icon_new")->store('cms/stats');
+                    $icon = $request->file("stats.$idx.icon_new")->store('cms/stats', 'public');
                 }
 
                 $stats[] = [
@@ -140,7 +140,8 @@ class CmsController extends Controller
         $data = $request->except(['_token', 'image']);
         $data['published_at'] = $request->filled('published_at') ? $request->published_at : now();
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('news');
+            // $data['image'] = $request->file('image')->store('news');
+            $data['image'] = $request->file('image')->store('news', 'public');
         }
         News::create($data);
         return redirect()->route('admin.cms.news')->with('success', 'News added.');
@@ -159,7 +160,8 @@ class CmsController extends Controller
         }
         if ($request->hasFile('image')) {
             if ($item->image) Storage::delete($item->image);
-            $data['image'] = $request->file('image')->store('news');
+            // $data['image'] = $request->file('image')->store('news');
+            $data['image'] = $request->file('image')->store('news', 'public');
         }
         $item->update($data);
         return redirect()->route('admin.cms.news')->with('success', 'News updated.');
@@ -366,7 +368,7 @@ class CmsController extends Controller
         foreach ($fields as $f) CmsSetting::set($f, $request->$f);
 
         if ($request->hasFile('qr_code')) {
-            $path = $request->file('qr_code')->store('cms');
+            $path = $request->file('qr_code')->store('cms', 'public');
             CmsSetting::set('qr_code', $path);
         }
 
@@ -384,7 +386,7 @@ class CmsController extends Controller
         $request->validate(['title' => 'required']);
         $data = $request->except(['_token', 'image']);
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('promotions');
+            $data['image'] = $request->file('image')->store('promotions', 'public');
         }
         Promotion::create($data);
         return back()->with('success', 'Promotion added.');

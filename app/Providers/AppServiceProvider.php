@@ -5,7 +5,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\URL; // <-- 1. Add this line here
+use Illuminate\Support\Facades\URL; 
 use Illuminate\Support\Facades\View;
 use App\Models\CmsSetting;
 

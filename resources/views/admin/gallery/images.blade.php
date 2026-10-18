@@ -203,7 +203,13 @@
 @section('content')
 <div class="ai-page">
 
-    <a href="{{ route('admin.gallery.edit', $folder->id) }}" class="ai-back">←</a>
+    <a href="{{ route('admin.gallery.edit', $folder->id) }}" class="btn-back" title="Back" aria-label="Back">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="20" y1="12" x2="4" y2="12"></line>
+            <polyline points="10 18 4 12 10 6"></polyline>
+        </svg>
+        <span>Back</span>
+    </a>
     <h2 class="ai-heading">Add Images</h2>
     <div id="clientErrorContainer"></div>
 

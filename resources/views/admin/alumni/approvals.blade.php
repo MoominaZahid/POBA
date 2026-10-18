@@ -7,8 +7,9 @@
 <div class="admin-table-wrap">
     <div style="padding:20px 24px 0">
         <div class="tab-btns" style="margin-bottom:0">
-            <a href="{{ route('admin.alumni.index') }}" class="tab-btn" style="text-decoration:none">Users List</a>
+            <a href="{{ route('admin.alumni.index') }}" class="tab-btn" style="text-decoration:none">User List</a>
             <a href="{{ route('admin.alumni.approvals') }}" class="tab-btn active" style="text-decoration:none">Approvals</a>
+            <a href="{{ route('admin.alumni.rejected') }}" class="tab-btn" style="text-decoration:none">Rejected Users</a>
         </div>
     </div>
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AlumniUser;
+use App\Models\Country;
 use App\Notifications\AlumniApproved;
 use App\Notifications\AlumniRejected;
 use Illuminate\Http\Request;
@@ -18,10 +19,19 @@ class AlumniUserController extends Controller
     {
         $query = AlumniUser::where('status', 'approved');
 
+        if ($request->filled('status')) {
+            if ($request->status === 'active') {
+                $query->where('is_active', true);
+            } elseif ($request->status === 'deactivated') {
+                $query->where('is_active', false);
+            }
+        }
+
         if ($request->search) {
             $query->where(function ($q) use ($request) {
                 $q->where('full_name', 'like', "%{$request->search}%")
-                  ->orWhere('email', 'like', "%{$request->search}%");
+                  ->orWhere('email', 'like', "%{$request->search}%")
+                  ->orWhere('ccp_no', 'like', "%{$request->search}%");
             });
         }
 
@@ -36,11 +46,34 @@ class AlumniUserController extends Controller
         $query = AlumniUser::where('status', 'pending');
 
         if ($request->search) {
-            $query->where('full_name', 'like', "%{$request->search}%");
+            $query->where(function ($q) use ($request) {
+                $q->where('full_name', 'like', "%{$request->search}%")
+                  ->orWhere('email', 'like', "%{$request->search}%")
+                  ->orWhere('ccp_no', 'like', "%{$request->search}%");
+            });
         }
 
         $users = $query->orderByDesc('created_at')->paginate(10);
         return view('admin.alumni.approvals', compact('users'));
+    }
+
+    // ── Rejected alumni list ──────────────────────────────────────────────────
+
+    public function rejected(Request $request)
+    {
+        $query = AlumniUser::where('status', 'rejected');
+
+        if ($request->search) {
+            $query->where(function ($q) use ($request) {
+                $q->where('full_name', 'like', "%{$request->search}%")
+                  ->orWhere('email', 'like', "%{$request->search}%")
+                  ->orWhere('ccp_no', 'like', "%{$request->search}%")
+                  ->orWhere('rejection_reason', 'like', "%{$request->search}%");
+            });
+        }
+
+        $users = $query->orderByDesc('updated_at')->paginate(10);
+        return view('admin.alumni.rejected', compact('users'));
     }
 
     // ── Show single alumni ────────────────────────────────────────────────────
@@ -48,7 +81,8 @@ class AlumniUserController extends Controller
     public function show($id)
     {
         $user = AlumniUser::findOrFail($id);
-        return view('admin.alumni.show', compact('user'));
+        $countries = Country::orderBy('name')->get(['id', 'name']);
+        return view('admin.alumni.show', compact('user', 'countries'));
     }
 
     // ── Update alumni profile ─────────────────────────────────────────────────
@@ -56,7 +90,16 @@ class AlumniUserController extends Controller
     public function update(Request $request, $id)
     {
         $user = AlumniUser::findOrFail($id);
-        $data = $request->except(['_token', '_method', 'profile_photo', 'cnic_file']);
+        $data = $request->except(['_token', '_method', 'profile_photo', 'cnic_file', 'phone_code']);
+
+        if ($request->filled('phone_number')) {
+            $phone = $request->phone_number;
+            if ($request->filled('phone_code') && !str_starts_with($phone, '+')) {
+                $clean = ltrim(preg_replace('/\D/', '', $phone), '0');
+                $phone = $request->phone_code . $clean;
+            }
+            $data['phone_number'] = $phone;
+        }
 
         if ($request->hasFile('profile_photo')) {
             // Delete old file if exists
@@ -100,9 +143,10 @@ class AlumniUserController extends Controller
         $plainPassword = Str::random(10);
 
         $user->update([
-            'status'    => 'approved',
-            'is_active' => true,
-            'password'  => $plainPassword,   // model casts handle hashing
+            'status'           => 'approved',
+            'is_active'        => true,
+            'password'         => $plainPassword,   // model casts handle hashing
+            'rejection_reason' => null,             // clear previous rejection reason
         ]);
 
         // Send approval email with credentials
@@ -113,24 +157,57 @@ class AlumniUserController extends Controller
 
     // ── Reject ────────────────────────────────────────────────────────────────
 
-    public function reject($id)
+    public function reject(Request $request, $id)
     {
+        $request->validate([
+            'reason' => 'required|string|max:1000',
+        ], [
+            'reason.required' => 'Please provide a reason for rejecting this application.',
+        ]);
+
         $user = AlumniUser::findOrFail($id);
-        $user->update(['status' => 'rejected']);
+        $user->update([
+            'status'           => 'rejected',
+            'rejection_reason' => $request->reason,
+        ]);
 
-        // Send rejection email
-        $user->notify(new AlumniRejected());
+        // Send rejection email with reason and support contacts
+        $user->notify(new AlumniRejected($request->reason));
 
-        return back()->with('success', 'Alumni application rejected. Rejection email sent.');
+        return back()->with('success', 'Alumni application rejected. Rejection email sent with reason.');
     }
 
     // ── Toggle active/suspended ───────────────────────────────────────────────
 
-    public function toggleStatus($id)
+    public function toggleStatus(Request $request, $id)
     {
         $user = AlumniUser::findOrFail($id);
-        $user->update(['is_active' => ! $user->is_active]);
-        return response()->json(['is_active' => $user->is_active]);
+
+        if ($user->is_active) {
+            // Deactivating
+            $request->validate([
+                'reason' => 'required|string|max:1000',
+            ], [
+                'reason.required' => 'A deactivation reason is required.',
+            ]);
+
+            $user->update([
+                'is_active'           => false,
+                'deactivation_reason' => $request->reason,
+            ]);
+        } else {
+            // Reactivating
+            $user->update([
+                'is_active'           => true,
+                'deactivation_reason' => null,
+            ]);
+        }
+
+        return response()->json([
+            'success'   => true,
+            'is_active' => $user->is_active,
+            'reason'    => $user->deactivation_reason,
+        ]);
     }
 
     // ── Mark as Star Alumni ───────────────────────────────────────────────────

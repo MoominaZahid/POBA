@@ -5,6 +5,16 @@
 
     <section class="section-pad">
         <div class="container">
+            <div style="margin-bottom:20px;">
+                <a href="{{ url()->previous() }}" class="btn-back" title="Back" aria-label="Back">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="20" y1="12" x2="4" y2="12"></line>
+                        <polyline points="10 18 4 12 10 6"></polyline>
+                    </svg>
+                    <span>Back</span>
+                </a>
+            </div>
+
             <div style="display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap">
                 {{-- Sidebar --}}
                 <div style="min-width:200px;text-align:center">
@@ -22,7 +32,7 @@
                             settings.
                         </div>
                     @endif
-                    </h1>
+                    <h1 style="font-size:2rem;font-weight:700;color:var(--teal);margin-bottom:8px">{{ $alumni->full_name }}</h1>
                     @if ($visibleFields['current_designation'] || $visibleFields['current_organization'])
                         <p style="font-weight:700;font-size:16px;margin-bottom:4px">
                             @if ($visibleFields['current_designation'])
@@ -112,7 +122,13 @@
             </div>
 
             <div style="margin-top:30px">
-                <a href="{{ url()->previous() }}" class="btn-outline-teal">← Back</a>
+                <a href="{{ url()->previous() }}" class="btn-back" title="Back" aria-label="Back">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="20" y1="12" x2="4" y2="12"></line>
+                        <polyline points="10 18 4 12 10 6"></polyline>
+                    </svg>
+                    <span>Back</span>
+                </a>
             </div>
         </div>
     </section>

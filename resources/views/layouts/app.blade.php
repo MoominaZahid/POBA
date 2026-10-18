@@ -28,15 +28,7 @@
             {{-- Left Side Links --}}
             <ul class="navbar-nav nav-left" id="navLeft">
                 <li><a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Home</a></li>
-                <li class="dropdown">
-                    <a href="{{ route('about') }}" class="{{ request()->routeIs('about') || request()->routeIs('verticals.*') ? 'active' : '' }}">About Us ▾</a>
-                    <div class="dropdown-menu">
-                        <a href="{{ route('about') }}">About POBA</a>
-                        <a href="{{ route('verticals.index') }}">All Verticals</a>
-                        <a href="{{ route('verticals.executive') }}">Executive Committee</a>
-                        <a href="{{ route('verticals.working') }}">Working Committees</a>
-                    </div>
-                </li>
+                <li><a href="{{ route('about') }}" class="{{ request()->routeIs('about') || request()->routeIs('verticals.*') ? 'active' : '' }}">About Us</a></li>
                 <li><a href="{{ route('news.index') }}" class="{{ request()->routeIs('news.*') ? 'active' : '' }}">Updates</a></li>
                 <li><a href="{{ route('events.index') }}" class="{{ request()->routeIs('events.*') ? 'active' : '' }}">Events</a></li>
             </ul>
@@ -65,17 +57,21 @@
                     </div>
                 </li>
                 <li><a href="{{ route('contact') }}" class="{{ request()->routeIs('contact') ? 'active' : '' }}">Contact</a></li>
-                <li class="nav-cta-group">
-                    @auth('alumni')
-                        <a href="{{ route('profile.edit') }}" class="btn-teal-nav">My Profile</a>
-                        <form method="POST" action="{{ route('logout') }}">
+                @auth('alumni')
+                    <li>
+                        <a href="{{ route('profile.edit') }}" class="{{ request()->routeIs('profile.*') ? 'active' : '' }}">My Profile</a>
+                    </li>
+                    <li>
+                        <a href="#" onclick="event.preventDefault(); document.getElementById('alumni-logout-form').submit();" title="Logout">Logout</a>
+                        <form id="alumni-logout-form" method="POST" action="{{ route('logout') }}" style="display:none;">
                             @csrf
-                            <button type="submit" class="btn-teal-nav" style="border:none;cursor:pointer">Logout</button>
                         </form>
-                    @else
+                    </li>
+                @else
+                    <li class="nav-cta-group">
                         <a href="{{ route('member.index') }}" class="btn-teal-nav">Become a Member</a>
-                    @endauth
-                </li>
+                    </li>
+                @endauth
             </ul>
 
             {{-- ✅ Hamburger OUTSIDE both nav lists so it always stays visible on mobile --}}
@@ -204,8 +200,13 @@
                 </div>
             </div>
 
-            <div class="footer-copyright">
-                {{ $settings['footer_copyright'] ?? '© 2025 POBA. All rights reserved.' }}
+            <div class="footer-copyright" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+                <span>{{ $settings['footer_copyright'] ?? '© 2025 POBA. All rights reserved.' }}</span>
+                <div style="display:flex;gap:14px;align-items:center;font-size:12px;">
+                    <a href="{{ route('privacy') }}" style="color:rgba(255,255,255,0.75);text-decoration:none;">Privacy Policy</a>
+                    <span style="color:rgba(255,255,255,0.4);">•</span>
+                    <a href="{{ route('terms') }}" style="color:rgba(255,255,255,0.75);text-decoration:none;">Terms &amp; Conditions</a>
+                </div>
             </div>
 
         </div>
@@ -275,39 +276,36 @@
         if (document.fonts && document.fonts.ready) {
             document.fonts.ready.then(checkSeeMoreOverflow);
         }
+        window.addEventListener('load', checkSeeMoreOverflow);
+        window.addEventListener('resize', checkSeeMoreOverflow);
 
-        // ── Timeline description: hover tooltip for truncated text ───────
-        function initTimelineDescTooltips() {
-            var tooltip = document.getElementById('timelineDescTooltip');
-            if (!tooltip) {
-                tooltip = document.createElement('div');
-                tooltip.id = 'timelineDescTooltip';
-                tooltip.className = 'timeline-desc-tooltip';
-                document.body.appendChild(tooltip);
+        // ── Footer contact alignment with last column ────────────
+        function alignFooterContact() {
+            var lastCol = document.querySelector('.footer-links-wrapper .footer-col:last-child');
+            var contact = document.querySelector('.footer-contact');
+            var socials = document.querySelector('.footer-socials');
+            var container = document.querySelector('.footer-container');
+            if (!lastCol || !contact || !socials) return;
+            if (window.innerWidth > 768) {
+                var colRect = lastCol.getBoundingClientRect();
+                var socialsRect = socials.getBoundingClientRect();
+                var margin = colRect.left - socialsRect.right;
+                if (container) {
+                    var containerRect = container.getBoundingClientRect();
+                    var maxMargin = containerRect.right - socialsRect.right - contact.offsetWidth;
+                    margin = Math.min(margin, maxMargin);
+                }
+                contact.style.marginLeft = Math.max(0, margin) + 'px';
+            } else {
+                contact.style.marginLeft = '';
             }
-
-            document.querySelectorAll('.timeline-desc').forEach(function (el) {
-                if (el.scrollHeight <= el.clientHeight + 1) return; // not truncated
-                el.classList.add('has-tooltip');
-
-                el.addEventListener('mouseenter', function () {
-                    tooltip.textContent = el.textContent.trim();
-                    var rect = el.getBoundingClientRect();
-                    tooltip.style.left = (rect.left + window.scrollX) + 'px';
-                    tooltip.style.top = (rect.bottom + window.scrollY + 8) + 'px';
-                    tooltip.style.width = Math.max(rect.width, 180) + 'px';
-                    tooltip.classList.add('visible');
-                });
-                el.addEventListener('mouseleave', function () {
-                    tooltip.classList.remove('visible');
-                });
-            });
         }
         if (document.fonts && document.fonts.ready) {
-            document.fonts.ready.then(initTimelineDescTooltips);
+            document.fonts.ready.then(alignFooterContact);
         }
-        window.addEventListener('load', initTimelineDescTooltips);
-        window.addEventListener('load', checkSeeMoreOverflow);
+        window.addEventListener('load', alignFooterContact);
+        window.addEventListener('resize', alignFooterContact);
+        document.addEventListener('DOMContentLoaded', alignFooterContact);
     </script>
 
     @stack('scripts')

@@ -5,6 +5,15 @@
 
 <section class="section-pad">
     <div class="container">
+        <div style="margin-bottom:20px;">
+            <a href="{{ route('news.index') }}" class="btn-back" title="Back to News" aria-label="Back to News">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="20" y1="12" x2="4" y2="12"></line>
+                    <polyline points="10 18 4 12 10 6"></polyline>
+                </svg>
+                <span>Back to News</span>
+            </a>
+        </div>
         <div class="grid-2" style="gap:50px;align-items:flex-start">
             <div>
                 <h1 style="font-size:2rem;font-weight:700;color:var(--teal);margin-bottom:12px;line-height:1.3">{{ $item->title }}</h1>
@@ -17,9 +26,6 @@
                 <img src="{{ $item->image ? media_url($item->image) : 'https://placehold.co/600x400/1a7a7a/fff?text=News' }}"
                      alt="{{ $item->title }}" style="border-radius:16px;width:100%;object-fit:cover;max-height:420px">
             </div>
-        </div>
-        <div style="margin-top:30px">
-            <a href="{{ route('news.index') }}" class="btn-outline-teal">← Back to News</a>
         </div>
     </div>
 </section>

@@ -20,15 +20,11 @@
                     <button type="button" class="see-more-toggle" data-target="missionDescText" onclick="toggleSeeMore(this)" hidden>See More</button>
                     @php
                         $missionStats = json_decode($settings['mission_stats'] ?? '[]', true) ?: [];
-                        if (empty($missionStats)) {
-                            $missionStats = [
-                                ['icon' => null, 'heading' => 'Excellence', 'subheading' => 'In Service & Leadership'],
-                                ['icon' => null, 'heading' => 'Community', 'subheading' => 'Strong Alumni Network'],
-                                ['icon' => null, 'heading' => 'Global Reach', 'subheading' => 'Worldwide Presence'],
-                                ['icon' => null, 'heading' => 'Integrity', 'subheading' => 'Honor & Commitment'],
-                            ];
-                        }
+                        $missionStats = array_filter($missionStats, function ($stat) {
+                            return !empty($stat['heading']);
+                        });
                     @endphp
+                    @if (!empty($missionStats))
                     <div class="stats-grid-custom">
                         @foreach ($missionStats as $stat)
                             <div class="stat-item-custom">
@@ -45,6 +41,7 @@
                             </div>
                         @endforeach
                     </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -57,8 +54,21 @@
             <p style="text-align:center;color:var(--text-muted);margin-bottom:50px">
                 {{ $settings['history_description'] ?? 'Milestones in POBA\'s journey of excellence' }}</p>
             <div class="timeline">
-                @php $defaultTimeline = [['year' => '1947', 'heading' => 'Foundation Era', 'description' => 'Establishment of Pakistan Navy and the beginning of naval education traditions.'], ['year' => '1965', 'heading' => 'First Alumni Network', 'description' => 'Formation of the first organized alumni association.'], ['year' => '1980', 'heading' => 'Formal Constitution', 'description' => 'POBA officially constituted with formal structure and governance framework.'], ['year' => '1995', 'heading' => 'Modernization Phase', 'description' => 'Introduction of modern communication systems.'], ['year' => '2010', 'heading' => 'Digital Transformation', 'description' => 'Launch of digital platforms for better alumni connectivity.'], ['year' => '2025', 'heading' => 'New Horizons', 'description' => 'Comprehensive website launch and enhanced alumni engagement initiatives.']]; @endphp
-                @foreach ($timeline && count($timeline) ? $timeline : $defaultTimeline as $index => $item)
+                @php
+                    $defaultTimeline = [
+                        ['year' => '1947', 'heading' => 'Foundation Era', 'description' => 'Establishment of Pakistan Navy and the beginning of naval education traditions.'],
+                        ['year' => '1965', 'heading' => 'First Alumni Network', 'description' => 'Formation of the first organized alumni association.'],
+                        ['year' => '1980', 'heading' => 'Formal Constitution', 'description' => 'POBA officially constituted with formal structure and governance framework.'],
+                        ['year' => '1995', 'heading' => 'Modernization Phase', 'description' => 'Introduction of modern communication systems.'],
+                        ['year' => '2010', 'heading' => 'Digital Transformation', 'description' => 'Launch of digital platforms for better alumni connectivity.'],
+                        ['year' => '2025', 'heading' => 'New Horizons', 'description' => 'Comprehensive website launch and enhanced alumni engagement initiatives.']
+                    ];
+                    $timelineItems = $timeline && count($timeline) ? $timeline : $defaultTimeline;
+                    $endTileText = trim($settings['history_end_tile_text'] ?? '');
+                    $endTileYear = trim($settings['history_end_tile_year'] ?? '') ?: 'Present';
+                    $endTileHeading = trim($settings['history_end_tile_heading'] ?? '');
+                @endphp
+                @foreach ($timelineItems as $index => $item)
                     <div class="timeline-item">
                         <div class="timeline-content" id="timelineTile-{{ $index }}">
                             <div class="timeline-ribbon"><span class="timeline-year">{{ $item['year'] }}</span></div>
@@ -67,15 +77,24 @@
                                 <div class="timeline-heading">{{ $item['heading'] }}</div>
                                 <div class="timeline-desc">{{ $item['description'] }}</div>
                             </div>
-                            @if (!empty($item['detail']))
-                                <div class="timeline-detail-wrap">
-                                    <p class="timeline-detail">{{ $item['detail'] }}</p>
-                                    <button type="button" class="timeline-more-toggle" data-target="timelineTile-{{ $index }}" onclick="toggleTimelineDetail(this)">Read More</button>
-                                </div>
-                            @endif
                         </div>
                     </div>
                 @endforeach
+                @if (!empty($endTileText))
+                    @php $endIndex = count($timelineItems); @endphp
+                    <div class="timeline-item timeline-item-end">
+                        <div class="timeline-content timeline-content-end" id="timelineTile-{{ $endIndex }}">
+                            <div class="timeline-ribbon"><span class="timeline-year">{{ $endTileYear }}</span></div>
+                            <div class="timeline-connector"></div>
+                            <div class="timeline-box timeline-box-end">
+                                @if (!empty($endTileHeading))
+                                    <div class="timeline-heading">{{ $endTileHeading }}</div>
+                                @endif
+                                <div class="timeline-desc timeline-desc-end">{{ $endTileText }}</div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
     </section>
@@ -86,13 +105,13 @@
             <h2 class="section-title">Our Verticals</h2>
             <div class="verticals-grid">
                 <div class="vertical-card">
-                    <h4>Executive Committee</h4>
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                    <h4>{{ !empty(trim($executive->title ?? '')) ? $executive->title : 'Executive Committee' }}</h4>
+                    <p>{{ !empty(trim($executive->description ?? '')) ? $executive->description : 'Executive Committee coordinates leadership, governance, and overall strategy.' }}</p>
                     <a href="{{ route('verticals.executive') }}" class="btn-teal" style="font-size:13px;padding:9px 22px">View Details</a>
                 </div>
                 <div class="vertical-card">
-                    <h4>Working Committees</h4>
-                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry.</p>
+                    <h4>{{ !empty(trim($workingMain->title ?? '')) ? $workingMain->title : 'Working Committees' }}</h4>
+                    <p>{{ !empty(trim($workingMain->description ?? '')) ? $workingMain->description : 'Working committees manage active operational programs and alumni initiatives.' }}</p>
                     <a href="{{ route('verticals.working') }}" class="btn-teal" style="font-size:13px;padding:9px 22px">View Details</a>
                 </div>
             </div>

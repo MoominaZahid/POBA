@@ -83,6 +83,13 @@
     margin: 0 0 6px;
 }
 
+.ec-mobile-title-wrap {
+    display: none;
+}
+.ec-title-desktop {
+    display: block;
+}
+
 .ec-meta {
     display: flex;
     flex-wrap: wrap;
@@ -295,11 +302,198 @@
     font-size: .95rem;
 }
 
-@media (max-width: 640px) {
-    .ec-card    { flex-wrap: wrap; }
-    .ec-thumb   { width: 100%; height: 160px; margin-left: 0; }
-    .ec-actions { width: 100%; border-left: none; border-top: 1px solid rgba(8,102,102,.08); }
-    .ec-date-badge { min-width: 50px; border-right: none; padding-right: 10px; }
+@media (max-width: 768px) {
+    .ec-card {
+        flex-wrap: wrap;
+    }
+    .ec-date-badge {
+        min-width: 65px;
+        padding: 12px 14px;
+        border-right: 1px solid rgba(8,102,102,0.10);
+        align-self: stretch;
+    }
+    .ec-mobile-title-wrap {
+        display: flex;
+        align-items: center;
+        flex: 1;
+        min-width: 0;
+        padding: 12px 16px 12px 14px;
+    }
+    .ec-title-mobile {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #086666;
+        margin: 0;
+        line-height: 1.35;
+        word-break: break-word;
+    }
+    .ec-title-desktop {
+        display: none !important;
+    }
+    .ec-thumb {
+        width: 100%;
+        height: 160px;
+        margin-left: 0;
+    }
+    .ec-body {
+        width: 100%;
+    }
+    .ec-actions {
+        width: 100%;
+        border-left: none;
+        border-top: 1px solid rgba(8,102,102,.08);
+    }
+}
+
+/* ── Custom Event Confirmation Modal ──────────────────────────── */
+.ec-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(4, 30, 30, 0.6);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    animation: ecFadeIn 0.2s ease-out;
+}
+.ec-modal-overlay.open {
+    display: flex;
+}
+.ec-modal-box {
+    background: #ffffff;
+    border-radius: 24px;
+    padding: 32px 28px 26px;
+    width: 440px;
+    max-width: 100%;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.22);
+    text-align: center;
+    position: relative;
+    animation: ecPopIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1px solid rgba(8, 102, 102, 0.1);
+}
+@keyframes ecFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes ecPopIn {
+    from { opacity: 0; transform: scale(0.92); }
+    to { opacity: 1; transform: scale(1); }
+}
+.ec-modal-close {
+    position: absolute;
+    top: 14px;
+    right: 16px;
+    background: #f1f5f9;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 15px;
+    color: #64748b;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, color 0.15s;
+}
+.ec-modal-close:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+}
+.ec-modal-icon-wrap {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin: 0 auto 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.ec-modal-icon-wrap.success {
+    background: #e1f5ee;
+}
+.ec-modal-icon-wrap.danger {
+    background: #fef3c7;
+}
+.ec-modal-title {
+    font-family: 'Cairo', sans-serif;
+    font-size: 1.28rem;
+    font-weight: 700;
+    color: #086666;
+    margin: 0 0 6px;
+}
+.ec-modal-desc {
+    font-size: 0.88rem;
+    color: #64748b;
+    margin: 0 0 16px;
+    line-height: 1.5;
+}
+.ec-modal-event-preview {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 12px 16px;
+    margin-bottom: 22px;
+    text-align: left;
+}
+.ec-modal-event-preview .ev-p-title {
+    font-weight: 700;
+    color: #0f172a;
+    font-size: 0.95rem;
+    margin-bottom: 4px;
+}
+.ec-modal-event-preview .ev-p-meta {
+    font-size: 0.82rem;
+    color: #64748b;
+    line-height: 1.4;
+}
+.ec-modal-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+.btn-modal-cancel {
+    flex: 1;
+    padding: 11px 18px;
+    border-radius: 30px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    border: 1.5px solid #cbd5e1;
+    background: #fff;
+    color: #475569;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+}
+.btn-modal-cancel:hover {
+    background: #f1f5f9;
+    border-color: #94a3b8;
+}
+.btn-modal-confirm {
+    flex: 1;
+    padding: 11px 18px;
+    border-radius: 30px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    border: none;
+    background: #086666;
+    color: #fff;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.15s;
+    box-shadow: 0 4px 14px rgba(8, 102, 102, 0.28);
+}
+.btn-modal-confirm:hover {
+    background: #054d4d;
+    transform: translateY(-1px);
+}
+.btn-modal-confirm.danger {
+    background: #e87722;
+    box-shadow: 0 4px 14px rgba(232, 119, 34, 0.28);
+}
+.btn-modal-confirm.danger:hover {
+    background: #cf6211;
 }
 </style>
 @endpush
@@ -376,8 +570,112 @@
     </div>
 </section>
 
+{{-- ── Custom Event Confirmation Modal ── --}}
+<div class="ec-modal-overlay" id="eventConfirmModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="ec-modal-box">
+        <button type="button" class="ec-modal-close" onclick="closeEventConfirmModal()" aria-label="Close modal">✕</button>
+        
+        <div class="ec-modal-icon-wrap" id="modalIconWrap"></div>
+
+        <h3 id="modalTitle" class="ec-modal-title">Confirm Registration</h3>
+        <p id="modalDesc" class="ec-modal-desc">Are you sure you want to register for this event?</p>
+
+        <div class="ec-modal-event-preview">
+            <div id="modalEventTitle" class="ev-p-title"></div>
+            <div id="modalEventMeta" class="ev-p-meta"></div>
+        </div>
+
+        <div class="ec-modal-actions">
+            <button type="button" class="btn-modal-cancel" onclick="closeEventConfirmModal()">Cancel</button>
+            <button type="button" id="btnModalConfirm" class="btn-modal-confirm">Yes, Register</button>
+        </div>
+    </div>
+</div>
+
 @push('scripts')
 <script>
+// ── Custom Event Confirmation Modal Controller ────────────────────
+let currentConfirmFormId = null;
+
+function showEventConfirmModal(opts) {
+    currentConfirmFormId = opts.formId;
+    
+    document.getElementById('modalTitle').textContent = opts.title;
+    document.getElementById('modalDesc').textContent = opts.desc;
+    document.getElementById('modalEventTitle').textContent = opts.eventTitle;
+    document.getElementById('modalEventMeta').innerHTML = opts.eventMeta;
+
+    const confirmBtn = document.getElementById('btnModalConfirm');
+    confirmBtn.disabled = false;
+    confirmBtn.textContent = opts.confirmText || 'Confirm';
+    confirmBtn.className = 'btn-modal-confirm' + (opts.isDanger ? ' danger' : '');
+
+    const iconWrap = document.getElementById('modalIconWrap');
+    if (opts.isDanger) {
+        iconWrap.className = 'ec-modal-icon-wrap danger';
+        iconWrap.innerHTML = `
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#d97706" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                <line x1="12" y1="9" x2="12" y2="13"></line>
+                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>`;
+    } else {
+        iconWrap.className = 'ec-modal-icon-wrap success';
+        iconWrap.innerHTML = `
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#086666" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+                <path d="M9 16l2 2 4-4"></path>
+            </svg>`;
+    }
+
+    const modal = document.getElementById('eventConfirmModal');
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeEventConfirmModal() {
+    const modal = document.getElementById('eventConfirmModal');
+    if (modal) {
+        modal.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+    currentConfirmFormId = null;
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    const confirmBtn = document.getElementById('btnModalConfirm');
+    if (confirmBtn) {
+        confirmBtn.addEventListener('click', function () {
+            if (currentConfirmFormId) {
+                const form = document.getElementById(currentConfirmFormId);
+                if (form) {
+                    confirmBtn.disabled = true;
+                    confirmBtn.textContent = 'Processing...';
+                    form.submit();
+                }
+            }
+        });
+    }
+
+    const modal = document.getElementById('eventConfirmModal');
+    if (modal) {
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) {
+                closeEventConfirmModal();
+            }
+        });
+    }
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            closeEventConfirmModal();
+        }
+    });
+});
+
 // ── Tab switching ──────────────────────────────────────────────────
 function showTab(tab) {
     document.getElementById('tabUpcoming').style.display = tab === 'upcoming' ? 'block' : 'none';

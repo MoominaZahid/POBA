@@ -44,9 +44,9 @@
 <section class="section-pad" style="background:var(--bg-light);padding-top:60px">
     <div class="container">
         <div style="text-align:center;margin-bottom:24px">
-            <h2 class="section-title" style="margin-bottom:12px">Working Committees</h2>
+            <h2 class="section-title" style="margin-bottom:12px">{{ $workingMain->title ?? 'Working Committees' }}</h2>
             <p style="max-width:850px;margin:0 auto;color:#4a5568;font-size:15px;line-height:1.8">
-                Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+                {{ $workingMain->description ?? '' }}
             </p>
         </div>
 

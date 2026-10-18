@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\GalleryFolder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class GalleryController extends Controller
 {
@@ -24,10 +25,23 @@ class GalleryController extends Controller
 
     public function show($id)
     {
-        $folder = GalleryFolder::with('images')->findOrFail($id);
+        $folder = GalleryFolder::with('images')
+            ->where(function ($q) use ($id) {
+                if (is_numeric($id)) {
+                    $q->where('id', (int) $id)
+                      ->orWhere('slug', $id)
+                      ->orWhere('folder_name', $id);
+                } else {
+                    $q->where('slug', $id)
+                      ->orWhere('slug', Str::slug($id))
+                      ->orWhere('folder_name', $id);
+                }
+            })
+            ->firstOrFail();
 
         if ($folder->type === 'Private' && ! Auth::guard('alumni')->check()) {
-            abort(403, 'This gallery folder is only accessible to members. Please log in.');
+            return redirect()->route('login')
+                ->with('error', 'This gallery folder is only accessible to members. Please log in.');
         }
 
         return view('customer.gallery.show', compact('folder'));

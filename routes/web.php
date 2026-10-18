@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\GalleryController;
 use App\Http\Controllers\Admin\CmsController;
 use App\Http\Controllers\Admin\AdminUserController;
+use App\Http\Controllers\Admin\ContactInquiryController;
 use App\Http\Controllers\Customer\ProfileController;
 
 // ── Auth ──────────────────────────────────────────────────────────────────────
@@ -41,17 +42,18 @@ Route::get('/updates/{id}',    [NewsController::class, 'show'])->name('news.show
 Route::get('/events',          [CustomerEventController::class, 'index'])->name('events.index');
 Route::get('/star-alumni',     [AlumniController::class, 'starAlumni'])->name('star.alumni');
 Route::get('/gallery',         [CustomerGalleryController::class, 'index'])->name('gallery.index');
+Route::get('/gallery/{id}',    [CustomerGalleryController::class, 'show'])->name('gallery.show');
 Route::view('/coming-soon',    'customer.coming-soon')->name('coming.soon');
 Route::get('/become-a-member', [MemberController::class, 'index'])->name('member.index');
 Route::post('/become-a-member', [MemberController::class, 'store'])->name('member.store');
 Route::get('/cities-by-country/{country}', [MemberController::class, 'citiesByCountry'])->name('cities.by.country');
+Route::get('/privacy-policy',      [HomeController::class, 'privacyPolicy'])->name('privacy');
+Route::get('/terms-and-conditions', [HomeController::class, 'termsConditions'])->name('terms');
 
 // Alumni-only routes
 Route::middleware('alumni')->group(function () {
     Route::get('/alumni',      [AlumniController::class, 'index'])->name('alumni.index');
     Route::get('/alumni/{id}', [AlumniController::class, 'show'])->name('alumni.show');
-
-    Route::get('/gallery/{id}', [CustomerGalleryController::class, 'show'])->name('gallery.show');
 
     Route::post('/events/{id}/register', [CustomerEventController::class, 'register'])->name('events.register');
     Route::post('/events/{id}/cancel',   [CustomerEventController::class, 'cancel'])->name('events.cancel');
@@ -71,6 +73,7 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     Route::middleware('permission:alumni_users')->group(function () {
         Route::get('/alumni-users',                               [AlumniUserController::class, 'index'])->name('alumni.index');
         Route::get('/alumni-users/approvals',                     [AlumniUserController::class, 'approvals'])->name('alumni.approvals');
+        Route::get('/alumni-users/rejected',                      [AlumniUserController::class, 'rejected'])->name('alumni.rejected');
         Route::get('/alumni-users/export',                        [AlumniUserController::class, 'export'])->name('alumni.export');
         Route::get('/alumni-users/{id}',                          [AlumniUserController::class, 'show'])->name('alumni.show');
         Route::put('/alumni-users/{id}',                          [AlumniUserController::class, 'update'])->name('alumni.update');
@@ -117,6 +120,15 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
         Route::get('/gallery/{id}/images',        [GalleryController::class, 'images'])->name('gallery.images');
         Route::post('/gallery/{id}/images',       [GalleryController::class, 'addImages'])->name('gallery.addImages');
         Route::delete('/gallery/images/{imgId}',  [GalleryController::class, 'deleteImage'])->name('gallery.deleteImage');
+    });
+
+    // ── Contact Inquiries ─────────────────────────────────────────────────────
+    Route::middleware('permission:contact')->group(function () {
+        Route::get('/inquiries',                   [ContactInquiryController::class, 'index'])->name('inquiries.index');
+        Route::get('/inquiries/{id}',              [ContactInquiryController::class, 'show'])->name('inquiries.show');
+        Route::post('/inquiries/{id}/reply',       [ContactInquiryController::class, 'reply'])->name('inquiries.reply');
+        Route::post('/inquiries/{id}/toggle-read', [ContactInquiryController::class, 'toggleRead'])->name('inquiries.toggleRead');
+        Route::delete('/inquiries/{id}',           [ContactInquiryController::class, 'destroy'])->name('inquiries.destroy');
     });
 
     // ── CMS - Homepage ────────────────────────────────────────────────────────

@@ -23,6 +23,10 @@ class CmsController extends Controller
     }
     public function saveHomepage(Request $request)
     {
+        $request->validate([
+            'hero_description' => 'nullable|string|max:500',
+        ]);
+
         $fields = ['hero_title','hero_tagline','hero_description','hero_btn_text','hero_btn_url',
            'about_title','about_description','about_btn_text','about_btn_url'];
         foreach ($fields as $f) {
@@ -82,43 +86,51 @@ class CmsController extends Controller
         return view('admin.cms.about', compact('settings'));
     }
     public function saveAbout(Request $request) {
-    $fields = ['mission_title','mission_description','mission_btn_text','mission_btn_url',
-               'history_title','history_description'];
-    foreach ($fields as $f) CmsSetting::set($f, $request->$f);
+        $fields = [
+            'mission_title','mission_description','mission_btn_text','mission_btn_url',
+            'history_title','history_description',
+            'history_end_tile_year','history_end_tile_heading','history_end_tile_text'
+        ];
+        foreach ($fields as $f) CmsSetting::set($f, $request->$f);
 
-    if ($request->hasFile('mission_image')) {
-        $path = $request->file('mission_image')->store('cms');
-        CmsSetting::set('mission_image', $path);
-    }
+        if ($request->hasFile('mission_image')) {
+            $path = $request->file('mission_image')->store('cms');
+            CmsSetting::set('mission_image', $path);
+        }
 
-    // ── Mission Stats (dynamic badges) ───────────────────────
-    $stats = [];
-    if ($request->has('mission_stats')) {
-        foreach ($request->mission_stats as $idx => $row) {
-            $heading = $row['heading'] ?? null;
-            if (!$heading) continue;
+        // ── Mission Stats (dynamic badges) ───────────────────────
+        $stats = [];
+        if ($request->has('mission_stats')) {
+            foreach ($request->mission_stats as $idx => $row) {
+                $heading = $row['heading'] ?? null;
+                if (!$heading) continue;
 
-            $icon = $row['icon_existing'] ?? null;
-            if ($request->hasFile("mission_stats.$idx.icon_new")) {
-                $icon = $request->file("mission_stats.$idx.icon_new")->store('cms/stats');
+                $icon = $row['icon_existing'] ?? null;
+                if ($request->hasFile("mission_stats.$idx.icon_new")) {
+                    $icon = $request->file("mission_stats.$idx.icon_new")->store('cms/stats');
+                }
+
+                $stats[] = ['icon' => $icon, 'heading' => $heading, 'subheading' => $row['subheading'] ?? ''];
             }
-
-            $stats[] = ['icon' => $icon, 'heading' => $heading, 'subheading' => $row['subheading'] ?? ''];
         }
-    }
-    CmsSetting::set('mission_stats', json_encode($stats));
+        CmsSetting::set('mission_stats', json_encode($stats));
 
-    // Timeline rows
-    if ($request->has('years')) {
-        $timeline = [];
-        foreach ($request->years as $i => $year) {
-            $timeline[] = ['year'=>$year,'heading'=>$request->headings[$i]??'','description'=>$request->descriptions[$i]??'','detail'=>$request->details[$i]??''];
+        // Timeline rows
+        if ($request->has('years')) {
+            $timeline = [];
+            foreach ($request->years as $i => $year) {
+                if (empty($year) && empty($request->headings[$i])) continue;
+                $timeline[] = [
+                    'year'        => $year,
+                    'heading'     => $request->headings[$i] ?? '',
+                    'description' => $request->descriptions[$i] ?? ''
+                ];
+            }
+            CmsSetting::set('history_timeline', json_encode($timeline));
         }
-        CmsSetting::set('history_timeline', json_encode($timeline));
-    }
 
-    return back()->with('success','About content saved.');
-}
+        return back()->with('success','About content saved.');
+    }
 
     // ── News ──────────────────────────────────────────────────────────────────
     // ── News ──────────────────────────────────────────────────────────────────
@@ -209,13 +221,19 @@ class CmsController extends Controller
         }
 
         if ($request->filled('type') && $request->type !== 'all') {
-            $query->where('type', $request->type);
+            if ($request->type === 'main') {
+                $query->whereNull('parent_id');
+            } elseif ($request->type === 'sub') {
+                $query->whereNotNull('parent_id');
+            } else {
+                $query->where('type', $request->type);
+            }
         }
 
-        // Put Executive committee at top if present, then newest
-        $committees = $query->orderByRaw("CASE WHEN LOWER(title) LIKE '%executive%' OR type = 'executive' OR id = 1 THEN 0 ELSE 1 END")
-                            ->orderByDesc('created_at')
-                            ->paginate(10)
+        // Put Main committees (Executive first, then Working) at top, followed by sub committees
+        $committees = $query->orderByRaw("CASE WHEN parent_id IS NULL AND (type = 'executive' OR id = 1) THEN 0 WHEN parent_id IS NULL THEN 1 ELSE 2 END")
+                            ->orderBy('id')
+                            ->paginate(15)
                             ->appends($request->all());
 
         return view('admin.cms.verticals', compact('committees'));
@@ -223,20 +241,40 @@ class CmsController extends Controller
 
     public function createVertical()
     {
-        return view('admin.cms.verticals_create');
+        $workingMain = Committee::where('type', 'working')->whereNull('parent_id')->first();
+        if (!$workingMain) {
+            $workingMain = Committee::create([
+                'title'       => 'Working Committees',
+                'description' => "Working committees coordinate and execute POBA's various initiatives and operational activities across diverse domains.",
+                'type'        => 'working',
+                'parent_id'   => null,
+            ]);
+        }
+        return view('admin.cms.verticals_create', compact('workingMain'));
     }
 
     public function storeVertical(Request $request)
     {
         $request->validate([
-            'title' => 'required|string|max:255',
+            'title'       => 'required|string|max:255',
             'description' => 'nullable|string',
         ]);
+
+        $workingMain = Committee::where('type', 'working')->whereNull('parent_id')->first();
+        if (!$workingMain) {
+            $workingMain = Committee::create([
+                'title'       => 'Working Committees',
+                'description' => "Working committees coordinate and execute POBA's various initiatives and operational activities across diverse domains.",
+                'type'        => 'working',
+                'parent_id'   => null,
+            ]);
+        }
 
         $committee = Committee::create([
             'title'       => $request->title,
             'description' => $request->description,
-            'type'        => $request->type ?? 'working',
+            'type'        => 'working',
+            'parent_id'   => $workingMain->id,
         ]);
 
         if ($request->has('member_names')) {
@@ -252,7 +290,7 @@ class CmsController extends Controller
             }
         }
 
-        return redirect()->route('admin.cms.verticals')->with('success', 'Working Committee created successfully.');
+        return redirect()->route('admin.cms.verticals')->with('success', 'Sub Working Committee created successfully.');
     }
 
     public function showVertical($id)
@@ -272,7 +310,7 @@ class CmsController extends Controller
         $committee = Committee::findOrFail($id);
 
         $request->validate([
-            'title' => 'required|string|max:255',
+            'title'       => 'required|string|max:255',
             'description' => 'nullable|string',
         ]);
 
@@ -281,17 +319,20 @@ class CmsController extends Controller
             'description' => $request->description,
         ]);
 
-        $committee->members()->delete();
+        // Members can be updated for Executive committee or any Sub Working committee
+        if ($committee->type === 'executive' || !$committee->isMain() || $request->has('member_names')) {
+            $committee->members()->delete();
 
-        if ($request->has('member_names')) {
-            foreach ($request->member_names as $i => $name) {
-                if (!empty(trim($name))) {
-                    CommitteeMember::create([
-                        'committee_id' => $committee->id,
-                        'member_name'  => trim($name),
-                        'member_url'   => $request->member_urls[$i] ?? null,
-                        'sort_order'   => $i,
-                    ]);
+            if ($request->has('member_names')) {
+                foreach ($request->member_names as $i => $name) {
+                    if (!empty(trim($name))) {
+                        CommitteeMember::create([
+                            'committee_id' => $committee->id,
+                            'member_name'  => trim($name),
+                            'member_url'   => $request->member_urls[$i] ?? null,
+                            'sort_order'   => $i,
+                        ]);
+                    }
                 }
             }
         }
@@ -303,14 +344,14 @@ class CmsController extends Controller
     {
         $committee = Committee::findOrFail($id);
 
-        // Executive Committee protection
-        if ($committee->id == 1 || $committee->type === 'executive' || strtolower(trim($committee->title)) === 'executive committee') {
-            return back()->with('error', 'Executive Committee is hardcoded and cannot be deleted.');
+        // Main Committees protection: Neither Executive nor Working Committee can be deleted
+        if ($committee->isMain() || $committee->type === 'executive' || strtolower(trim($committee->title)) === 'executive committee' || strtolower(trim($committee->title)) === 'working committees' || strtolower(trim($committee->title)) === 'working committee') {
+            return back()->with('error', 'Main committees (Executive Committee and Working Committee) cannot be deleted.');
         }
 
         $committee->delete();
 
-        return back()->with('success', 'Committee deleted successfully.');
+        return back()->with('success', 'Sub Working Committee deleted successfully.');
     }
 
     public function exportVerticals()

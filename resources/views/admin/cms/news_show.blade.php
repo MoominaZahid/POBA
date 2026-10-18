@@ -75,24 +75,15 @@
         display: inline-block;
     }
     .btn-edit:hover { background: #2a9a9a; }
-    .btn-back {
-        background: transparent;
-        color: #555;
-        border: 1.5px solid #ccc;
-        border-radius: 50px;
-        padding: 12px 44px;
-        font-size: 15px;
-        font-weight: 600;
-        text-decoration: none;
-        display: inline-block;
-    }
-    .btn-back:hover { background: #f5f5f5; }
 </style>
 
 <div class="news-show-wrap">
-    <a href="{{ route('admin.cms.news') }}" class="back-link">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-        Back to News
+    <a href="{{ route('admin.cms.news') }}" class="btn-back" title="Back to News" aria-label="Back to News">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="20" y1="12" x2="4" y2="12"></line>
+            <polyline points="10 18 4 12 10 6"></polyline>
+        </svg>
+        <span>Back to News</span>
     </a>
 
     <h1>{{ $item->title }}</h1>
@@ -114,7 +105,13 @@
 
     <div class="news-show-actions">
         <a href="{{ route('admin.cms.news.edit', $item->id) }}" class="btn-edit">Edit</a>
-        <a href="{{ route('admin.cms.news') }}" class="btn-back">Back</a>
+        <a href="{{ route('admin.cms.news') }}" class="btn-back" title="Back to News" aria-label="Back to News">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="20" y1="12" x2="4" y2="12"></line>
+                <polyline points="10 18 4 12 10 6"></polyline>
+            </svg>
+            <span>Back</span>
+        </a>
     </div>
 </div>
 

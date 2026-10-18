@@ -219,11 +219,11 @@
     {{-- Cards --}}
     <div class="gal-grid">
         @forelse($folders as $folder)
-            <a href="{{ route('gallery.show', $folder->id) }}" class="gal-card-link">
+            <a href="{{ route('gallery.show', $folder->slug ?: $folder->id) }}" class="gal-card-link">
                 <div class="gal-card">
                     <div class="gal-card-img">
                         <img
-                            src="{{ $folder->images->first() ? media_url($folder->images->first()->image_path) : 'https://placehold.co/400x220/e8f5f5/1a7a7a?text=Gallery' }}"
+                            src="{{ $folder->card_image_url }}"
                             alt="{{ $folder->folder_name }}"
                             loading="lazy"
                             onerror="this.src='https://placehold.co/400x220/e8f5f5/1a7a7a?text=Gallery'">

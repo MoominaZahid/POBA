@@ -41,6 +41,11 @@
         <span class="ec-my">{{ $monthYear }}</span>
     </div>
 
+    {{-- Mobile: event heading displayed next to date badge --}}
+    <div class="ec-mobile-title-wrap">
+        <h4 class="ec-title ec-title-mobile">{{ $event->title }}</h4>
+    </div>
+
     {{-- Thumbnail --}}
     <img class="ec-thumb"
          src="{{ $event->logo ? media_url($event->logo) : 'https://placehold.co/80x90/086666/ffffff?text=Event' }}"
@@ -48,7 +53,7 @@
 
     {{-- Main info --}}
     <div class="ec-body">
-        <h4 class="ec-title">{{ $event->title }}</h4>
+        <h4 class="ec-title ec-title-desktop">{{ $event->title }}</h4>
 
         <div class="ec-meta">
             <span>📍 {{ $event->location }}</span>
@@ -74,7 +79,9 @@
                 @if($event->description)
                     <p>{{ $event->description }}</p>
                 @endif
-                <a href="{{ $event->formatted_gallery_url }}" class="ec-gallery-link">🖼 View Gallery →</a>
+                @if(!empty($event->formatted_gallery_url))
+                    <a href="{{ $event->formatted_gallery_url }}" class="ec-gallery-link">🖼 View Gallery →</a>
+                @endif
             </div>
         </div>
 
@@ -84,6 +91,7 @@
     </div>
 
     {{-- Actions --}}
+    @if(!$isPrevious || !empty($event->formatted_gallery_url))
     <div class="ec-actions">
         @if($isPrevious)
             <a href="{{ $event->formatted_gallery_url }}" class="ec-btn ec-btn-outline">View Gallery</a>
@@ -105,10 +113,18 @@
             @if(in_array($myStatus, ['declined', 'cancelled']))
                 <p class="ec-declined-msg">Your registration request has been declined. Please contact the event organizer for reconsideration.</p>
             @else
-                <form method="POST" action="{{ route('events.cancel', $event->id) }}">
+                <form method="POST" action="{{ route('events.cancel', $event->id) }}" id="form-cancel-{{ $event->id }}">
                     @csrf
-                    <button type="submit" class="ec-btn ec-btn-cancel"
-                            onclick="return confirm('Cancel your registration for this event?')">
+                    <button type="button" class="ec-btn ec-btn-cancel"
+                            onclick="showEventConfirmModal({
+                                formId: 'form-cancel-{{ $event->id }}',
+                                title: 'Cancel Registration',
+                                desc: 'Are you sure you want to cancel your registration for this event?',
+                                eventTitle: '{{ addslashes($event->title) }}',
+                                eventMeta: '📍 {{ addslashes($event->location) }} • 📅 {{ $startDateFmt }}',
+                                confirmText: 'Yes, Cancel',
+                                isDanger: true
+                            })">
                         Cancel Registration
                     </button>
                 </form>
@@ -124,12 +140,24 @@
             </div>
 
         @else
-            <form method="POST" action="{{ route('events.register', $event->id) }}">
+            <form method="POST" action="{{ route('events.register', $event->id) }}" id="form-register-{{ $event->id }}">
                 @csrf
-                <button type="submit" class="ec-btn ec-btn-primary">Register Now</button>
+                <button type="button" class="ec-btn ec-btn-primary"
+                        onclick="showEventConfirmModal({
+                            formId: 'form-register-{{ $event->id }}',
+                            title: 'Confirm Registration',
+                            desc: 'Are you sure you want to register for this event?',
+                            eventTitle: '{{ addslashes($event->title) }}',
+                            eventMeta: '📍 {{ addslashes($event->location) }} • 📅 {{ $startDateFmt }}',
+                            confirmText: 'Yes, Register',
+                            isDanger: false
+                        })">
+                    Register Now
+                </button>
             </form>
         @endif
     </div>
+    @endif
 
 </div>
 @endforeach

@@ -5,10 +5,14 @@ use Illuminate\Support\Facades\DB;
 
 return new class extends Migration {
     public function up(): void {
-        DB::statement("ALTER TABLE event_participants MODIFY COLUMN status ENUM('confirmed','pending','cancelled','declined') DEFAULT 'pending'");
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement("ALTER TABLE event_participants MODIFY COLUMN status ENUM('confirmed','pending','cancelled','declined') DEFAULT 'pending'");
+        }
     }
 
     public function down(): void {
-        DB::statement("ALTER TABLE event_participants MODIFY COLUMN status ENUM('confirmed','pending','cancelled') DEFAULT 'pending'");
+        if (DB::getDriverName() === 'mysql') {
+            DB::statement("ALTER TABLE event_participants MODIFY COLUMN status ENUM('confirmed','pending','cancelled') DEFAULT 'pending'");
+        }
     }
 };

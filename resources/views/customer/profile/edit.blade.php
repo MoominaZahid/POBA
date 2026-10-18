@@ -52,12 +52,19 @@
 .pf-textarea     { resize:vertical; }
 
 /* Phone wrap */
-.pf-phone-wrap   { display:flex; }
-.pf-phone-flag   { display:flex; align-items:center; gap:4px; background:#fff;
+.pf-phone-wrap   { display:flex; align-items:stretch; }
+.pf-phone-flag   { position:relative; display:inline-flex; align-items:center; gap:6px; background:#fff;
                    border:1px solid #e2e8f0; border-right:none;
-                   border-radius:8px 0 0 8px; padding:10px 10px;
-                   font-size:13px; white-space:nowrap; }
-.pf-phone-flag select { border:none; background:transparent; font-size:13px; outline:none; }
+                   border-radius:8px 0 0 8px; padding:8px 12px;
+                   font-size:13px; white-space:nowrap; cursor:pointer;
+                   transition:border-color .15s, background .15s; }
+.pf-phone-flag:hover { border-color:#0d9488; background:#f0fdfc; }
+.pf-phone-flag:focus-within { border-color:#0d9488; }
+.pf-phone-flag .phone-flag-icon { display:inline-flex; align-items:center; }
+.pf-phone-flag .phone-country-label { font-size:12px; font-weight:700; color:#334155; }
+.pf-phone-flag .phone-code-badge { font-size:13px; font-weight:700; color:#0d9488; margin-left:2px; }
+.pf-phone-flag .phone-chevron { font-size:10px; color:#94a3b8; margin-left:2px; }
+.pf-phone-flag select { position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; cursor:pointer; z-index:3; }
 .pf-phone-num    { border-radius:0 8px 8px 0 !important; }
 
 /* File row */
@@ -119,6 +126,16 @@
 
     {{-- ── Sidebar ── --}}
     <div class="pf-sidebar">
+        <div style="margin-bottom:14px;width:100%">
+            <a href="{{ route('home') }}" class="btn-back" title="Back to Home" aria-label="Back to Home">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="20" y1="12" x2="4" y2="12"></line>
+                    <polyline points="10 18 4 12 10 6"></polyline>
+                </svg>
+                <span>Back</span>
+            </a>
+        </div>
+
         {{-- Avatar --}}
         <div class="pf-avatar-wrap">
             <img id="avatarPreview"
@@ -191,19 +208,40 @@
                     <div class="pf-group">
                         <label class="pf-label">Phone Number *</label>
                         <div class="pf-phone-wrap">
-                            <div class="pf-phone-flag">
-                                🇵🇰
-                                <select name="phone_code">
-                                    <option value="+92" {{ str_starts_with($alumni->phone_number ?? '', '+92') ? 'selected' : '' }}>+92</option>
-                                    <option value="+1"  {{ str_starts_with($alumni->phone_number ?? '', '+1')  ? 'selected' : '' }}>+1</option>
-                                    <option value="+44" {{ str_starts_with($alumni->phone_number ?? '', '+44') ? 'selected' : '' }}>+44</option>
-                                    <option value="+971"{{ str_starts_with($alumni->phone_number ?? '', '+971')? 'selected' : '' }}>+971</option>
-                                    <option value="+966"{{ str_starts_with($alumni->phone_number ?? '', '+966')? 'selected' : '' }}>+966</option>
+                            <div class="pf-phone-flag" id="pf_phone_flag_wrap" title="Select Country Code">
+                                <span id="pf_phone_flag" class="phone-flag-icon">
+                                    <img id="pf_phone_flag_img"
+                                         src="{{ asset('images/flags/pk.png') }}"
+                                         width="20" height="15"
+                                         alt="PK"
+                                         style="display:inline-block;width:20px;height:15px;object-fit:cover;border-radius:2px;box-shadow:0 0 1px rgba(0,0,0,0.3);flex-shrink:0;">
+                                </span>
+                                <span id="pf_phone_country_label" class="phone-country-label">Pakistan (PK)</span>
+                                <span id="pf_phone_code_badge" class="phone-code-badge">+92</span>
+                                <span class="phone-chevron" aria-hidden="true">▾</span>
+                                <select name="phone_code" id="pf_phone_code" onchange="updatePfPhoneLimits()">
+                                    <option value="+92" {{ str_starts_with($alumni->phone_number ?? '', '+92') ? 'selected' : '' }}>🇵🇰 Pakistan (+92)</option>
+                                    <option value="+93" {{ str_starts_with($alumni->phone_number ?? '', '+93') ? 'selected' : '' }}>🇦🇫 Afghanistan (+93)</option>
+                                    <option value="+27" {{ str_starts_with($alumni->phone_number ?? '', '+27') ? 'selected' : '' }}>🇿🇦 South Africa (+27)</option>
+                                    <option value="+1"  {{ str_starts_with($alumni->phone_number ?? '', '+1')  ? 'selected' : '' }}>🇺🇸 United States (+1)</option>
+                                    <option value="+44" {{ str_starts_with($alumni->phone_number ?? '', '+44') ? 'selected' : '' }}>🇬🇧 United Kingdom (+44)</option>
+                                    <option value="+971"{{ str_starts_with($alumni->phone_number ?? '', '+971')? 'selected' : '' }}>🇦🇪 UAE (+971)</option>
+                                    <option value="+966"{{ str_starts_with($alumni->phone_number ?? '', '+966')? 'selected' : '' }}>🇸🇦 Saudi Arabia (+966)</option>
+                                    <option value="+91" {{ str_starts_with($alumni->phone_number ?? '', '+91') ? 'selected' : '' }}>🇮🇳 India (+91)</option>
+                                    <option value="+86" {{ str_starts_with($alumni->phone_number ?? '', '+86') ? 'selected' : '' }}>🇨🇳 China (+86)</option>
+                                    <option value="+81" {{ str_starts_with($alumni->phone_number ?? '', '+81') ? 'selected' : '' }}>🇯🇵 Japan (+81)</option>
+                                    <option value="+61" {{ str_starts_with($alumni->phone_number ?? '', '+61') ? 'selected' : '' }}>🇦🇺 Australia (+61)</option>
+                                    <option value="+49" {{ str_starts_with($alumni->phone_number ?? '', '+49') ? 'selected' : '' }}>🇩🇪 Germany (+49)</option>
+                                    <option value="+33" {{ str_starts_with($alumni->phone_number ?? '', '+33') ? 'selected' : '' }}>🇫🇷 France (+33)</option>
+                                    <option value="+39" {{ str_starts_with($alumni->phone_number ?? '', '+39') ? 'selected' : '' }}>🇮🇹 Italy (+39)</option>
+                                    <option value="+34" {{ str_starts_with($alumni->phone_number ?? '', '+34') ? 'selected' : '' }}>🇪🇸 Spain (+34)</option>
+                                    <option value="+55" {{ str_starts_with($alumni->phone_number ?? '', '+55') ? 'selected' : '' }}>🇧🇷 Brazil (+55)</option>
                                 </select>
                             </div>
                             <input type="text" name="phone_number" class="pf-input pf-phone-num"
                                    value="{{ old('phone_number', $alumni->phone_number) }}" required>
                         </div>
+                        @error('phone_number')<div style="font-size:11px;color:#e53e3e;margin-top:3px;">{{ $message }}</div>@enderror
                     </div>
                     <div class="pf-group">
                         <label class="pf-label">Current City *</label>
@@ -519,11 +557,29 @@ function previewAvatar(input) {
     }
 }
 
-// ── Show selected filename ────────────────────────────────────────────────────
+// ── Show selected filename with validation ────────────────────────────────────
 function showFileName(input, spanId) {
     const span = document.getElementById(spanId);
+    if (!span) return;
     if (input.files && input.files[0]) {
-        span.textContent = '📎 ' + input.files[0].name;
+        const file = input.files[0];
+        const ext = file.name.includes('.') ? file.name.split('.').pop().toLowerCase() : '';
+        const allowedExts = ['pdf', 'jpg', 'jpeg', 'png'];
+        const maxSize = 5 * 1024 * 1024;
+        if (!allowedExts.includes(ext) || (file.type && file.type.startsWith('video/'))) {
+            input.value = '';
+            span.style.color = '#e53e3e';
+            span.textContent = '❌ Invalid file format. Only PDF, JPG, and PNG are allowed.';
+            return false;
+        }
+        if (file.size > maxSize) {
+            input.value = '';
+            span.style.color = '#e53e3e';
+            span.textContent = '❌ File size exceeds 5MB limit. Please choose a smaller file.';
+            return false;
+        }
+        span.style.color = '#0d9488';
+        span.textContent = '📎 ' + file.name;
     }
 }
 
@@ -581,6 +637,48 @@ function closeLbBg(e) {
     if (e.target === document.getElementById('lbOverlay')) closeLb();
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+
+// ── Dynamic Phone Flag & Country in Profile ──────────────────────────────────
+const pfPhoneCountries = {
+    '+92':  { name: 'Pakistan',       iso: 'PK', flag: '🇵🇰' },
+    '+93':  { name: 'Afghanistan',    iso: 'AF', flag: '🇦🇫' },
+    '+27':  { name: 'South Africa',   iso: 'ZA', flag: '🇿🇦' },
+    '+1':   { name: 'United States',  iso: 'US', flag: '🇺🇸' },
+    '+44':  { name: 'United Kingdom', iso: 'GB', flag: '🇬🇧' },
+    '+971': { name: 'UAE',            iso: 'AE', flag: '🇦🇪' },
+    '+966': { name: 'Saudi Arabia',   iso: 'SA', flag: '🇸🇦' },
+    '+91':  { name: 'India',          iso: 'IN', flag: '🇮🇳' },
+    '+86':  { name: 'China',          iso: 'CN', flag: '🇨🇳' },
+    '+81':  { name: 'Japan',          iso: 'JP', flag: '🇯🇵' },
+    '+61':  { name: 'Australia',      iso: 'AU', flag: '🇦🇺' },
+    '+49':  { name: 'Germany',        iso: 'DE', flag: '🇩🇪' },
+    '+33':  { name: 'France',         iso: 'FR', flag: '🇫🇷' },
+    '+39':  { name: 'Italy',          iso: 'IT', flag: '🇮🇹' },
+    '+34':  { name: 'Spain',          iso: 'ES', flag: '🇪🇸' },
+    '+55':  { name: 'Brazil',         iso: 'BR', flag: '🇧🇷' },
+};
+
+function updatePfPhoneLimits() {
+    const codeEl = document.getElementById('pf_phone_code');
+    if (!codeEl) return;
+    const code = codeEl.value;
+    const meta = pfPhoneCountries[code] || { name: 'Country', iso: 'INT', flag: '🌐' };
+    const flagImg = document.getElementById('pf_phone_flag_img');
+    const flagFallback = document.getElementById('pf_phone_flag_fallback');
+    const labelEl = document.getElementById('pf_phone_country_label');
+    const badgeEl = document.getElementById('pf_phone_code_badge');
+    const isoLower = (meta.iso || 'pk').toLowerCase();
+    const flagBaseUrl = "{{ asset('images/flags') }}";
+    if (flagImg) {
+        flagImg.src = flagBaseUrl + '/' + isoLower + '.png';
+        flagImg.alt = isoLower.toUpperCase();
+        flagImg.style.display = 'inline-block';
+    }
+    if (labelEl) labelEl.textContent = `${meta.name} (${isoLower.toUpperCase()})`;
+    if (badgeEl) badgeEl.textContent = code;
+}
+
+document.addEventListener('DOMContentLoaded', updatePfPhoneLimits);
 
 // ── Auto-open correct tab after redirect (e.g. password error) ────────────────
 @if(session('password_success') || $errors->has('current_password') || $errors->has('password'))

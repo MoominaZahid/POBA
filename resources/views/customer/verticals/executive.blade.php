@@ -3,18 +3,31 @@
 @section('title', 'Executive Committee - POBA Verticals')
 @section('content')
 
-<div class="page-header" style="background:#fff;padding:50px 0 30px;text-align:center">
+<div class="page-header" style="background:#fff;padding:36px 0 24px;">
     <div class="container">
-        <h1 class="vertical-detail-heading">Executive Committee</h1>
-        <div class="vertical-detail-underline"></div>
+        <div style="margin-bottom:12px;">
+            <a href="{{ route('verticals.index') }}" class="btn-back" title="Back to Verticals" aria-label="Back to Verticals">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <line x1="20" y1="12" x2="4" y2="12"></line>
+                    <polyline points="10 18 4 12 10 6"></polyline>
+                </svg>
+                <span>Back to Verticals</span>
+            </a>
+        </div>
+        <div style="text-align:center">
+            <h1 class="vertical-detail-heading">{{ $executive->title ?? 'Executive Committee' }}</h1>
+            <div class="vertical-detail-underline"></div>
+        </div>
     </div>
 </div>
 
 <section class="section-pad" style="background:#fff;padding-top:20px">
     <div class="container">
+        @if(!empty($executive->description))
         <p class="vertical-detail-intro">
-            {{ $executive->description ?? "Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged." }}
+            {{ $executive->description }}
         </p>
+        @endif
 
         @if($executive && $executive->members && count($executive->members) > 0)
         <div class="vertical-member-grid">

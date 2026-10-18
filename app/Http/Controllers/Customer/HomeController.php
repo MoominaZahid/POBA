@@ -21,27 +21,48 @@ class HomeController extends Controller {
     public function about() {
         $settings = CmsSetting::pluck('value', 'key');
         $timeline = json_decode($settings['history_timeline'] ?? '[]', true);
-        return view('customer.about', compact('settings', 'timeline'));
+        $executive = Committee::where('type', 'executive')->whereNull('parent_id')->first()
+                  ?? Committee::where('type', 'executive')->first();
+        $workingMain = Committee::where('type', 'working')->whereNull('parent_id')->first();
+        return view('customer.about', compact('settings', 'timeline', 'executive', 'workingMain'));
     }
 
     public function verticals() {
-        $executive = Committee::with('members')->where('type', 'executive')->orWhere('id', 1)->first();
-        $working   = Committee::with('members')->where(function($q) {
-            $q->where('type', 'working')->orWhereNull('type');
-        })->where('id', '!=', 1)->orderBy('id')->get();
-        return view('customer.verticals.index', compact('executive', 'working'));
+        $executive = Committee::with('members')->where('type', 'executive')->whereNull('parent_id')->first()
+                  ?? Committee::with('members')->where('type', 'executive')->first();
+        $workingMain = Committee::where('type', 'working')->whereNull('parent_id')->first();
+        $working = Committee::with('members')
+            ->where(function($q) use ($workingMain) {
+                if ($workingMain) {
+                    $q->where('parent_id', $workingMain->id);
+                } else {
+                    $q->where('type', 'working')->where('id', '!=', 1);
+                }
+            })
+            ->orderBy('id')
+            ->get();
+        return view('customer.verticals.index', compact('executive', 'workingMain', 'working'));
     }
 
     public function verticalsExecutive() {
-        $executive = Committee::with('members')->where('type', 'executive')->orWhere('id', 1)->first();
+        $executive = Committee::with('members')->where('type', 'executive')->whereNull('parent_id')->first()
+                  ?? Committee::with('members')->where('type', 'executive')->first();
         return view('customer.verticals.executive', compact('executive'));
     }
 
     public function verticalsWorking() {
-        $working = Committee::with('members')->where(function($q) {
-            $q->where('type', 'working')->orWhereNull('type');
-        })->where('id', '!=', 1)->orderBy('id')->get();
-        return view('customer.verticals.working', compact('working'));
+        $workingMain = Committee::where('type', 'working')->whereNull('parent_id')->first();
+        $working = Committee::with('members')
+            ->where(function($q) use ($workingMain) {
+                if ($workingMain) {
+                    $q->where('parent_id', $workingMain->id);
+                } else {
+                    $q->where('type', 'working')->where('id', '!=', 1);
+                }
+            })
+            ->orderBy('id')
+            ->get();
+        return view('customer.verticals.working', compact('workingMain', 'working'));
     }
 
     public function promotions() {
@@ -49,5 +70,15 @@ class HomeController extends Controller {
             $q->whereNull('expiry_date')->orWhere('expiry_date', '>=', today());
         })->orderByDesc('created_at')->get();
         return view('customer.promotions', compact('promos'));
+    }
+
+    public function privacyPolicy() {
+        $settings = CmsSetting::pluck('value', 'key');
+        return view('customer.privacy', compact('settings'));
+    }
+
+    public function termsConditions() {
+        $settings = CmsSetting::pluck('value', 'key');
+        return view('customer.terms', compact('settings'));
     }
 }

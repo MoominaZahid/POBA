@@ -5,8 +5,13 @@ namespace App\Http\Controllers\Customer;
 use App\Http\Controllers\Controller;
 use App\Models\Event;
 use App\Models\EventParticipant;
+use App\Models\User;
+use App\Notifications\EventRegistrationSubmitted;
+use App\Notifications\NewEventRegistrationAdminNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
 class EventController extends Controller
@@ -135,6 +140,25 @@ class EventController extends Controller
                 'alumni_user_id' => $alumni->id,
                 'status'         => 'pending',
             ]);
+
+            // Notify the registered alumni
+            try {
+                $alumni->notify(new EventRegistrationSubmitted($event));
+            } catch (\Throwable $e) {
+                Log::warning('Failed sending event registration confirmation to alumni: ' . $e->getMessage());
+            }
+
+            // Notify Super Admins and Sub-Admins who manage events
+            try {
+                $adminsToNotify = User::all()->filter(function ($user) {
+                    return $user->hasPermission('events');
+                });
+                if ($adminsToNotify->isNotEmpty()) {
+                    Notification::send($adminsToNotify, new NewEventRegistrationAdminNotification($event, $alumni));
+                }
+            } catch (\Throwable $e) {
+                Log::warning('Failed sending new event registration notification to admins: ' . $e->getMessage());
+            }
         }
 
         return back()->with('success', 'Registered successfully! Your status is pending confirmation.');

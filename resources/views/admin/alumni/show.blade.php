@@ -126,7 +126,13 @@
 
     {{-- ── Left Sidebar ── --}}
     <div class="ap-sidebar">
-        <a href="{{ $user->status === 'pending' ? route('admin.alumni.approvals') : route('admin.alumni.index') }}" class="ap-back">← Back</a>
+        <a href="{{ $user->status === 'rejected' ? route('admin.alumni.rejected') : ($user->status === 'pending' ? route('admin.alumni.approvals') : route('admin.alumni.index')) }}" class="btn-back" title="Back" aria-label="Back">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="20" y1="12" x2="4" y2="12"></line>
+                <polyline points="10 18 4 12 10 6"></polyline>
+            </svg>
+            <span>Back</span>
+        </a>
 
         <img src="{{ $user->profile_photo
                 ? media_url($user->profile_photo)
@@ -136,20 +142,21 @@
         <div class="ap-name">{{ $user->full_name }}</div>
 
         @if($user->status === 'pending')
-        <form method="POST" action="{{ route('admin.alumni.approve', $user->id) }}">
-            @csrf
-            <button type="submit" class="btn-approve">
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#fff" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                Approve
-            </button>
-        </form>
-        <form method="POST" action="{{ route('admin.alumni.reject', $user->id) }}">
-            @csrf
-            <button type="submit" class="btn-reject">
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>
-                Reject
-            </button>
-        </form>
+        <button type="button" class="btn-approve" onclick="openApproveModal()">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#fff" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Approve
+        </button>
+        <button type="button" class="btn-reject" onclick="openRejectModal()">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2l-8 8" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Reject
+        </button>
+        @endif
+
+        @if($user->status === 'rejected')
+        <button type="button" class="btn-approve" onclick="openApproveModal()">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#fff" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Approve Application
+        </button>
         @endif
 
         <!-- @if($user->status === 'approved')
@@ -182,6 +189,21 @@
 
     {{-- ── Right Card ── --}}
     <div class="ap-card">
+        @if($user->status === 'rejected')
+        <div style="background:#fee2e2;border:1px solid #fca5a5;border-radius:10px;padding:14px 18px;margin-bottom:20px;display:flex;gap:12px;align-items:flex-start;">
+            <div style="width:24px;height:24px;border-radius:50%;background:#ef4444;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:bold;font-size:14px;flex-shrink:0;">✕</div>
+            <div style="flex:1;">
+                <div style="font-size:14px;font-weight:700;color:#991b1b;margin-bottom:4px;">Application Rejected</div>
+                <div style="font-size:13px;color:#7f1d1d;line-height:1.5;">
+                    <strong>Reason:</strong> {{ $user->rejection_reason ?: 'No specific reason recorded.' }}
+                </div>
+                <div style="font-size:12px;color:#991b1b;margin-top:6px;">
+                    Admins can update the alumni information below and click <strong>Approve Application</strong> to admit this user and email them their credentials.
+                </div>
+            </div>
+        </div>
+        @endif
+
         <div class="ap-card-header">
             <span class="ap-card-title">Alumni Information</span>
             <button type="button" class="ap-edit-btn" id="editBtn" onclick="toggleEdit()">
@@ -259,18 +281,33 @@
                 </div>
             </div>
 
-            {{-- Current City + Current Country --}}
+            @php
+                $countries = $countries ?? \App\Models\Country::orderBy('name')->get(['id', 'name']);
+            @endphp
+            {{-- Current Country + Current City --}}
             <div class="ap-row ap-row-2">
-                <div class="ap-group">
-                    <label class="ap-label">Current City</label>
-                    <select name="current_city" class="ap-select" disabled id="inp_city">
-                        <option value="{{ $user->current_city }}" selected>{{ $user->current_city }}</option>
-                    </select>
-                </div>
                 <div class="ap-group">
                     <label class="ap-label">Current Country: *</label>
                     <select name="current_country" class="ap-select" disabled id="inp_country">
-                        <option value="{{ $user->current_country }}" selected>{{ $user->current_country }}</option>
+                        <option value="">Select Country</option>
+                        @foreach($countries as $c)
+                            <option value="{{ $c->name }}" data-id="{{ $c->id }}" {{ ($user->current_country ?? '') == $c->name ? 'selected' : '' }}>
+                                {{ $c->name }}
+                            </option>
+                        @endforeach
+                        @if($user->current_country && !$countries->contains('name', $user->current_country))
+                            <option value="{{ $user->current_country }}" selected>{{ $user->current_country }}</option>
+                        @endif
+                    </select>
+                </div>
+                <div class="ap-group">
+                    <label class="ap-label">Current City</label>
+                    <select name="current_city" class="ap-select" disabled id="inp_city">
+                        @if($user->current_city)
+                            <option value="{{ $user->current_city }}" selected>{{ $user->current_city }}</option>
+                        @else
+                            <option value="">Select City</option>
+                        @endif
                     </select>
                 </div>
             </div>
@@ -279,15 +316,11 @@
             <div class="ap-row ap-row-2">
                 <div class="ap-group">
                     <label class="ap-label">Current Designation</label>
-                    <select name="current_designation" class="ap-select" disabled id="inp_desig">
-                        <option value="{{ $user->current_designation }}" selected>{{ $user->current_designation }}</option>
-                    </select>
+                    <input type="text" name="current_designation" class="ap-input" value="{{ $user->current_designation }}" readonly id="inp_desig" placeholder="Enter Designation">
                 </div>
                 <div class="ap-group">
                     <label class="ap-label">Current Organization</label>
-                    <select name="current_organization" class="ap-select" disabled id="inp_org">
-                        <option value="{{ $user->current_organization }}" selected>{{ $user->current_organization }}</option>
-                    </select>
+                    <input type="text" name="current_organization" class="ap-input" value="{{ $user->current_organization }}" readonly id="inp_org" placeholder="Enter Organization">
                 </div>
             </div>
 
@@ -470,6 +503,74 @@
         </form>
     </div>
 </div>
+
+{{-- Modal for Reject with Reason --}}
+<div class="modal-overlay" id="rejectModal">
+    <div class="modal-box">
+        <button class="modal-close" onclick="closeModal('rejectModal')">✕</button>
+        <h3 style="color:#dc2626;display:flex;align-items:center;gap:8px;margin-bottom:8px;">Reject Application</h3>
+        <p style="font-size:13px;color:#555;margin-bottom:16px;line-height:1.5;">
+            Please provide a mandatory reason for rejecting <strong>{{ $user->full_name }}</strong>'s application. This reason will be recorded and emailed to the applicant along with POBA support contact details.
+        </p>
+        <form method="POST" action="{{ route('admin.alumni.reject', $user->id) }}">
+            @csrf
+            <div class="ap-group" style="margin-bottom:18px;">
+                <label class="ap-label">Rejection Reason: <span style="color:#e53e3e;">*</span></label>
+                <textarea name="reason" class="ap-textarea" rows="4" required
+                          placeholder="Provide the reason for rejection (e.g. invalid CCP number, unreadable CNIC copy, etc.)..."></textarea>
+            </div>
+            <div style="display:flex;justify-content:flex-end;gap:12px;">
+                <button type="button" class="btn-outline-red" style="padding:8px 18px;" onclick="closeModal('rejectModal')">Cancel</button>
+                <button type="submit" class="btn-reject" style="width:auto;padding:8px 22px;margin:0;">Confirm Rejection</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{{-- Modal for Approve Confirmation --}}
+<div class="modal-overlay" id="approveModal">
+    <div class="modal-box" style="padding:28px 32px;">
+        <button type="button" class="modal-close" onclick="closeModal('approveModal')">✕</button>
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px;">
+            <div style="width:42px;height:42px;border-radius:50%;background:#e6f7f5;color:#0d9488;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </div>
+            <div>
+                <h3 style="margin:0;font-size:18px;font-weight:700;color:#0f766e;">
+                    {{ $user->status === 'rejected' ? 'Approve Rejected Application' : 'Approve Application' }}
+                </h3>
+                <span style="font-size:12px;color:var(--text-muted,#888);">Member Onboarding</span>
+            </div>
+        </div>
+
+        <p style="font-size:14px;color:#333;margin-bottom:16px;line-height:1.6;">
+            Are you sure you want to approve <strong>{{ $user->full_name }}</strong>?
+        </p>
+
+        <div style="background:#f0fdfc;border:1px solid #b2d8d8;border-radius:8px;padding:12px 16px;margin-bottom:20px;font-size:13px;color:#0f766e;line-height:1.6;">
+            <div>✓ User account status will be set to <strong>Approved</strong> and activated.</div>
+            @if($user->status === 'rejected')
+            <div>✓ Previous rejection reason will be cleared.</div>
+            @endif
+            <div>✓ Login credentials will be generated and emailed to <strong>{{ $user->email }}</strong>.</div>
+        </div>
+
+        <form method="POST" action="{{ route('admin.alumni.approve', $user->id) }}">
+            @csrf
+            <div style="display:flex;justify-content:flex-end;gap:12px;">
+                <button type="button" class="btn-outline-red" style="padding:9px 20px;border-color:#cbd5e1;color:#475569;" onclick="closeModal('approveModal')">
+                    Cancel
+                </button>
+                <button type="submit" class="btn-approve" style="width:auto;padding:9px 24px;margin:0;font-size:13px;font-weight:700;">
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="7" stroke="#fff" stroke-width="1.5"/><path d="M5 8l2 2 4-4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Confirm Approval
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
 @push('scripts')
 <script>
 // ── Lightbox ──────────────────────────────────────────────────────────────────
@@ -520,8 +621,8 @@ document.addEventListener('keydown', e => {
 // ── Edit toggle ───────────────────────────────────────────────────────────────
 let editing = false;
 
-const editableInputs   = ['inp_full_name','inp_email','inp_ccp','inp_phone','inp_ach','inp_fos','inp_fow'];
-const editableSelects  = ['inp_entry','inp_class_year','inp_house','inp_edu','inp_city','inp_country','inp_desig','inp_org','inp_phone_code'];
+const editableInputs   = ['inp_full_name','inp_email','inp_ccp','inp_phone','inp_ach','inp_fos','inp_fow','inp_desig','inp_org'];
+const editableSelects  = ['inp_entry','inp_class_year','inp_house','inp_edu','inp_city','inp_country','inp_phone_code'];
 
 function toggleEdit() {
     editing = !editing;
@@ -547,10 +648,73 @@ function toggleEdit() {
     // Edit button state
     document.getElementById('editBtn').classList.toggle('active', editing);
     document.getElementById('editBtnLabel').textContent = editing ? 'Editing' : 'Edit';
+
+    if (editing && typeof loadAdminCities === 'function') {
+        loadAdminCities(document.getElementById('inp_city') ? document.getElementById('inp_city').value : null);
+    }
+}
+
+// ── Admin Country → City Dynamic Loading ──────────────────────────────────────
+const countrySelect = document.getElementById('inp_country');
+const citySelect = document.getElementById('inp_city');
+
+function loadAdminCities(preselectCity) {
+    if (!countrySelect || !citySelect) return;
+    const selectedOption = countrySelect.options[countrySelect.selectedIndex];
+    const countryId = selectedOption ? selectedOption.dataset.id : null;
+
+    if (!countryId) {
+        citySelect.innerHTML = '<option value="">Select Country First</option>';
+        return;
+    }
+
+    const previousValue = preselectCity || citySelect.value;
+    citySelect.innerHTML = '<option value="">Loading cities...</option>';
+
+    fetch('/cities-by-country/' + countryId)
+        .then(res => res.json())
+        .then(cities => {
+            citySelect.innerHTML = '<option value="">Select City</option>';
+            let found = false;
+            cities.forEach(city => {
+                const opt = document.createElement('option');
+                opt.value = city;
+                opt.textContent = city;
+                if (previousValue && city.toLowerCase() === previousValue.toLowerCase()) {
+                    opt.selected = true;
+                    found = true;
+                }
+                citySelect.appendChild(opt);
+            });
+            if (previousValue && !found) {
+                const customOpt = document.createElement('option');
+                customOpt.value = previousValue;
+                customOpt.textContent = previousValue;
+                customOpt.selected = true;
+                citySelect.prepend(customOpt);
+            }
+        })
+        .catch(() => {
+            citySelect.innerHTML = previousValue
+                ? '<option value="' + previousValue + '" selected>' + previousValue + '</option>'
+                : '<option value="">Could not load cities</option>';
+        });
+}
+
+if (countrySelect) {
+    countrySelect.addEventListener('change', function() {
+        loadAdminCities(null);
+    });
 }
 
 
-// ── Modal helpers for star management ────────────────────────────
+// ── Modal helpers for star, rejection & approval management ───────────────
+function openApproveModal() {
+    document.getElementById('approveModal').classList.add('open');
+}
+function openRejectModal() {
+    document.getElementById('rejectModal').classList.add('open');
+}
 function openMarkStarModal() {
     document.getElementById('markStarModal').classList.add('open');
 }
@@ -563,6 +727,8 @@ function closeModal(id) {
 // Close modals on Escape key
 document.addEventListener('keydown', e => {
     if (e.key === 'Escape') {
+        closeModal('approveModal');
+        closeModal('rejectModal');
         closeModal('markStarModal');
         closeModal('editStarModal');
     }

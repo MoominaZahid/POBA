@@ -75,12 +75,7 @@
             {{-- Stats Repeater --}}
             <div class="admin-form-group">
                 @php
-                    $missionStats = json_decode($settings['mission_stats'] ?? '[]', true);
-                    if (empty($missionStats)) {
-                        $missionStats = [
-                            ['icon' => null, 'heading' => 'Excellence', 'subheading' => 'In Service & Leadership'],
-                        ];
-                    }
+                    $missionStats = json_decode($settings['mission_stats'] ?? '[]', true) ?: [];
                 @endphp
 
                 <div id="statsContainer">
@@ -200,17 +195,34 @@
                             <input type="text" name="descriptions[]" class="admin-input"
                                 value="{{ $row['description'] }}" placeholder="Description...">
                         </div>
-                        <div style="grid-column:1/-1">
-                            <label class="admin-form-label">Detailed Info (shown when visitor clicks "Read More"):</label>
-                            <textarea name="details[]" class="admin-input" rows="3"
-                                placeholder="Optional longer write-up for this milestone...">{{ $row['detail'] ?? '' }}</textarea>
-                        </div>
                     </div>
                 @endforeach
             </div>
 
             <a href="#" onclick="addTimelineRow(); return false;"
                 style="font-size:13px;color:var(--teal);font-weight:600">+ Add row</a>
+
+            {{-- Final History Tile (End of Timeline) --}}
+            <div style="margin-top:24px;padding-top:20px;border-top:1px solid #eee">
+                <div style="font-weight:700;font-size:14px;color:var(--teal);margin-bottom:12px">Final History Tile (End of Timeline):</div>
+                <div class="admin-form-row">
+                    <div class="admin-form-group">
+                        <label class="admin-form-label">End Tile Year / Badge Label:</label>
+                        <input type="text" name="history_end_tile_year" class="admin-input"
+                            value="{{ $settings['history_end_tile_year'] ?? 'Present' }}" placeholder="Present">
+                    </div>
+                    <div class="admin-form-group">
+                        <label class="admin-form-label">End Tile Heading:</label>
+                        <input type="text" name="history_end_tile_heading" class="admin-input"
+                            value="{{ $settings['history_end_tile_heading'] ?? '' }}" placeholder="e.g. Our Continuing Story">
+                    </div>
+                </div>
+                <div class="admin-form-group" style="margin-top:8px">
+                    <label class="admin-form-label">Detailed Info (Long Text for End Tile):</label>
+                    <textarea name="history_end_tile_text" class="admin-input" rows="4"
+                        placeholder="Detailed info or long write-up to display in the single tile at the end of all history tiles...">{{ $settings['history_end_tile_text'] ?? '' }}</textarea>
+                </div>
+            </div>
         </div>
 
         <div class="btn-action-row">
@@ -303,10 +315,6 @@
         <div>
             <label class="admin-form-label">Description:</label>
             <input type="text" name="descriptions[]" class="admin-input" placeholder="Description...">
-        </div>
-        <div style="grid-column:1/-1">
-            <label class="admin-form-label">Detailed Info (shown when visitor clicks "Read More"):</label>
-            <textarea name="details[]" class="admin-input" rows="3" placeholder="Optional longer write-up for this milestone..."></textarea>
         </div>
     </div>`;
             document.getElementById('timelineRows').insertAdjacentHTML('beforeend', html);

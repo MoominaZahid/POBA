@@ -287,6 +287,7 @@ input[type="time"].cef-input::-webkit-calendar-picker-indicator {
     max-width: 380px;
 }
 .cef-upload-box:hover { background: #d6eeee; border-color: #1a8080; }
+.cef-upload-box.has-error { background: #fff5f5; border-color: #e24b4a; }
 
 .cef-upload-icon {
     width: 34px;
@@ -378,7 +379,13 @@ input[type="time"].cef-input::-webkit-calendar-picker-indicator {
 
 <div class="cef-page">
 
-    <a href="{{ route('admin.events.index') }}" class="cef-back">←</a>
+    <a href="{{ route('admin.events.index') }}" class="btn-back" title="Back" aria-label="Back">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="20" y1="12" x2="4" y2="12"></line>
+            <polyline points="10 18 4 12 10 6"></polyline>
+        </svg>
+        <span>Back</span>
+    </a>
 
     <!-- <h2 class="cef-heading">Create an Event</h2> -->
 
@@ -522,9 +529,9 @@ input[type="time"].cef-input::-webkit-calendar-picker-indicator {
 
         {{-- ── Upload Logo ── --}}
         <div class="cef-group" style="margin-bottom:28px">
-            <label class="cef-label">Upload Event Logo: *</label>
+            <label class="cef-label">Upload Event Logo: <span style="color:#e24b4a">*</span></label>
 
-            <div class="cef-upload-box" onclick="document.getElementById('logoFile').click()">
+            <div class="cef-upload-box @error('logo') has-error @enderror" onclick="document.getElementById('logoFile').click()">
                 <div class="cef-upload-icon">+</div>
                 <div class="cef-upload-text">Drag &amp; Drop files here or click to select file(s)</div>
             </div>
@@ -537,6 +544,10 @@ input[type="time"].cef-input::-webkit-calendar-picker-indicator {
             <div class="cef-preview-wrap" id="previewWrap">
                 <img id="previewImg" src="" alt="Preview">
             </div>
+
+            @error('logo')
+                <div style="color:#e24b4a;font-size:12px;margin-top:6px;font-weight:600;">{{ $message }}</div>
+            @enderror
         </div>
 
         {{-- ── Actions ── --}}
@@ -600,8 +611,10 @@ function renderTags() {
         if (c !== input) c.remove();
     });
 
-    // Re-render tags before the input
-    batches.forEach(function(b) {
+    var sorted = Array.from(batches).sort(function(a, b) { return a - b; });
+
+    // Re-render tags before the input in sequential order
+    sorted.forEach(function(b) {
         var tag = document.createElement('span');
         tag.className = 'cef-tag';
         tag.innerHTML =
@@ -610,10 +623,10 @@ function renderTags() {
         box.insertBefore(tag, input);
     });
 
-    // Rebuild hidden inputs
+    // Rebuild hidden inputs in sequential order
     var hid = document.getElementById('batchHiddenInputs');
     hid.innerHTML = '';
-    batches.forEach(function(b) {
+    sorted.forEach(function(b) {
         var inp = document.createElement('input');
         inp.type  = 'hidden';
         inp.name  = 'entry_batches[]';
@@ -645,7 +658,8 @@ document.getElementById('batchInput').addEventListener('keydown', function(e) {
         this.value = '';
     }
     if (e.key === 'Backspace' && this.value === '' && batches.size > 0) {
-        removeBatch(Array.from(batches).pop());
+        var sorted = Array.from(batches).sort(function(a, b) { return a - b; });
+        removeBatch(sorted.pop());
     }
 });
 

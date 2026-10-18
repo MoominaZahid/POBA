@@ -162,6 +162,39 @@
 @media (max-width: 580px) {
     .cgf-row-2 { grid-template-columns: 1fr; }
 }
+
+/* Upload box */
+.cgf-upload-box {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #e8f4f4;
+    border-radius: 14px;
+    padding: 14px 20px;
+    cursor: pointer;
+    transition: background .15s, border-color .15s;
+    border: 2px dashed #b2d8d8;
+}
+.cgf-upload-box:hover { background: #d6eeee; border-color: #1a8080; }
+.cgf-upload-box.has-error { background: #fff5f5; border-color: #e24b4a; }
+.cgf-upload-icon {
+    width: 34px;
+    height: 34px;
+    background: #1a8080;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+.cgf-upload-text {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #1a8080;
+}
 </style>
 @endpush
 
@@ -169,13 +202,17 @@
 
 <div class="cgf-page">
 
-    <a href="{{ route('admin.gallery.index') }}" class="cgf-back">←</a>
+    <a href="{{ route('admin.gallery.index') }}" class="btn-back" title="Back to Gallery" aria-label="Back to Gallery">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="20" y1="12" x2="4" y2="12"></line>
+            <polyline points="10 18 4 12 10 6"></polyline>
+        </svg>
+        <span>Back</span>
+    </a>
 
     <h2 class="cgf-heading">Create a Gallery Folder</h2>
 
-
-
-    <form method="POST" action="{{ route('admin.gallery.store') }}">
+    <form method="POST" action="{{ route('admin.gallery.store') }}" enctype="multipart/form-data">
         @csrf
 
         {{-- ── Row 1: Folder Name + Class Year ── --}}
@@ -232,6 +269,26 @@
             </div>
         </div>
 
+        {{-- ── Banner Image (Cover for list page) ── --}}
+        <div class="cgf-row-1 cgf-group">
+            <label class="cgf-label">Banner Image (Cover for Gallery List):</label>
+            <div class="cgf-upload-box @error('banner_image') has-error @enderror" onclick="document.getElementById('bannerImgInput').click()">
+                <div class="cgf-upload-icon">+</div>
+                <div>
+                    <div class="cgf-upload-text">Upload Banner / Cover Image</div>
+                    <small style="font-size:11.5px;color:#888;">Displayed on the gallery album card on the list page (JPG, PNG, WebP up to 5MB).</small>
+                </div>
+            </div>
+            <input type="file" id="bannerImgInput" name="banner_image" accept="image/jpeg,image/png,image/jpg,image/webp" style="display:none" onchange="previewBanner(this)">
+            <span id="bannerFilename" style="font-size:12px;color:#1a8080;margin-top:6px;display:none;font-weight:600;"></span>
+            <div id="bannerPreviewWrap" style="display:none;margin-top:10px;max-width:280px;border-radius:10px;overflow:hidden;border:1px solid #cce0e0;box-shadow:0 2px 8px rgba(0,0,0,.06)">
+                <img id="bannerPreviewImg" src="" alt="Banner Preview" style="width:100%;height:140px;object-fit:cover;display:block">
+            </div>
+            @error('banner_image')
+                <span style="color:#e24b4a;font-size:12px;margin-top:6px;display:block">{{ $message }}</span>
+            @enderror
+        </div>
+
         {{-- ── Actions ── --}}
         <div class="cgf-actions">
             <button type="submit" class="cgf-btn-save">Save</button>
@@ -262,6 +319,25 @@ function updateSlug(val) {
             "{{ url('/gallery') }}/" + existing;
     }
 })();
+
+function previewBanner(input) {
+    if (input.files && input.files[0]) {
+        var file = input.files[0];
+        var nameSpan = document.getElementById('bannerFilename');
+        var previewWrap = document.getElementById('bannerPreviewWrap');
+        var previewImg = document.getElementById('bannerPreviewImg');
+
+        nameSpan.textContent = file.name + ' (' + Math.round(file.size / 1024) + ' KB)';
+        nameSpan.style.display = 'block';
+
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            previewImg.src = e.target.result;
+            previewWrap.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+}
 </script>
 @endpush
 

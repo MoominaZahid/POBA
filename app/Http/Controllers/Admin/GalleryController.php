@@ -26,9 +26,26 @@ class GalleryController extends Controller
     }
 
     public function store(Request $request) {
-        $request->validate(['folder_name'=>'required','class_year'=>'required','type'=>'required']);
-        $data = $request->except('_token');
-        $data['slug'] = Str::slug($request->folder_name);
+        $request->validate([
+            'folder_name'  => 'required',
+            'class_year'   => 'required',
+            'type'         => 'required',
+            'banner_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+        ]);
+        $data = $request->except(['_token', 'banner_image']);
+        $baseSlug = Str::slug($request->folder_name) ?: 'gallery';
+        $slug = $baseSlug;
+        $count = 1;
+        while (GalleryFolder::where('slug', $slug)->exists()) {
+            $slug = "{$baseSlug}-{$count}";
+            $count++;
+        }
+        $data['slug'] = $slug;
+
+        if ($request->hasFile('banner_image')) {
+            $data['banner_image'] = $request->file('banner_image')->store('gallery');
+        }
+
         GalleryFolder::create($data);
         return redirect()->route('admin.gallery.index')->with('success','Folder created.');
     }
@@ -40,16 +57,47 @@ class GalleryController extends Controller
 
     public function update(Request $request, $id) {
         $folder = GalleryFolder::findOrFail($id);
-        $data   = $request->except(['_token','_method']);
-        if ($request->folder_name) {
-            $data['slug'] = Str::slug($request->folder_name);
+        $request->validate([
+            'folder_name'  => 'required',
+            'class_year'   => 'required',
+            'type'         => 'required',
+            'banner_image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:5120',
+        ]);
+        $data = $request->except(['_token','_method','slug','banner_image','remove_banner_image']);
+
+        // Do not update slug on edit so existing shared links remain functional
+        if (empty($folder->slug) && !empty($request->folder_name)) {
+            $baseSlug = Str::slug($request->folder_name) ?: 'gallery';
+            $slug = $baseSlug;
+            $count = 1;
+            while (GalleryFolder::where('slug', $slug)->where('id', '!=', $folder->id)->exists()) {
+                $slug = "{$baseSlug}-{$count}";
+                $count++;
+            }
+            $data['slug'] = $slug;
         }
+
+        if ($request->hasFile('banner_image')) {
+            if ($folder->banner_image) {
+                Storage::delete($folder->banner_image);
+            }
+            $data['banner_image'] = $request->file('banner_image')->store('gallery');
+        } elseif ($request->boolean('remove_banner_image')) {
+            if ($folder->banner_image) {
+                Storage::delete($folder->banner_image);
+            }
+            $data['banner_image'] = null;
+        }
+
         $folder->update($data);
         return redirect()->route('admin.gallery.index')->with('success','Folder updated.');
     }
 
     public function destroy($id) {
         $folder = GalleryFolder::with('images')->findOrFail($id);
+        if ($folder->banner_image) {
+            Storage::delete($folder->banner_image);
+        }
         foreach ($folder->images as $img) {
             Storage::delete($img->image_path);
         }

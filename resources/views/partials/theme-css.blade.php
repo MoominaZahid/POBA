@@ -65,4 +65,14 @@ h2 { font-size: {{ $subheadingSize }} !important; }
     color: #ffffff !important;
     text-decoration: none !important;
 }
+
+/* ── Unified Back Button (Figma Arrow) ── */
+.btn-back, .poba-back-btn {
+    color: var(--teal, #02828e) !important;
+    background: transparent !important;
+}
+.btn-back:hover, .poba-back-btn:hover {
+    color: var(--teal-dark, #054d4d) !important;
+    background: #e6f7f5 !important;
+}
 </style>

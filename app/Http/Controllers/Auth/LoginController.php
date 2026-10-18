@@ -35,25 +35,53 @@ class LoginController extends Controller
             return redirect()->intended(route('admin.dashboard'));
         }
 
-        // 2. Try alumni guard
-        if (Auth::guard('alumni')->attempt($credentials, $remember)) {
-            $alumni = Auth::guard('alumni')->user();
+        // 2. Check alumni account status
+        $alumni = \App\Models\AlumniUser::where('email', $request->email)->first();
+        if ($alumni) {
+            $supportEmail = \App\Models\CmsSetting::get('contact_email') ?: config('mail.from.address', 'info@poba.com');
+            $supportPhone = \App\Models\CmsSetting::get('contact_number') ?: '+92 21 123 4567';
 
-            // Block inactive / suspended accounts
+            if ($alumni->status === 'rejected') {
+                $reasonText = $alumni->rejection_reason ? " Reason: {$alumni->rejection_reason}." : "";
+                $msg = "Your account has been rejected.{$reasonText} Please contact support at {$supportEmail} / {$supportPhone}.";
+                return back()
+                    ->withInput($request->only('email', 'remember'))
+                    ->withErrors(['email' => $msg])
+                    ->with('blocked_modal', [
+                        'title'   => 'Account Rejected',
+                        'type'    => 'rejected',
+                        'reason'  => $alumni->rejection_reason,
+                        'email'   => $supportEmail,
+                        'phone'   => $supportPhone,
+                        'message' => $msg,
+                    ]);
+            }
+
             if (! $alumni->is_active) {
-                Auth::guard('alumni')->logout();
-                return back()->withErrors(['email' => 'Your account has been suspended. Please contact support.']);
+                $reasonText = $alumni->deactivation_reason ? " Reason: {$alumni->deactivation_reason}." : "";
+                $msg = "Your account has been deactivated.{$reasonText} Please contact support at {$supportEmail} / {$supportPhone}.";
+                return back()
+                    ->withInput($request->only('email', 'remember'))
+                    ->withErrors(['email' => $msg])
+                    ->with('blocked_modal', [
+                        'title'   => 'Account Deactivated',
+                        'type'    => 'deactivated',
+                        'reason'  => $alumni->deactivation_reason,
+                        'email'   => $supportEmail,
+                        'phone'   => $supportPhone,
+                        'message' => $msg,
+                    ]);
             }
 
-            // Block unapproved accounts
             if ($alumni->status !== 'approved') {
-                Auth::guard('alumni')->logout();
-                $message = $alumni->status === 'rejected'
-                    ? 'Your application was not approved. Please contact support.'
-                    : 'Your account is pending admin approval. You will receive an email once approved.';
-                return back()->withErrors(['email' => $message]);
+                return back()
+                    ->withInput($request->only('email', 'remember'))
+                    ->withErrors(['email' => 'Your account is pending admin approval. You will receive an email once approved.']);
             }
+        }
 
+        // 3. Try alumni guard authentication
+        if (Auth::guard('alumni')->attempt($credentials, $remember)) {
             $request->session()->regenerate();
             return redirect()->intended(route('home'));
         }

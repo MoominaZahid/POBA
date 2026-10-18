@@ -276,10 +276,11 @@ AlumniUser::updateOrCreate(
 
         // ── Default Committees & Members ───────────────────────────────────────
         $exec = \App\Models\Committee::firstOrCreate(
-            ['title' => 'Executive Committee'],
+            ['title' => 'Executive Committee', 'parent_id' => null],
             [
                 'description' => "Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
-                'type' => 'executive'
+                'type'        => 'executive',
+                'parent_id'   => null,
             ]
         );
         $execMembers = [
@@ -290,6 +291,15 @@ AlumniUser::updateOrCreate(
             \App\Models\CommitteeMember::firstOrCreate(['committee_id' => $exec->id, 'member_name' => $mName], ['sort_order' => $i]);
         }
 
+        $workingMain = \App\Models\Committee::firstOrCreate(
+            ['title' => 'Working Committees', 'parent_id' => null],
+            [
+                'description' => "Working committees coordinate and execute POBA's various initiatives and operational activities across diverse domains.",
+                'type'        => 'working',
+                'parent_id'   => null,
+            ]
+        );
+
         $workingCommittees = [
             'Admin Committee' => ['Muhammad Saqib Hameed', 'Muhammad Furqan Abbasi', 'Nafay Hameed Satti', 'Ahsan Ali Khan'],
             'IT Committee' => ['Muhammad Saqib Hameed', 'Muhammad Furqan Abbasi', 'Nafay Hameed Satti', 'Ahsan Ali Khan'],
@@ -299,15 +309,21 @@ AlumniUser::updateOrCreate(
 
         foreach ($workingCommittees as $wTitle => $members) {
             $wComm = \App\Models\Committee::firstOrCreate(
-                ['title' => $wTitle],
+                ['title' => $wTitle, 'parent_id' => $workingMain->id],
                 [
                     'description' => "Lorem ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text.",
-                    'type' => 'working'
+                    'type'        => 'working',
+                    'parent_id'   => $workingMain->id,
                 ]
             );
             foreach ($members as $i => $mName) {
                 \App\Models\CommitteeMember::firstOrCreate(['committee_id' => $wComm->id, 'member_name' => $mName], ['sort_order' => $i]);
             }
+        }
+
+        // ── Countries & Cities (if not already seeded) ───────────────────────
+        if (\App\Models\Country::count() === 0) {
+            $this->call(CountriesCitiesSeeder::class);
         }
     }
 }

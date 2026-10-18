@@ -1,31 +1,39 @@
 {{-- FILE: resources/views/customer/gallery/show.blade.php --}}
 @extends('layouts.app')
-@section('title', $folder->folder_name . ' Gallery - POBA')
+@section('title', $folder->folder_name . ' - POBA')
 
 @push('styles')
 <style>
     /* ── Page Title ── */
     .show-header {
         text-align: center;
-        padding: 44px 20px 32px;
+        padding: 8px 20px 14px;
     }
     .show-header h1 {
-        font-size: 1.9rem;
+        font-size: 1.85rem;
         font-weight: 700;
         color: var(--teal, #1a7a7a);
-        margin: 0 0 14px;
+        margin: 0;
+        line-height: 1.2;
     }
     .show-header h1 span {
         text-decoration: underline;
         text-decoration-color: var(--orange, #e87722);
         text-underline-offset: 4px;
     }
+    .show-orange-line {
+        height: 3px;
+        width: 60px;
+        background: var(--orange, #e87722);
+        border-radius: 2px;
+        margin: 6px auto 10px;
+    }
     .show-header p {
         font-size: 13.5px;
         color: #6b7280;
         max-width: 680px;
         margin: 0 auto;
-        line-height: 1.6;
+        line-height: 1.5;
     }
     .show-header p a { color: var(--orange, #e87722); }
 
@@ -78,20 +86,7 @@
         color: #fff;
     }
 
-    /* ── Back link ── */
-    .back-link {
-        display: inline-block;
-        margin-bottom: 40px;
-        color: var(--teal, #1a7a7a);
-        font-size: 14px;
-        font-weight: 600;
-        text-decoration: none;
-        border: 1.5px solid var(--teal, #1a7a7a);
-        padding: 8px 20px;
-        border-radius: 6px;
-        transition: background .2s, color .2s;
-    }
-    .back-link:hover { background: var(--teal, #1a7a7a); color: #fff; }
+
 
     /* ══ Lightbox ══ */
     .lbx-overlay {
@@ -103,6 +98,8 @@
         align-items: center;
         justify-content: center;
         flex-direction: column;
+        padding: 20px;
+        box-sizing: border-box;
     }
     .lbx-overlay.open { display: flex; }
 
@@ -123,20 +120,30 @@
         box-shadow: 0 8px 40px rgba(0,0,0,.5);
     }
 
-    /* Counter */
-    .lbx-counter {
-        color: rgba(255,255,255,.7);
-        font-size: 13px;
-        margin-top: 12px;
-        letter-spacing: .04em;
+    /* Controls container */
+    .lbx-controls {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 14px;
+        position: relative;
+        z-index: 10000;
     }
 
-    /* Nav buttons */
+    /* Counter */
+    .lbx-counter {
+        color: rgba(255,255,255,.8);
+        font-size: 13.5px;
+        letter-spacing: .04em;
+        text-align: center;
+    }
+
+    /* Desktop Nav buttons */
     .lbx-btn {
         position: fixed;
         top: 50%;
         transform: translateY(-50%);
-        background: rgba(255,255,255,.12);
+        background: rgba(255,255,255,.14);
         border: none;
         color: #fff;
         font-size: 2.4rem;
@@ -150,10 +157,11 @@
         justify-content: center;
         transition: background .18s;
         z-index: 10000;
+        user-select: none;
     }
-    .lbx-btn:hover { background: rgba(255,255,255,.25); }
-    .lbx-prev { left: 16px; }
-    .lbx-next { right: 16px; }
+    .lbx-btn:hover { background: rgba(255,255,255,.28); }
+    .lbx-prev { left: 24px; }
+    .lbx-next { right: 24px; }
 
     /* Close + Download */
     .lbx-close {
@@ -195,13 +203,74 @@
         z-index: 10001;
     }
     .lbx-download:hover { background: rgba(255,255,255,.3); }
+
+    /* ── Mobile View: Move arrows below image so they NEVER overlap ── */
+    @media (max-width: 768px) {
+        .lbx-img-wrap {
+            max-width: 94vw;
+            max-height: 68vh;
+        }
+        .lbx-img-wrap img {
+            max-width: 94vw;
+            max-height: 68vh;
+        }
+        .lbx-controls {
+            gap: 24px;
+            margin-top: 18px;
+        }
+        .lbx-btn {
+            position: static;
+            top: auto;
+            transform: none;
+            width: 46px;
+            height: 46px;
+            font-size: 2.1rem;
+            background: rgba(255, 255, 255, .18);
+            box-shadow: 0 2px 10px rgba(0,0,0,.3);
+            flex-shrink: 0;
+        }
+        .lbx-btn:active {
+            background: rgba(255, 255, 255, .35);
+        }
+        .lbx-prev { left: auto; }
+        .lbx-next { right: auto; }
+        .lbx-counter {
+            font-size: 14px;
+            font-weight: 600;
+            min-width: 65px;
+        }
+        .lbx-close {
+            top: 12px;
+            right: 12px;
+            width: 38px;
+            height: 38px;
+        }
+        .lbx-download {
+            top: 12px;
+            right: 58px;
+            width: 38px;
+            height: 38px;
+        }
+    }
 </style>
 @endpush
 
 @section('content')
 
+<div class="container" style="max-width:1200px;margin:0 auto;padding:16px 20px 0;">
+    <a href="{{ route('gallery.index') }}" class="btn-back" title="Back to Gallery" aria-label="Back to Gallery">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="20" y1="12" x2="4" y2="12"></line>
+            <polyline points="10 18 4 12 10 6"></polyline>
+        </svg>
+        <span>Back to Gallery</span>
+    </a>
+</div>
+
 <div class="show-header">
-    <h1>{{ $folder->folder_name }} <span>Gallery</span></h1>
+    <h1>{{ $folder->folder_name }}</h1>
+    <div class="show-orange-line"></div>
+    @if(!empty($folder->description))
     <p>
         {{ Str::limit($folder->description, 180) }}
         @if(strlen($folder->description) > 180)
@@ -209,6 +278,7 @@
             <span id="fullDesc" style="display:none">{{ substr($folder->description, 180) }}</span>
         @endif
     </p>
+    @endif
 </div>
 
 <section class="section-pad" style="padding-top:0">
@@ -236,23 +306,23 @@
         </div>
         @endif
 
-        <div>
-            <a href="{{ route('gallery.index') }}" class="back-link">← Back to Gallery</a>
-        </div>
-
     </div>
 </section>
 
 {{-- ══ Lightbox ══ --}}
 <div class="lbx-overlay" id="lbxOverlay" onclick="handleOverlayClick(event)">
-    <button class="lbx-close"    onclick="closeLightbox()">✕</button>
-    <a      class="lbx-download" id="lbxDownload" href="#" download title="Download image">⬇</a>
-    <button class="lbx-btn lbx-prev" onclick="shiftImage(-1)">&#8249;</button>
+    <button class="lbx-close"    onclick="closeLightbox()" title="Close" aria-label="Close">✕</button>
+    <a      class="lbx-download" id="lbxDownload" href="#" download title="Download image" aria-label="Download image">⬇</a>
+    
     <div class="lbx-img-wrap">
         <img id="lbxImg" src="" alt="Gallery image">
     </div>
-    <button class="lbx-btn lbx-next" onclick="shiftImage(1)">&#8250;</button>
-    <div class="lbx-counter" id="lbxCounter"></div>
+
+    <div class="lbx-controls">
+        <button class="lbx-btn lbx-prev" onclick="shiftImage(-1)" title="Previous image" aria-label="Previous image">&#8249;</button>
+        <div class="lbx-counter" id="lbxCounter"></div>
+        <button class="lbx-btn lbx-next" onclick="shiftImage(1)" title="Next image" aria-label="Next image">&#8250;</button>
+    </div>
 </div>
 
 @push('scripts')
@@ -287,7 +357,7 @@
             (current + 1) + ' / ' + ALL.length;
     }
 
-    // Close when clicking the dark backdrop (not the image)
+    // Close when clicking the dark backdrop (not the image or controls)
     function handleOverlayClick(e) {
         if (e.target === document.getElementById('lbxOverlay')) closeLightbox();
     }
@@ -300,6 +370,34 @@
         if (e.key === 'ArrowLeft')  shiftImage(-1);
         if (e.key === 'ArrowRight') shiftImage(1);
     });
+
+    // Touch swipe support for mobile devices
+    (function initLightboxSwipe() {
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const lbx = document.getElementById('lbxOverlay');
+        if (!lbx) return;
+
+        lbx.addEventListener('touchstart', function(e) {
+            if (e.changedTouches && e.changedTouches.length > 0) {
+                touchStartX = e.changedTouches[0].screenX;
+            }
+        }, { passive: true });
+
+        lbx.addEventListener('touchend', function(e) {
+            if (e.changedTouches && e.changedTouches.length > 0) {
+                touchEndX = e.changedTouches[0].screenX;
+                const diff = touchEndX - touchStartX;
+                if (Math.abs(diff) > 40) {
+                    if (diff < 0) {
+                        shiftImage(1);  // swipe left -> next image
+                    } else {
+                        shiftImage(-1); // swipe right -> previous image
+                    }
+                }
+            }
+        }, { passive: true });
+    })();
 
     // ── Load More ─────────────────────────────────────────
     function loadMore() {

@@ -107,6 +107,7 @@
                 @endif
 
                 {{-- Gallery --}}
+                {{-- Gallery --}}
                 @if (auth()->user()->hasPermission('gallery'))
                     <a href="{{ route('admin.gallery.index') }}"
                         class="{{ request()->routeIs('admin.gallery.*') ? 'active' : '' }}">
@@ -117,6 +118,28 @@
                             <polyline points="21 15 16 10 5 21" />
                         </svg>
                         Gallery
+                    </a>
+                @endif
+
+                {{-- Contact Inquiries --}}
+                @if (auth()->user()->hasPermission('contact'))
+                    <a href="{{ route('admin.inquiries.index') }}"
+                        class="{{ request()->routeIs('admin.inquiries.*') ? 'active' : '' }}"
+                        style="display:flex;align-items:center;justify-content:space-between;">
+                        <span style="display:flex;align-items:center;gap:10px;">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                <polyline points="22,6 12,13 2,6" />
+                            </svg>
+                            Inquiries
+                        </span>
+                        @php $unreadNavCount = \App\Models\ContactInquiry::where('is_read', false)->count(); @endphp
+                        @if($unreadNavCount > 0)
+                            <span style="background:#0d9488;color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;margin-right:8px;">
+                                {{ $unreadNavCount }}
+                            </span>
+                        @endif
                     </a>
                 @endif
 

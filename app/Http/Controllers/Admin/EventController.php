@@ -46,17 +46,24 @@ class EventController extends Controller
             'entry_batches'          => 'nullable|array',
             'entry_batches.*'        => 'integer|min:1|max:100',
             'gallery_link'           => 'nullable|string|max:500',
-            'logo'                   => 'nullable|image|max:2048',
+            'logo'                   => 'required|image|max:2048',
             'registration_required'  => 'required|in:0,1',
         ], [
             'focal_person_number.regex' => 'The focal person number must be exactly 11 digits (numbers only).',
+            'logo.required'             => 'The event logo is required.',
         ]);
 
         $data = $request->except(['_token', 'logo']);
         $data['registration_required'] = $request->boolean('registration_required');
         $data['is_upcoming']           = strtotime($request->start_date) >= strtotime(today());
         // entry_batches comes in as array of integers from entry_batches[]
-        $data['entry_batches'] = $request->filled('entry_batches') ? array_map('intval', $request->entry_batches) : null;
+        if ($request->filled('entry_batches')) {
+            $batches = array_values(array_unique(array_map('intval', $request->entry_batches)));
+            sort($batches, SORT_NUMERIC);
+            $data['entry_batches'] = $batches;
+        } else {
+            $data['entry_batches'] = null;
+        }
 
         if ($request->hasFile('logo')) {
             $data['logo'] = $request->file('logo')->store('events');
@@ -88,16 +95,23 @@ class EventController extends Controller
             'entry_batches'          => 'nullable|array',
             'entry_batches.*'        => 'integer|min:1|max:100',
             'gallery_link'           => 'nullable|string|max:500',
-            'logo'                   => 'nullable|image|max:2048',
+            'logo'                   => ($event->logo ? 'nullable' : 'required') . '|image|max:2048',
             'registration_required'  => 'required|in:0,1',
         ], [
             'focal_person_number.regex' => 'The focal person number must be exactly 11 digits (numbers only).',
+            'logo.required'             => 'The event logo is required.',
         ]);
 
         $data = $request->except(['_token', '_method', 'logo']);
         $data['registration_required'] = $request->boolean('registration_required');
         $data['is_upcoming']           = strtotime($request->start_date) >= strtotime(today());
-        $data['entry_batches'] = $request->filled('entry_batches') ? array_map('intval', $request->entry_batches) : null;
+        if ($request->filled('entry_batches')) {
+            $batches = array_values(array_unique(array_map('intval', $request->entry_batches)));
+            sort($batches, SORT_NUMERIC);
+            $data['entry_batches'] = $batches;
+        } else {
+            $data['entry_batches'] = null;
+        }
 
         if ($request->hasFile('logo')) {
             if ($event->logo) Storage::delete($event->logo);

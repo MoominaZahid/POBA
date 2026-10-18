@@ -156,6 +156,7 @@
             }
 
             .hero-overlay {
+                min-height: 360px;
                 padding: 60px 20px 30px;
             }
 
@@ -236,16 +237,12 @@
                     <button type="button" class="see-more-toggle" data-target="aboutDescText" onclick="toggleSeeMore(this)" hidden style="margin-bottom:20px">See More</button>
                     @php
                         $aboutStats = json_decode($settings['about_stats'] ?? '[]', true) ?: [];
-                        if (empty($aboutStats)) {
-                            $aboutStats = [
-                                ['icon' => null, 'heading' => 'Excellence', 'subheading' => 'In Service & Leadership'],
-                                ['icon' => null, 'heading' => 'Community', 'subheading' => 'Strong Alumni Network'],
-                                ['icon' => null, 'heading' => 'Global Reach', 'subheading' => 'Worldwide Presence'],
-                                ['icon' => null, 'heading' => 'Integrity', 'subheading' => 'Honor & Commitment'],
-                            ];
-                        }
+                        $aboutStats = array_filter($aboutStats, function ($stat) {
+                            return !empty($stat['heading']);
+                        });
                     @endphp
 
+                    @if (!empty($aboutStats))
                     <div class="stats-grid-custom">
                         @foreach ($aboutStats as $stat)
                             <div class="stat-item-custom">
@@ -275,6 +272,7 @@
                             </div>
                         @endforeach
                     </div>
+                    @endif
                     <div style="margin-top:35px">
                         <a href="{{ Auth::guard('alumni')->check() ? route('alumni.index') : ($settings['about_btn_url'] ?? route('member.index')) }}"
                             class="btn-outline-orange-capsule">

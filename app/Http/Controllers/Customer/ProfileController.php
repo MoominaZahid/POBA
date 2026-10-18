@@ -28,7 +28,17 @@ class ProfileController extends Controller
 
         $request->validate([
             'full_name'            => 'sometimes|required|string|max:255',
-            'phone_number'         => 'sometimes|required|string|max:20',
+            'phone_number'         => [
+                'sometimes',
+                'required',
+                'string',
+                'max:25',
+                function ($attribute, $value, $fail) use ($request, $user) {
+                    if (AlumniUser::phoneAlreadyExists($value, $request->phone_code, $user->id)) {
+                        $fail('This phone number is already registered to another user.');
+                    }
+                },
+            ],
             'entry'                => 'nullable|string|max:20',
             'class_year'           => 'nullable|numeric|digits:4',
             'ccp_no'               => ['sometimes', 'required', 'string', 'max:50', \Illuminate\Validation\Rule::unique('alumni_users', 'ccp_no')->ignore($user->id)],
@@ -41,10 +51,16 @@ class ProfileController extends Controller
             'current_designation'  => 'nullable|string|max:150',
             'current_organization' => 'nullable|string|max:150',
             'achievements'         => 'nullable|string|max:2000',
-            'profile_photo'        => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
+            'profile_photo'        => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
             'cnic_file'            => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:5120',
         ], [
-            'ccp_no.unique' => 'This CCP No. is already registered to another user.',
+            'ccp_no.unique'       => 'This CCP No. is already registered to another user.',
+            'profile_photo.file'  => 'Invalid file format. Only PDF, JPG, and PNG are allowed.',
+            'profile_photo.mimes' => 'Invalid file format. Only PDF, JPG, and PNG are allowed.',
+            'profile_photo.max'   => 'File size exceeds 5MB limit. Please choose a smaller file.',
+            'cnic_file.file'      => 'Invalid file format. Only PDF, JPG, and PNG are allowed.',
+            'cnic_file.mimes'     => 'Invalid file format. Only PDF, JPG, and PNG are allowed.',
+            'cnic_file.max'       => 'File size exceeds 5MB limit. Please choose a smaller file.',
         ]);
 
         $data = $request->except(['_token', '_method', 'profile_photo', 'cnic_file', 'privacy_hide', 'phone_code']);
@@ -52,8 +68,10 @@ class ProfileController extends Controller
         // Format phone number with country code if provided
         if ($request->filled('phone_number')) {
             $phone = $request->phone_number;
+            $cleanNumber = preg_replace('/\D/', '', $phone);
+            $significant = ltrim($cleanNumber, '0');
             if ($request->filled('phone_code') && !str_starts_with($phone, '+')) {
-                $phone = $request->phone_code . $phone;
+                $phone = $request->phone_code . $significant;
             }
             $data['phone_number'] = $phone;
         }

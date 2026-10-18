@@ -31,8 +31,12 @@
             </div>
 
             <div class="admin-form-group">
-                <label class="admin-form-label">Description: *</label>
-                <textarea name="hero_description" class="admin-input" rows="3">{{ $settings['hero_description'] ?? '' }}</textarea>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+                    <label class="admin-form-label" style="margin-bottom:0">Description: *</label>
+                    <span id="heroDescCounter" style="font-size:12px;color:var(--text-muted);font-weight:600">0 / 500</span>
+                </div>
+                <textarea name="hero_description" id="heroDescriptionInput" class="admin-input" rows="3" maxlength="500">{{ $settings['hero_description'] ?? '' }}</textarea>
+                <small style="color:var(--text-muted);font-size:12px;display:block;margin-top:4px">Maximum 500 characters so the banner content and "See Less" option display properly.</small>
             </div>
 
             <div class="admin-form-row">
@@ -272,6 +276,16 @@
             });
         }
         attachRemoveHandlers();
+
+        const heroDescInput = document.getElementById('heroDescriptionInput');
+        const heroDescCounter = document.getElementById('heroDescCounter');
+        if (heroDescInput && heroDescCounter) {
+            function updateHeroDescCounter() {
+                heroDescCounter.textContent = `${heroDescInput.value.length} / 500`;
+            }
+            heroDescInput.addEventListener('input', updateHeroDescCounter);
+            updateHeroDescCounter();
+        }
     </script>
 
 @endsection

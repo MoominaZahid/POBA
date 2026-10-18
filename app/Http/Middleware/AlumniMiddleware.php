@@ -22,10 +22,41 @@ class AlumniMiddleware
 
         $alumni = Auth::guard('alumni')->user();
 
-        if (! $alumni->is_active) {
+        if (! $alumni->is_active || $alumni->status !== 'approved') {
             Auth::guard('alumni')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            $supportEmail = \App\Models\CmsSetting::get('contact_email') ?: config('mail.from.address', 'info@poba.com');
+            $supportPhone = \App\Models\CmsSetting::get('contact_number') ?: '+92 21 123 4567';
+
+            if ($alumni->status === 'rejected') {
+                $reasonText = $alumni->rejection_reason ? " Reason: {$alumni->rejection_reason}." : "";
+                $msg = "Your account has been rejected.{$reasonText} Please contact support at {$supportEmail} / {$supportPhone}.";
+                return redirect()->route('login')
+                    ->with('error', $msg)
+                    ->with('blocked_modal', [
+                        'title'   => 'Account Rejected',
+                        'type'    => 'rejected',
+                        'reason'  => $alumni->rejection_reason,
+                        'email'   => $supportEmail,
+                        'phone'   => $supportPhone,
+                        'message' => $msg,
+                    ]);
+            }
+
+            $reasonText = $alumni->deactivation_reason ? " Reason: {$alumni->deactivation_reason}." : "";
+            $msg = "Your account has been deactivated.{$reasonText} Please contact support at {$supportEmail} / {$supportPhone}.";
             return redirect()->route('login')
-                ->with('error', 'Your account has been suspended. Please contact support.');
+                ->with('error', $msg)
+                ->with('blocked_modal', [
+                    'title'   => 'Account Deactivated',
+                    'type'    => 'deactivated',
+                    'reason'  => $alumni->deactivation_reason,
+                    'email'   => $supportEmail,
+                    'phone'   => $supportPhone,
+                    'message' => $msg,
+                ]);
         }
 
         return $next($request);

@@ -31,10 +31,11 @@ class AppServiceProvider extends ServiceProvider
         Paginator::defaultView('vendor.pagination.simple-default');
         Paginator::defaultSimpleView('vendor.pagination.simple-default');
 
-        // Share CMS settings with the footer on every page
+        // Share CMS settings with the footer on every page (cached)
         View::composer('layouts.app', function ($view) {
             if (!array_key_exists('settings', $view->getData())) {
-                $view->with('settings', CmsSetting::pluck('value', 'key'));
+                $view->with('settings', \App\Support\PublicCache::remember('cms.settings',
+                    fn () => CmsSetting::pluck('value', 'key')));
             }
         });
     }

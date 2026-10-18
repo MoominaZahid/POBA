@@ -8,6 +8,7 @@ use App\Models\City;
 use App\Models\Country;
 use App\Models\User;
 use App\Notifications\AlumniRegistrationReceived;
+use App\Support\PublicCache;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
@@ -30,16 +31,18 @@ class MemberController extends Controller
             'captcha_ans' => $n1 + $n2,
         ]);
 
-        $countries = Country::orderBy('name')->get(['id', 'name']);
+        $countries = PublicCache::remember('countries.list', fn () =>
+            Country::orderBy('name')->get(['id', 'name']), 86400);
 
         return view('customer.member.register', compact('n1', 'n2', 'countries'));
     }
 
     public function citiesByCountry(Country $country)
     {
-        $cities = City::where('country_id', $country->id)
-            ->orderBy('name')
-            ->pluck('name');
+        $cities = PublicCache::remember('cities.' . $country->id, fn () =>
+            City::where('country_id', $country->id)
+                ->orderBy('name')
+                ->pluck('name'), 86400);
 
         return response()->json($cities);
     }

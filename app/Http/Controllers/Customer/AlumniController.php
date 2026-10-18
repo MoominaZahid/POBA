@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
 use App\Models\AlumniUser;
+use App\Support\PublicCache;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 
@@ -13,23 +14,33 @@ class AlumniController extends Controller
     // ── Alumni Directory ──────────────────────────────────────────────────────
     public function index(Request $request)
     {
-        $query = AlumniUser::where('status', 'approved')
-            ->where('is_active', true);
+        $build = function () use ($request) {
+            $query = AlumniUser::where('status', 'approved')
+                ->where('is_active', true);
 
-        if ($request->filled('search')) {
-            $query->where('full_name', 'like', '%' . $request->search . '%');
-        }
-        if ($request->filled('class_year')) {
-            $query->where('class_year', $request->class_year);
-        }
-        if ($request->filled('field_work')) {
-            $query->where('field_of_work', $request->field_work);
-        }
-        if ($request->filled('city')) {
-            $query->where('current_city', $request->city);
-        }
+            if ($request->filled('search')) {
+                $query->where('full_name', 'like', '%' . $request->search . '%');
+            }
+            if ($request->filled('class_year')) {
+                $query->where('class_year', $request->class_year);
+            }
+            if ($request->filled('field_work')) {
+                $query->where('field_of_work', $request->field_work);
+            }
+            if ($request->filled('city')) {
+                $query->where('current_city', $request->city);
+            }
 
-        $alumni = $query->orderByDesc('created_at')->paginate(8);
+            return $query->orderByDesc('created_at')->paginate(8);
+        };
+
+        $filtered = array_filter($request->only(['search', 'class_year', 'field_work', 'city']));
+        $page     = max(1, (int) $request->query('page', 1));
+
+        $alumni = empty($filtered)
+            ? PublicCache::remember("alumni.index.p{$page}", $build)
+            : $build();
+
         return view('customer.alumni.index', compact('alumni'));
     }
 
@@ -38,9 +49,10 @@ class AlumniController extends Controller
     {
         $viewer = Auth::guard('alumni')->user();
 
-        $alumni = AlumniUser::where('status', 'approved')
-            ->where('is_active', true)
-            ->findOrFail($id);
+        $alumni = PublicCache::remember('alumni.show.' . (int) $id, fn () =>
+            AlumniUser::where('status', 'approved')
+                ->where('is_active', true)
+                ->findOrFail($id));
 
         // Always show full profile when viewing your own page
         $isOwnProfile = $viewer && $viewer->id === $alumni->id;
@@ -81,24 +93,34 @@ class AlumniController extends Controller
     // ── Star Alumni Listing ───────────────────────────────────────────────────
     public function starAlumni(Request $request)
     {
-        $query = AlumniUser::where('status', 'approved')
-            ->where('is_active', true)
-            ->where('is_star_alumni', true);
+        $build = function () use ($request) {
+            $query = AlumniUser::where('status', 'approved')
+                ->where('is_active', true)
+                ->where('is_star_alumni', true);
 
-        if ($request->filled('search')) {
-            $query->where('full_name', 'like', '%' . $request->search . '%');
-        }
-        if ($request->filled('class_year')) {
-            $query->where('class_year', $request->class_year);
-        }
-        if ($request->filled('field_work')) {
-            $query->where('field_of_work', $request->field_work);
-        }
-        if ($request->filled('city')) {
-            $query->where('current_city', $request->city);
-        }
+            if ($request->filled('search')) {
+                $query->where('full_name', 'like', '%' . $request->search . '%');
+            }
+            if ($request->filled('class_year')) {
+                $query->where('class_year', $request->class_year);
+            }
+            if ($request->filled('field_work')) {
+                $query->where('field_of_work', $request->field_work);
+            }
+            if ($request->filled('city')) {
+                $query->where('current_city', $request->city);
+            }
 
-        $alumni = $query->orderByDesc('created_at')->paginate(8);
+            return $query->orderByDesc('created_at')->paginate(8);
+        };
+
+        $filtered = array_filter($request->only(['search', 'class_year', 'field_work', 'city']));
+        $page     = max(1, (int) $request->query('page', 1));
+
+        $alumni = empty($filtered)
+            ? PublicCache::remember("alumni.star.p{$page}", $build)
+            : $build();
+
         return view('customer.star-alumni.index', compact('alumni'));
     }
 }

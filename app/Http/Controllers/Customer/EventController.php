@@ -8,6 +8,7 @@ use App\Models\EventParticipant;
 use App\Models\User;
 use App\Notifications\EventRegistrationSubmitted;
 use App\Notifications\NewEventRegistrationAdminNotification;
+use App\Support\PublicCache;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
@@ -20,47 +21,58 @@ class EventController extends Controller
 
     public function index(Request $request)
     {
-        $now     = Carbon::now();
-        $today   = $now->toDateString();   // e.g. "2026-06-26"
-        $timeNow = $now->toTimeString();   // e.g. "17:00:00"
+        $upcomingPage = max(1, (int) $request->query('upcoming_page', 1));
+        $previousPage = max(1, (int) $request->query('previous_page', 1));
 
-        // ─────────────────────────────────────────────────────────────────
-        // UPCOMING: event has NOT yet ended
-        //   • end_date is AFTER today, OR
-        //   • end_date IS today AND end_time >= current time, OR
-        //   • end_date IS today AND end_time IS NULL  (treat as 23:59:59 – still running)
-        // ─────────────────────────────────────────────────────────────────
-        $upcomingQuery = Event::where(function ($q) use ($today, $timeNow) {
-            // Ends on a future date
-            $q->where('end_date', '>', $today)
-              // OR ends today and hasn't finished yet (or has no end_time)
-              ->orWhere(function ($q2) use ($today, $timeNow) {
-                  $q2->where('end_date', '=', $today)
-                     ->where(function ($q3) use ($timeNow) {
-                         $q3->whereNull('end_time')
-                            ->orWhere('end_time', '>=', $timeNow);
-                     });
-              });
-        })->orderBy('start_date')->orderBy('start_time');
+        [$upcoming, $previous] = PublicCache::remember(
+            "events.u{$upcomingPage}.p{$previousPage}",
+            function () {
+                $now     = Carbon::now();
+                $today   = $now->toDateString();   // e.g. "2026-06-26"
+                $timeNow = $now->toTimeString();   // e.g. "17:00:00"
 
-        // ─────────────────────────────────────────────────────────────────
-        // PREVIOUS: event has already ended
-        //   • end_date is BEFORE today, OR
-        //   • end_date IS today AND end_time < current time (and end_time is not null)
-        // ─────────────────────────────────────────────────────────────────
-        $previousQuery = Event::where(function ($q) use ($today, $timeNow) {
-            // Ended on a past date
-            $q->where('end_date', '<', $today)
-              // OR ended today and the end_time has already passed
-              ->orWhere(function ($q2) use ($today, $timeNow) {
-                  $q2->where('end_date', '=', $today)
-                     ->whereNotNull('end_time')
-                     ->where('end_time', '<', $timeNow);
-              });
-        })->orderByDesc('end_date')->orderByDesc('end_time');
+                // ─────────────────────────────────────────────────────────────────
+                // UPCOMING: event has NOT yet ended
+                //   • end_date is AFTER today, OR
+                //   • end_date IS today AND end_time >= current time, OR
+                //   • end_date IS today AND end_time IS NULL  (treat as 23:59:59 – still running)
+                // ─────────────────────────────────────────────────────────────────
+                $upcomingQuery = Event::where(function ($q) use ($today, $timeNow) {
+                    // Ends on a future date
+                    $q->where('end_date', '>', $today)
+                      // OR ends today and hasn't finished yet (or has no end_time)
+                      ->orWhere(function ($q2) use ($today, $timeNow) {
+                          $q2->where('end_date', '=', $today)
+                             ->where(function ($q3) use ($timeNow) {
+                                 $q3->whereNull('end_time')
+                                    ->orWhere('end_time', '>=', $timeNow);
+                             });
+                      });
+                })->orderBy('start_date')->orderBy('start_time');
 
-        $upcoming = $upcomingQuery->paginate(self::PER_PAGE, ['*'], 'upcoming_page');
-        $previous = $previousQuery->paginate(self::PER_PAGE, ['*'], 'previous_page');
+                // ─────────────────────────────────────────────────────────────────
+                // PREVIOUS: event has already ended
+                //   • end_date is BEFORE today, OR
+                //   • end_date IS today AND end_time < current time (and end_time is not null)
+                // ─────────────────────────────────────────────────────────────────
+                $previousQuery = Event::where(function ($q) use ($today, $timeNow) {
+                    // Ended on a past date
+                    $q->where('end_date', '<', $today)
+                      // OR ended today and the end_time has already passed
+                      ->orWhere(function ($q2) use ($today, $timeNow) {
+                          $q2->where('end_date', '=', $today)
+                             ->whereNotNull('end_time')
+                             ->where('end_time', '<', $timeNow);
+                      });
+                })->orderByDesc('end_date')->orderByDesc('end_time');
+
+                return [
+                    $upcomingQuery->paginate(self::PER_PAGE, ['*'], 'upcoming_page'),
+                    $previousQuery->paginate(self::PER_PAGE, ['*'], 'previous_page'),
+                ];
+            },
+            300
+        );
 
         // ── Fetch this alumni's registrations ────────────────────────────
         $myEventIds       = [];

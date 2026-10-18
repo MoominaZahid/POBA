@@ -49,21 +49,45 @@
                     <div class="form-group">
                         <label class="form-label">Phone Number:</label>
                         <div class="phone-input-wrapper">
-                            <select name="phone_ext" class="phone-ext-select">
-                                <option value="+92">🇵🇰 +92</option>
-                                <option value="+1">🇺🇸 +1</option>
-                                <option value="+44">🇬🇧 +44</option>
-                                <option value="+971">🇦🇪 +971</option>
-                                <option value="+966">🇸🇦 +966</option>
-                                <option value="+61">🇦🇺 +61</option>
-                                <option value="+49">🇩🇪 +49</option>
-                                <option value="+33">🇫🇷 +33</option>
-                                <option value="+86">🇨🇳 +86</option>
-                                <option value="+91">🇮🇳 +91</option>
+                            <select name="phone_ext" id="contactPhoneExt" class="phone-ext-select">
+                                <option value="+92" data-max="10" data-ph="300 1234567">🇵🇰 +92</option>
+                                <option value="+1"  data-max="10" data-ph="202 555 0123">🇺🇸 +1</option>
+                                <option value="+44" data-max="10" data-ph="7911 123456">🇬🇧 +44</option>
+                                <option value="+971" data-max="9" data-ph="50 123 4567">🇦🇪 +971</option>
+                                <option value="+966" data-max="9" data-ph="50 123 4567">🇸🇦 +966</option>
+                                <option value="+61" data-max="9" data-ph="412 345 678">🇦🇺 +61</option>
+                                <option value="+49" data-max="10" data-ph="151 23456789">🇩🇪 +49</option>
+                                <option value="+33" data-max="9" data-ph="6 12 34 56 78">🇫🇷 +33</option>
+                                <option value="+86" data-max="11" data-ph="138 0013 8000">🇨🇳 +86</option>
+                                <option value="+91" data-max="10" data-ph="98765 43210">🇮🇳 +91</option>
                             </select>
                             <div class="phone-divider"></div>
-                            <input type="tel" name="phone" class="phone-number-input" placeholder="321 1234567" value="{{ old('phone') }}">
+                            <input type="tel" name="phone" id="contactPhoneNumber" class="phone-number-input" placeholder="300 1234567" value="{{ old('phone') }}" inputmode="numeric" maxlength="10">
                         </div>
+                        <script>
+                        (function () {
+                            var extSelect = document.getElementById('contactPhoneExt');
+                            var phoneInput = document.getElementById('contactPhoneNumber');
+
+                            function applyCountryLimit() {
+                                var opt = extSelect.options[extSelect.selectedIndex];
+                                var max = parseInt(opt.getAttribute('data-max'), 10) || 15;
+                                phoneInput.setAttribute('maxlength', max);
+                                phoneInput.setAttribute('placeholder', opt.getAttribute('data-ph') || '');
+                                if (phoneInput.value.length > max) {
+                                    phoneInput.value = phoneInput.value.slice(0, max);
+                                }
+                            }
+
+                            phoneInput.addEventListener('input', function () {
+                                var max = parseInt(extSelect.options[extSelect.selectedIndex].getAttribute('data-max'), 10) || 15;
+                                this.value = this.value.replace(/\D/g, '').slice(0, max);
+                            });
+
+                            extSelect.addEventListener('change', applyCountryLimit);
+                            applyCountryLimit();
+                        })();
+                        </script>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Message:</label>

@@ -1,0 +1,1759 @@
+{
+    "Afghanistan": {
+        "code": "+93",
+        "iso": "af",
+        "flag": "\ud83c\udde6\ud83c\uddeb",
+        "max": 9,
+        "ph": "70 123 4567"
+    },
+    "Aland Islands": {
+        "code": "+358",
+        "iso": "ax",
+        "flag": "\ud83c\udde6\ud83c\uddfd",
+        "max": 10,
+        "ph": "40 123 4567"
+    },
+    "Albania": {
+        "code": "+355",
+        "iso": "al",
+        "flag": "\ud83c\udde6\ud83c\uddf1",
+        "max": 9,
+        "ph": "67 123 4567"
+    },
+    "Algeria": {
+        "code": "+213",
+        "iso": "dz",
+        "flag": "\ud83c\udde9\ud83c\uddff",
+        "max": 9,
+        "ph": "551 23 45 67"
+    },
+    "American Samoa": {
+        "code": "+1684",
+        "iso": "as",
+        "flag": "\ud83c\udde6\ud83c\uddf8",
+        "max": 7,
+        "ph": "684 1234"
+    },
+    "Andorra": {
+        "code": "+376",
+        "iso": "ad",
+        "flag": "\ud83c\udde6\ud83c\udde9",
+        "max": 6,
+        "ph": "345 678"
+    },
+    "Angola": {
+        "code": "+244",
+        "iso": "ao",
+        "flag": "\ud83c\udde6\ud83c\uddf4",
+        "max": 9,
+        "ph": "923 123 456"
+    },
+    "Anguilla": {
+        "code": "+1264",
+        "iso": "ai",
+        "flag": "\ud83c\udde6\ud83c\uddee",
+        "max": 7,
+        "ph": "264 1234"
+    },
+    "Antigua and Barbuda": {
+        "code": "+1268",
+        "iso": "ag",
+        "flag": "\ud83c\udde6\ud83c\uddec",
+        "max": 7,
+        "ph": "268 1234"
+    },
+    "Argentina": {
+        "code": "+54",
+        "iso": "ar",
+        "flag": "\ud83c\udde6\ud83c\uddf7",
+        "max": 10,
+        "ph": "11 2345 6789"
+    },
+    "Armenia": {
+        "code": "+374",
+        "iso": "am",
+        "flag": "\ud83c\udde6\ud83c\uddf2",
+        "max": 8,
+        "ph": "77 123456"
+    },
+    "Aruba": {
+        "code": "+297",
+        "iso": "aw",
+        "flag": "\ud83c\udde6\ud83c\uddfc",
+        "max": 7,
+        "ph": "560 1234"
+    },
+    "Australia": {
+        "code": "+61",
+        "iso": "au",
+        "flag": "\ud83c\udde6\ud83c\uddfa",
+        "max": 9,
+        "ph": "412 345 678"
+    },
+    "Austria": {
+        "code": "+43",
+        "iso": "at",
+        "flag": "\ud83c\udde6\ud83c\uddf9",
+        "max": 10,
+        "ph": "664 1234567"
+    },
+    "Azerbaijan": {
+        "code": "+994",
+        "iso": "az",
+        "flag": "\ud83c\udde6\ud83c\uddff",
+        "max": 9,
+        "ph": "50 123 45 67"
+    },
+    "Bahrain": {
+        "code": "+973",
+        "iso": "bh",
+        "flag": "\ud83c\udde7\ud83c\udded",
+        "max": 8,
+        "ph": "3612 3456"
+    },
+    "Bangladesh": {
+        "code": "+880",
+        "iso": "bd",
+        "flag": "\ud83c\udde7\ud83c\udde9",
+        "max": 10,
+        "ph": "1712 345678"
+    },
+    "Barbados": {
+        "code": "+1246",
+        "iso": "bb",
+        "flag": "\ud83c\udde7\ud83c\udde7",
+        "max": 7,
+        "ph": "246 1234"
+    },
+    "Belarus": {
+        "code": "+375",
+        "iso": "by",
+        "flag": "\ud83c\udde7\ud83c\uddfe",
+        "max": 9,
+        "ph": "29 123 45 67"
+    },
+    "Belgium": {
+        "code": "+32",
+        "iso": "be",
+        "flag": "\ud83c\udde7\ud83c\uddea",
+        "max": 9,
+        "ph": "470 12 34 56"
+    },
+    "Belize": {
+        "code": "+501",
+        "iso": "bz",
+        "flag": "\ud83c\udde7\ud83c\uddff",
+        "max": 7,
+        "ph": "610 1234"
+    },
+    "Benin": {
+        "code": "+229",
+        "iso": "bj",
+        "flag": "\ud83c\udde7\ud83c\uddef",
+        "max": 8,
+        "ph": "90 12 34 56"
+    },
+    "Bermuda": {
+        "code": "+1441",
+        "iso": "bm",
+        "flag": "\ud83c\udde7\ud83c\uddf2",
+        "max": 7,
+        "ph": "441 1234"
+    },
+    "Bhutan": {
+        "code": "+975",
+        "iso": "bt",
+        "flag": "\ud83c\udde7\ud83c\uddf9",
+        "max": 8,
+        "ph": "17 12 34 56"
+    },
+    "Bolivia": {
+        "code": "+591",
+        "iso": "bo",
+        "flag": "\ud83c\udde7\ud83c\uddf4",
+        "max": 8,
+        "ph": "71234567"
+    },
+    "Bosnia and Herzegovina": {
+        "code": "+387",
+        "iso": "ba",
+        "flag": "\ud83c\udde7\ud83c\udde6",
+        "max": 8,
+        "ph": "61 123 456"
+    },
+    "Botswana": {
+        "code": "+267",
+        "iso": "bw",
+        "flag": "\ud83c\udde7\ud83c\uddfc",
+        "max": 8,
+        "ph": "71 123 456"
+    },
+    "Brazil": {
+        "code": "+55",
+        "iso": "br",
+        "flag": "\ud83c\udde7\ud83c\uddf7",
+        "max": 11,
+        "ph": "11 91234 5678"
+    },
+    "Brunei": {
+        "code": "+673",
+        "iso": "bn",
+        "flag": "\ud83c\udde7\ud83c\uddf3",
+        "max": 7,
+        "ph": "712 3456"
+    },
+    "Bulgaria": {
+        "code": "+359",
+        "iso": "bg",
+        "flag": "\ud83c\udde7\ud83c\uddec",
+        "max": 9,
+        "ph": "87 123 4567"
+    },
+    "Burkina Faso": {
+        "code": "+226",
+        "iso": "bf",
+        "flag": "\ud83c\udde7\ud83c\uddeb",
+        "max": 8,
+        "ph": "70 12 34 56"
+    },
+    "Burundi": {
+        "code": "+257",
+        "iso": "bi",
+        "flag": "\ud83c\udde7\ud83c\uddee",
+        "max": 8,
+        "ph": "79 12 34 56"
+    },
+    "Cambodia": {
+        "code": "+855",
+        "iso": "kh",
+        "flag": "\ud83c\uddf0\ud83c\udded",
+        "max": 9,
+        "ph": "12 345 678"
+    },
+    "Cameroon": {
+        "code": "+237",
+        "iso": "cm",
+        "flag": "\ud83c\udde8\ud83c\uddf2",
+        "max": 9,
+        "ph": "6 71 23 45 67"
+    },
+    "Canada": {
+        "code": "+1",
+        "iso": "ca",
+        "flag": "\ud83c\udde8\ud83c\udde6",
+        "max": 10,
+        "ph": "416 555 0123"
+    },
+    "Cape Verde": {
+        "code": "+238",
+        "iso": "cv",
+        "flag": "\ud83c\udde8\ud83c\uddfb",
+        "max": 7,
+        "ph": "991 1234"
+    },
+    "Cayman Islands": {
+        "code": "+1345",
+        "iso": "ky",
+        "flag": "\ud83c\uddf0\ud83c\uddfe",
+        "max": 7,
+        "ph": "345 1234"
+    },
+    "Central African Republic": {
+        "code": "+236",
+        "iso": "cf",
+        "flag": "\ud83c\udde8\ud83c\uddeb",
+        "max": 8,
+        "ph": "70 12 34 56"
+    },
+    "Chad": {
+        "code": "+235",
+        "iso": "td",
+        "flag": "\ud83c\uddf9\ud83c\udde9",
+        "max": 8,
+        "ph": "66 12 34 56"
+    },
+    "Chile": {
+        "code": "+56",
+        "iso": "cl",
+        "flag": "\ud83c\udde8\ud83c\uddf1",
+        "max": 9,
+        "ph": "9 1234 5678"
+    },
+    "China": {
+        "code": "+86",
+        "iso": "cn",
+        "flag": "\ud83c\udde8\ud83c\uddf3",
+        "max": 11,
+        "ph": "138 0013 8000"
+    },
+    "Colombia": {
+        "code": "+57",
+        "iso": "co",
+        "flag": "\ud83c\udde8\ud83c\uddf4",
+        "max": 10,
+        "ph": "310 123 4567"
+    },
+    "Comoros": {
+        "code": "+269",
+        "iso": "km",
+        "flag": "\ud83c\uddf0\ud83c\uddf2",
+        "max": 7,
+        "ph": "321 2345"
+    },
+    "Congo": {
+        "code": "+242",
+        "iso": "cg",
+        "flag": "\ud83c\udde8\ud83c\uddec",
+        "max": 9,
+        "ph": "06 123 4567"
+    },
+    "Costa Rica": {
+        "code": "+506",
+        "iso": "cr",
+        "flag": "\ud83c\udde8\ud83c\uddf7",
+        "max": 8,
+        "ph": "8312 3456"
+    },
+    "Croatia": {
+        "code": "+385",
+        "iso": "hr",
+        "flag": "\ud83c\udded\ud83c\uddf7",
+        "max": 9,
+        "ph": "91 123 4567"
+    },
+    "Cuba": {
+        "code": "+53",
+        "iso": "cu",
+        "flag": "\ud83c\udde8\ud83c\uddfa",
+        "max": 8,
+        "ph": "5 123 4567"
+    },
+    "Cyprus": {
+        "code": "+357",
+        "iso": "cy",
+        "flag": "\ud83c\udde8\ud83c\uddfe",
+        "max": 8,
+        "ph": "96 123456"
+    },
+    "Czech Republic": {
+        "code": "+420",
+        "iso": "cz",
+        "flag": "\ud83c\udde8\ud83c\uddff",
+        "max": 9,
+        "ph": "601 123 456"
+    },
+    "Democratic Republic of the Congo": {
+        "code": "+243",
+        "iso": "cd",
+        "flag": "\ud83c\udde8\ud83c\udde9",
+        "max": 9,
+        "ph": "81 123 4567"
+    },
+    "Denmark": {
+        "code": "+45",
+        "iso": "dk",
+        "flag": "\ud83c\udde9\ud83c\uddf0",
+        "max": 8,
+        "ph": "20 12 34 56"
+    },
+    "Djibouti": {
+        "code": "+253",
+        "iso": "dj",
+        "flag": "\ud83c\udde9\ud83c\uddef",
+        "max": 8,
+        "ph": "77 12 34 56"
+    },
+    "Dominica": {
+        "code": "+1767",
+        "iso": "dm",
+        "flag": "\ud83c\udde9\ud83c\uddf2",
+        "max": 7,
+        "ph": "767 1234"
+    },
+    "Dominican Republic": {
+        "code": "+1809",
+        "iso": "do",
+        "flag": "\ud83c\udde9\ud83c\uddf4",
+        "max": 7,
+        "ph": "809 1234"
+    },
+    "Ecuador": {
+        "code": "+593",
+        "iso": "ec",
+        "flag": "\ud83c\uddea\ud83c\udde8",
+        "max": 9,
+        "ph": "99 123 4567"
+    },
+    "Egypt": {
+        "code": "+20",
+        "iso": "eg",
+        "flag": "\ud83c\uddea\ud83c\uddec",
+        "max": 10,
+        "ph": "100 123 4567"
+    },
+    "El Salvador": {
+        "code": "+503",
+        "iso": "sv",
+        "flag": "\ud83c\uddf8\ud83c\uddfb",
+        "max": 8,
+        "ph": "7012 3456"
+    },
+    "Equatorial Guinea": {
+        "code": "+240",
+        "iso": "gq",
+        "flag": "\ud83c\uddec\ud83c\uddf6",
+        "max": 9,
+        "ph": "222 123 456"
+    },
+    "Eritrea": {
+        "code": "+291",
+        "iso": "er",
+        "flag": "\ud83c\uddea\ud83c\uddf7",
+        "max": 7,
+        "ph": "7 123 456"
+    },
+    "Estonia": {
+        "code": "+372",
+        "iso": "ee",
+        "flag": "\ud83c\uddea\ud83c\uddea",
+        "max": 8,
+        "ph": "5123 4567"
+    },
+    "Eswatini": {
+        "code": "+268",
+        "iso": "sz",
+        "flag": "\ud83c\uddf8\ud83c\uddff",
+        "max": 8,
+        "ph": "7612 3456"
+    },
+    "Ethiopia": {
+        "code": "+251",
+        "iso": "et",
+        "flag": "\ud83c\uddea\ud83c\uddf9",
+        "max": 9,
+        "ph": "91 123 4567"
+    },
+    "Fiji Islands": {
+        "code": "+679",
+        "iso": "fj",
+        "flag": "\ud83c\uddeb\ud83c\uddef",
+        "max": 7,
+        "ph": "701 2345"
+    },
+    "Finland": {
+        "code": "+358",
+        "iso": "fi",
+        "flag": "\ud83c\uddeb\ud83c\uddee",
+        "max": 10,
+        "ph": "40 123 4567"
+    },
+    "France": {
+        "code": "+33",
+        "iso": "fr",
+        "flag": "\ud83c\uddeb\ud83c\uddf7",
+        "max": 9,
+        "ph": "6 12 34 56 78"
+    },
+    "Gabon": {
+        "code": "+241",
+        "iso": "ga",
+        "flag": "\ud83c\uddec\ud83c\udde6",
+        "max": 8,
+        "ph": "06 12 34 56"
+    },
+    "Georgia": {
+        "code": "+995",
+        "iso": "ge",
+        "flag": "\ud83c\uddec\ud83c\uddea",
+        "max": 9,
+        "ph": "595 12 34 56"
+    },
+    "Germany": {
+        "code": "+49",
+        "iso": "de",
+        "flag": "\ud83c\udde9\ud83c\uddea",
+        "max": 10,
+        "ph": "151 23456789"
+    },
+    "Ghana": {
+        "code": "+233",
+        "iso": "gh",
+        "flag": "\ud83c\uddec\ud83c\udded",
+        "max": 9,
+        "ph": "24 123 4567"
+    },
+    "Greece": {
+        "code": "+30",
+        "iso": "gr",
+        "flag": "\ud83c\uddec\ud83c\uddf7",
+        "max": 10,
+        "ph": "69 1234 5678"
+    },
+    "Guatemala": {
+        "code": "+502",
+        "iso": "gt",
+        "flag": "\ud83c\uddec\ud83c\uddf9",
+        "max": 8,
+        "ph": "5123 4567"
+    },
+    "Guinea": {
+        "code": "+224",
+        "iso": "gn",
+        "flag": "\ud83c\uddec\ud83c\uddf3",
+        "max": 9,
+        "ph": "621 12 34 56"
+    },
+    "Guyana": {
+        "code": "+592",
+        "iso": "gy",
+        "flag": "\ud83c\uddec\ud83c\uddfe",
+        "max": 7,
+        "ph": "609 1234"
+    },
+    "Haiti": {
+        "code": "+509",
+        "iso": "ht",
+        "flag": "\ud83c\udded\ud83c\uddf9",
+        "max": 8,
+        "ph": "34 12 3456"
+    },
+    "Honduras": {
+        "code": "+504",
+        "iso": "hn",
+        "flag": "\ud83c\udded\ud83c\uddf3",
+        "max": 8,
+        "ph": "9123 4567"
+    },
+    "Hong Kong S.A.R.": {
+        "code": "+852",
+        "iso": "hk",
+        "flag": "\ud83c\udded\ud83c\uddf0",
+        "max": 8,
+        "ph": "9123 4567"
+    },
+    "Hungary": {
+        "code": "+36",
+        "iso": "hu",
+        "flag": "\ud83c\udded\ud83c\uddfa",
+        "max": 9,
+        "ph": "20 123 4567"
+    },
+    "Iceland": {
+        "code": "+354",
+        "iso": "is",
+        "flag": "\ud83c\uddee\ud83c\uddf8",
+        "max": 7,
+        "ph": "612 3456"
+    },
+    "India": {
+        "code": "+91",
+        "iso": "in",
+        "flag": "\ud83c\uddee\ud83c\uddf3",
+        "max": 10,
+        "ph": "98765 43210"
+    },
+    "Indonesia": {
+        "code": "+62",
+        "iso": "id",
+        "flag": "\ud83c\uddee\ud83c\udde9",
+        "max": 11,
+        "ph": "812 3456 7890"
+    },
+    "Iran": {
+        "code": "+98",
+        "iso": "ir",
+        "flag": "\ud83c\uddee\ud83c\uddf7",
+        "max": 10,
+        "ph": "912 345 6789"
+    },
+    "Iraq": {
+        "code": "+964",
+        "iso": "iq",
+        "flag": "\ud83c\uddee\ud83c\uddf6",
+        "max": 10,
+        "ph": "770 123 4567"
+    },
+    "Ireland": {
+        "code": "+353",
+        "iso": "ie",
+        "flag": "\ud83c\uddee\ud83c\uddea",
+        "max": 9,
+        "ph": "83 123 4567"
+    },
+    "Israel": {
+        "code": "+972",
+        "iso": "il",
+        "flag": "\ud83c\uddee\ud83c\uddf1",
+        "max": 9,
+        "ph": "50 123 4567"
+    },
+    "Italy": {
+        "code": "+39",
+        "iso": "it",
+        "flag": "\ud83c\uddee\ud83c\uddf9",
+        "max": 10,
+        "ph": "312 345 6789"
+    },
+    "Ivory Coast": {
+        "code": "+225",
+        "iso": "ci",
+        "flag": "\ud83c\udde8\ud83c\uddee",
+        "max": 10,
+        "ph": "07 12 34 56 78"
+    },
+    "Jamaica": {
+        "code": "+1876",
+        "iso": "jm",
+        "flag": "\ud83c\uddef\ud83c\uddf2",
+        "max": 7,
+        "ph": "876 1234"
+    },
+    "Japan": {
+        "code": "+81",
+        "iso": "jp",
+        "flag": "\ud83c\uddef\ud83c\uddf5",
+        "max": 10,
+        "ph": "90 1234 5678"
+    },
+    "Jordan": {
+        "code": "+962",
+        "iso": "jo",
+        "flag": "\ud83c\uddef\ud83c\uddf4",
+        "max": 9,
+        "ph": "7 9012 3456"
+    },
+    "Kazakhstan": {
+        "code": "+7",
+        "iso": "kz",
+        "flag": "\ud83c\uddf0\ud83c\uddff",
+        "max": 10,
+        "ph": "701 123 4567"
+    },
+    "Kenya": {
+        "code": "+254",
+        "iso": "ke",
+        "flag": "\ud83c\uddf0\ud83c\uddea",
+        "max": 9,
+        "ph": "712 345678"
+    },
+    "Kuwait": {
+        "code": "+965",
+        "iso": "kw",
+        "flag": "\ud83c\uddf0\ud83c\uddfc",
+        "max": 8,
+        "ph": "9123 4567"
+    },
+    "Kyrgyzstan": {
+        "code": "+996",
+        "iso": "kg",
+        "flag": "\ud83c\uddf0\ud83c\uddec",
+        "max": 9,
+        "ph": "700 123 456"
+    },
+    "Laos": {
+        "code": "+856",
+        "iso": "la",
+        "flag": "\ud83c\uddf1\ud83c\udde6",
+        "max": 10,
+        "ph": "20 12 345 678"
+    },
+    "Latvia": {
+        "code": "+371",
+        "iso": "lv",
+        "flag": "\ud83c\uddf1\ud83c\uddfb",
+        "max": 8,
+        "ph": "21 234 567"
+    },
+    "Lebanon": {
+        "code": "+961",
+        "iso": "lb",
+        "flag": "\ud83c\uddf1\ud83c\udde7",
+        "max": 8,
+        "ph": "70 123 456"
+    },
+    "Lesotho": {
+        "code": "+266",
+        "iso": "ls",
+        "flag": "\ud83c\uddf1\ud83c\uddf8",
+        "max": 8,
+        "ph": "5812 3456"
+    },
+    "Liberia": {
+        "code": "+231",
+        "iso": "lr",
+        "flag": "\ud83c\uddf1\ud83c\uddf7",
+        "max": 8,
+        "ph": "77 123 456"
+    },
+    "Libya": {
+        "code": "+218",
+        "iso": "ly",
+        "flag": "\ud83c\uddf1\ud83c\uddfe",
+        "max": 9,
+        "ph": "91 123 4567"
+    },
+    "Lithuania": {
+        "code": "+370",
+        "iso": "lt",
+        "flag": "\ud83c\uddf1\ud83c\uddf9",
+        "max": 8,
+        "ph": "612 34567"
+    },
+    "Luxembourg": {
+        "code": "+352",
+        "iso": "lu",
+        "flag": "\ud83c\uddf1\ud83c\uddfa",
+        "max": 9,
+        "ph": "621 123 456"
+    },
+    "Madagascar": {
+        "code": "+261",
+        "iso": "mg",
+        "flag": "\ud83c\uddf2\ud83c\uddec",
+        "max": 9,
+        "ph": "32 12 345 67"
+    },
+    "Malawi": {
+        "code": "+265",
+        "iso": "mw",
+        "flag": "\ud83c\uddf2\ud83c\uddfc",
+        "max": 9,
+        "ph": "99 123 4567"
+    },
+    "Malaysia": {
+        "code": "+60",
+        "iso": "my",
+        "flag": "\ud83c\uddf2\ud83c\uddfe",
+        "max": 10,
+        "ph": "12 345 6789"
+    },
+    "Maldives": {
+        "code": "+960",
+        "iso": "mv",
+        "flag": "\ud83c\uddf2\ud83c\uddfb",
+        "max": 7,
+        "ph": "791 2345"
+    },
+    "Mali": {
+        "code": "+223",
+        "iso": "ml",
+        "flag": "\ud83c\uddf2\ud83c\uddf1",
+        "max": 8,
+        "ph": "65 12 34 56"
+    },
+    "Malta": {
+        "code": "+356",
+        "iso": "mt",
+        "flag": "\ud83c\uddf2\ud83c\uddf9",
+        "max": 8,
+        "ph": "9912 3456"
+    },
+    "Mauritania": {
+        "code": "+222",
+        "iso": "mr",
+        "flag": "\ud83c\uddf2\ud83c\uddf7",
+        "max": 8,
+        "ph": "22 12 34 56"
+    },
+    "Mauritius": {
+        "code": "+230",
+        "iso": "mu",
+        "flag": "\ud83c\uddf2\ud83c\uddfa",
+        "max": 8,
+        "ph": "5251 2345"
+    },
+    "Mexico": {
+        "code": "+52",
+        "iso": "mx",
+        "flag": "\ud83c\uddf2\ud83c\uddfd",
+        "max": 10,
+        "ph": "55 1234 5678"
+    },
+    "Moldova": {
+        "code": "+373",
+        "iso": "md",
+        "flag": "\ud83c\uddf2\ud83c\udde9",
+        "max": 8,
+        "ph": "621 12 345"
+    },
+    "Monaco": {
+        "code": "+377",
+        "iso": "mc",
+        "flag": "\ud83c\uddf2\ud83c\udde8",
+        "max": 8,
+        "ph": "6 12 34 56 78"
+    },
+    "Mongolia": {
+        "code": "+976",
+        "iso": "mn",
+        "flag": "\ud83c\uddf2\ud83c\uddf3",
+        "max": 8,
+        "ph": "8812 3456"
+    },
+    "Montenegro": {
+        "code": "+382",
+        "iso": "me",
+        "flag": "\ud83c\uddf2\ud83c\uddea",
+        "max": 8,
+        "ph": "67 123 456"
+    },
+    "Morocco": {
+        "code": "+212",
+        "iso": "ma",
+        "flag": "\ud83c\uddf2\ud83c\udde6",
+        "max": 9,
+        "ph": "612 345678"
+    },
+    "Mozambique": {
+        "code": "+258",
+        "iso": "mz",
+        "flag": "\ud83c\uddf2\ud83c\uddff",
+        "max": 9,
+        "ph": "82 123 4567"
+    },
+    "Myanmar": {
+        "code": "+95",
+        "iso": "mm",
+        "flag": "\ud83c\uddf2\ud83c\uddf2",
+        "max": 9,
+        "ph": "9 212 3456"
+    },
+    "Namibia": {
+        "code": "+264",
+        "iso": "na",
+        "flag": "\ud83c\uddf3\ud83c\udde6",
+        "max": 9,
+        "ph": "81 123 4567"
+    },
+    "Nepal": {
+        "code": "+977",
+        "iso": "np",
+        "flag": "\ud83c\uddf3\ud83c\uddf5",
+        "max": 10,
+        "ph": "984 1234567"
+    },
+    "Netherlands": {
+        "code": "+31",
+        "iso": "nl",
+        "flag": "\ud83c\uddf3\ud83c\uddf1",
+        "max": 9,
+        "ph": "6 12345678"
+    },
+    "New Zealand": {
+        "code": "+64",
+        "iso": "nz",
+        "flag": "\ud83c\uddf3\ud83c\uddff",
+        "max": 9,
+        "ph": "21 123 4567"
+    },
+    "Nicaragua": {
+        "code": "+505",
+        "iso": "ni",
+        "flag": "\ud83c\uddf3\ud83c\uddee",
+        "max": 8,
+        "ph": "8123 4567"
+    },
+    "Niger": {
+        "code": "+227",
+        "iso": "ne",
+        "flag": "\ud83c\uddf3\ud83c\uddea",
+        "max": 8,
+        "ph": "90 12 34 56"
+    },
+    "Nigeria": {
+        "code": "+234",
+        "iso": "ng",
+        "flag": "\ud83c\uddf3\ud83c\uddec",
+        "max": 10,
+        "ph": "802 123 4567"
+    },
+    "North Macedonia": {
+        "code": "+389",
+        "iso": "mk",
+        "flag": "\ud83c\uddf2\ud83c\uddf0",
+        "max": 8,
+        "ph": "72 123 456"
+    },
+    "Norway": {
+        "code": "+47",
+        "iso": "no",
+        "flag": "\ud83c\uddf3\ud83c\uddf4",
+        "max": 8,
+        "ph": "412 34 567"
+    },
+    "Oman": {
+        "code": "+968",
+        "iso": "om",
+        "flag": "\ud83c\uddf4\ud83c\uddf2",
+        "max": 8,
+        "ph": "9123 4567"
+    },
+    "Pakistan": {
+        "code": "+92",
+        "iso": "pk",
+        "flag": "\ud83c\uddf5\ud83c\uddf0",
+        "max": 10,
+        "ph": "300 1234567"
+    },
+    "Palestine": {
+        "code": "+970",
+        "iso": "ps",
+        "flag": "\ud83c\uddf5\ud83c\uddf8",
+        "max": 9,
+        "ph": "59 123 4567"
+    },
+    "Palestinian Territory Occupied": {
+        "code": "+970",
+        "iso": "ps",
+        "flag": "\ud83c\uddf5\ud83c\uddf8",
+        "max": 9,
+        "ph": "59 123 4567"
+    },
+    "Panama": {
+        "code": "+507",
+        "iso": "pa",
+        "flag": "\ud83c\uddf5\ud83c\udde6",
+        "max": 8,
+        "ph": "6123 4567"
+    },
+    "Papua New Guinea": {
+        "code": "+675",
+        "iso": "pg",
+        "flag": "\ud83c\uddf5\ud83c\uddec",
+        "max": 8,
+        "ph": "7012 3456"
+    },
+    "Paraguay": {
+        "code": "+595",
+        "iso": "py",
+        "flag": "\ud83c\uddf5\ud83c\uddfe",
+        "max": 9,
+        "ph": "981 123456"
+    },
+    "Peru": {
+        "code": "+51",
+        "iso": "pe",
+        "flag": "\ud83c\uddf5\ud83c\uddea",
+        "max": 9,
+        "ph": "912 345 678"
+    },
+    "Philippines": {
+        "code": "+63",
+        "iso": "ph",
+        "flag": "\ud83c\uddf5\ud83c\udded",
+        "max": 10,
+        "ph": "917 123 4567"
+    },
+    "Poland": {
+        "code": "+48",
+        "iso": "pl",
+        "flag": "\ud83c\uddf5\ud83c\uddf1",
+        "max": 9,
+        "ph": "512 345 678"
+    },
+    "Portugal": {
+        "code": "+351",
+        "iso": "pt",
+        "flag": "\ud83c\uddf5\ud83c\uddf9",
+        "max": 9,
+        "ph": "912 345 678"
+    },
+    "Puerto Rico": {
+        "code": "+1787",
+        "iso": "pr",
+        "flag": "\ud83c\uddf5\ud83c\uddf7",
+        "max": 7,
+        "ph": "787 1234"
+    },
+    "Qatar": {
+        "code": "+974",
+        "iso": "qa",
+        "flag": "\ud83c\uddf6\ud83c\udde6",
+        "max": 8,
+        "ph": "3312 3456"
+    },
+    "Romania": {
+        "code": "+40",
+        "iso": "ro",
+        "flag": "\ud83c\uddf7\ud83c\uddf4",
+        "max": 9,
+        "ph": "712 345 678"
+    },
+    "Russia": {
+        "code": "+7",
+        "iso": "ru",
+        "flag": "\ud83c\uddf7\ud83c\uddfa",
+        "max": 10,
+        "ph": "912 345 67 89"
+    },
+    "Rwanda": {
+        "code": "+250",
+        "iso": "rw",
+        "flag": "\ud83c\uddf7\ud83c\uddfc",
+        "max": 9,
+        "ph": "788 123 456"
+    },
+    "Saudi Arabia": {
+        "code": "+966",
+        "iso": "sa",
+        "flag": "\ud83c\uddf8\ud83c\udde6",
+        "max": 9,
+        "ph": "50 123 4567"
+    },
+    "Senegal": {
+        "code": "+221",
+        "iso": "sn",
+        "flag": "\ud83c\uddf8\ud83c\uddf3",
+        "max": 9,
+        "ph": "77 123 45 67"
+    },
+    "Serbia": {
+        "code": "+381",
+        "iso": "rs",
+        "flag": "\ud83c\uddf7\ud83c\uddf8",
+        "max": 9,
+        "ph": "60 123 4567"
+    },
+    "Seychelles": {
+        "code": "+248",
+        "iso": "sc",
+        "flag": "\ud83c\uddf8\ud83c\udde8",
+        "max": 7,
+        "ph": "2 512 345"
+    },
+    "Sierra Leone": {
+        "code": "+232",
+        "iso": "sl",
+        "flag": "\ud83c\uddf8\ud83c\uddf1",
+        "max": 8,
+        "ph": "76 123456"
+    },
+    "Singapore": {
+        "code": "+65",
+        "iso": "sg",
+        "flag": "\ud83c\uddf8\ud83c\uddec",
+        "max": 8,
+        "ph": "8123 4567"
+    },
+    "Slovakia": {
+        "code": "+421",
+        "iso": "sk",
+        "flag": "\ud83c\uddf8\ud83c\uddf0",
+        "max": 9,
+        "ph": "912 345 678"
+    },
+    "Slovenia": {
+        "code": "+386",
+        "iso": "si",
+        "flag": "\ud83c\uddf8\ud83c\uddee",
+        "max": 8,
+        "ph": "31 234 567"
+    },
+    "Somalia": {
+        "code": "+252",
+        "iso": "so",
+        "flag": "\ud83c\uddf8\ud83c\uddf4",
+        "max": 8,
+        "ph": "61 234 5678"
+    },
+    "South Africa": {
+        "code": "+27",
+        "iso": "za",
+        "flag": "\ud83c\uddff\ud83c\udde6",
+        "max": 9,
+        "ph": "82 123 4567"
+    },
+    "South Korea": {
+        "code": "+82",
+        "iso": "kr",
+        "flag": "\ud83c\uddf0\ud83c\uddf7",
+        "max": 10,
+        "ph": "10 1234 5678"
+    },
+    "South Sudan": {
+        "code": "+211",
+        "iso": "ss",
+        "flag": "\ud83c\uddf8\ud83c\uddf8",
+        "max": 9,
+        "ph": "912 345 678"
+    },
+    "Spain": {
+        "code": "+34",
+        "iso": "es",
+        "flag": "\ud83c\uddea\ud83c\uddf8",
+        "max": 9,
+        "ph": "612 345 678"
+    },
+    "Sri Lanka": {
+        "code": "+94",
+        "iso": "lk",
+        "flag": "\ud83c\uddf1\ud83c\uddf0",
+        "max": 9,
+        "ph": "71 234 5678"
+    },
+    "Sudan": {
+        "code": "+249",
+        "iso": "sd",
+        "flag": "\ud83c\uddf8\ud83c\udde9",
+        "max": 9,
+        "ph": "91 234 5678"
+    },
+    "Sweden": {
+        "code": "+46",
+        "iso": "se",
+        "flag": "\ud83c\uddf8\ud83c\uddea",
+        "max": 9,
+        "ph": "70 123 45 67"
+    },
+    "Switzerland": {
+        "code": "+41",
+        "iso": "ch",
+        "flag": "\ud83c\udde8\ud83c\udded",
+        "max": 9,
+        "ph": "78 123 45 67"
+    },
+    "Syria": {
+        "code": "+963",
+        "iso": "sy",
+        "flag": "\ud83c\uddf8\ud83c\uddfe",
+        "max": 9,
+        "ph": "944 123 456"
+    },
+    "Taiwan": {
+        "code": "+886",
+        "iso": "tw",
+        "flag": "\ud83c\uddf9\ud83c\uddfc",
+        "max": 9,
+        "ph": "912 345 678"
+    },
+    "Tajikistan": {
+        "code": "+992",
+        "iso": "tj",
+        "flag": "\ud83c\uddf9\ud83c\uddef",
+        "max": 9,
+        "ph": "91 812 3456"
+    },
+    "Tanzania": {
+        "code": "+255",
+        "iso": "tz",
+        "flag": "\ud83c\uddf9\ud83c\uddff",
+        "max": 9,
+        "ph": "712 345 678"
+    },
+    "Thailand": {
+        "code": "+66",
+        "iso": "th",
+        "flag": "\ud83c\uddf9\ud83c\udded",
+        "max": 9,
+        "ph": "81 234 5678"
+    },
+    "The Bahamas": {
+        "code": "+1242",
+        "iso": "bs",
+        "flag": "\ud83c\udde7\ud83c\uddf8",
+        "max": 7,
+        "ph": "242 1234"
+    },
+    "The Gambia": {
+        "code": "+220",
+        "iso": "gm",
+        "flag": "\ud83c\uddec\ud83c\uddf2",
+        "max": 7,
+        "ph": "712 3456"
+    },
+    "Togo": {
+        "code": "+228",
+        "iso": "tg",
+        "flag": "\ud83c\uddf9\ud83c\uddec",
+        "max": 8,
+        "ph": "90 12 34 56"
+    },
+    "Trinidad and Tobago": {
+        "code": "+1868",
+        "iso": "tt",
+        "flag": "\ud83c\uddf9\ud83c\uddf9",
+        "max": 7,
+        "ph": "868 1234"
+    },
+    "Tunisia": {
+        "code": "+216",
+        "iso": "tn",
+        "flag": "\ud83c\uddf9\ud83c\uddf3",
+        "max": 8,
+        "ph": "20 123 456"
+    },
+    "Turkey": {
+        "code": "+90",
+        "iso": "tr",
+        "flag": "\ud83c\uddf9\ud83c\uddf7",
+        "max": 10,
+        "ph": "532 123 4567"
+    },
+    "Turkmenistan": {
+        "code": "+993",
+        "iso": "tm",
+        "flag": "\ud83c\uddf9\ud83c\uddf2",
+        "max": 8,
+        "ph": "65 123456"
+    },
+    "Uganda": {
+        "code": "+256",
+        "iso": "ug",
+        "flag": "\ud83c\uddfa\ud83c\uddec",
+        "max": 9,
+        "ph": "712 345678"
+    },
+    "Ukraine": {
+        "code": "+380",
+        "iso": "ua",
+        "flag": "\ud83c\uddfa\ud83c\udde6",
+        "max": 9,
+        "ph": "50 123 4567"
+    },
+    "United Arab Emirates": {
+        "code": "+971",
+        "iso": "ae",
+        "flag": "\ud83c\udde6\ud83c\uddea",
+        "max": 9,
+        "ph": "50 123 4567"
+    },
+    "United Kingdom": {
+        "code": "+44",
+        "iso": "gb",
+        "flag": "\ud83c\uddec\ud83c\udde7",
+        "max": 10,
+        "ph": "7911 123456"
+    },
+    "United States": {
+        "code": "+1",
+        "iso": "us",
+        "flag": "\ud83c\uddfa\ud83c\uddf8",
+        "max": 10,
+        "ph": "202 555 0123"
+    },
+    "Uruguay": {
+        "code": "+598",
+        "iso": "uy",
+        "flag": "\ud83c\uddfa\ud83c\uddfe",
+        "max": 8,
+        "ph": "99 123 456"
+    },
+    "Uzbekistan": {
+        "code": "+998",
+        "iso": "uz",
+        "flag": "\ud83c\uddfa\ud83c\uddff",
+        "max": 9,
+        "ph": "90 123 45 67"
+    },
+    "Venezuela": {
+        "code": "+58",
+        "iso": "ve",
+        "flag": "\ud83c\uddfb\ud83c\uddea",
+        "max": 10,
+        "ph": "412 1234567"
+    },
+    "Vietnam": {
+        "code": "+84",
+        "iso": "vn",
+        "flag": "\ud83c\uddfb\ud83c\uddf3",
+        "max": 9,
+        "ph": "91 234 5678"
+    },
+    "Yemen": {
+        "code": "+967",
+        "iso": "ye",
+        "flag": "\ud83c\uddfe\ud83c\uddea",
+        "max": 9,
+        "ph": "71 234 567"
+    },
+    "Zambia": {
+        "code": "+260",
+        "iso": "zm",
+        "flag": "\ud83c\uddff\ud83c\uddf2",
+        "max": 9,
+        "ph": "97 1234567"
+    },
+    "Zimbabwe": {
+        "code": "+263",
+        "iso": "zw",
+        "flag": "\ud83c\uddff\ud83c\uddfc",
+        "max": 9,
+        "ph": "71 234 5678"
+    },
+    "Antarctica": {
+        "code": "+672",
+        "iso": "aq",
+        "flag": "\ud83c\udde6\ud83c\uddf6",
+        "max": 6,
+        "ph": "123 456"
+    },
+    "Bonaire, Sint Eustatius and Saba": {
+        "code": "+599",
+        "iso": "bq",
+        "flag": "\ud83c\udde7\ud83c\uddf6",
+        "max": 7,
+        "ph": "712 3456"
+    },
+    "Bouvet Island": {
+        "code": "+47",
+        "iso": "bv",
+        "flag": "\ud83c\udde7\ud83c\uddfb",
+        "max": 8,
+        "ph": "412 34 567"
+    },
+    "British Indian Ocean Territory": {
+        "code": "+246",
+        "iso": "io",
+        "flag": "\ud83c\uddee\ud83c\uddf4",
+        "max": 7,
+        "ph": "370 1234"
+    },
+    "Christmas Island": {
+        "code": "+61",
+        "iso": "cx",
+        "flag": "\ud83c\udde8\ud83c\uddfd",
+        "max": 9,
+        "ph": "412 345 678"
+    },
+    "Cocos (Keeling) Islands": {
+        "code": "+61",
+        "iso": "cc",
+        "flag": "\ud83c\udde8\ud83c\udde8",
+        "max": 9,
+        "ph": "412 345 678"
+    },
+    "Cook Islands": {
+        "code": "+682",
+        "iso": "ck",
+        "flag": "\ud83c\udde8\ud83c\uddf0",
+        "max": 5,
+        "ph": "21 234"
+    },
+    "Cura\u00e7ao": {
+        "code": "+599",
+        "iso": "cw",
+        "flag": "\ud83c\udde8\ud83c\uddfc",
+        "max": 7,
+        "ph": "9 123 4567"
+    },
+    "Falkland Islands": {
+        "code": "+500",
+        "iso": "fk",
+        "flag": "\ud83c\uddeb\ud83c\uddf0",
+        "max": 5,
+        "ph": "51 234"
+    },
+    "Faroe Islands": {
+        "code": "+298",
+        "iso": "fo",
+        "flag": "\ud83c\uddeb\ud83c\uddf4",
+        "max": 6,
+        "ph": "212 345"
+    },
+    "French Guiana": {
+        "code": "+594",
+        "iso": "gf",
+        "flag": "\ud83c\uddec\ud83c\uddeb",
+        "max": 9,
+        "ph": "694 12 34 56"
+    },
+    "French Polynesia": {
+        "code": "+689",
+        "iso": "pf",
+        "flag": "\ud83c\uddf5\ud83c\uddeb",
+        "max": 8,
+        "ph": "87 12 34 56"
+    },
+    "French Southern Territories": {
+        "code": "+262",
+        "iso": "tf",
+        "flag": "\ud83c\uddf9\ud83c\uddeb",
+        "max": 9,
+        "ph": "692 12 34 56"
+    },
+    "Gibraltar": {
+        "code": "+350",
+        "iso": "gi",
+        "flag": "\ud83c\uddec\ud83c\uddee",
+        "max": 8,
+        "ph": "5712 3456"
+    },
+    "Greenland": {
+        "code": "+299",
+        "iso": "gl",
+        "flag": "\ud83c\uddec\ud83c\uddf1",
+        "max": 6,
+        "ph": "21 23 45"
+    },
+    "Grenada": {
+        "code": "+1473",
+        "iso": "gd",
+        "flag": "\ud83c\uddec\ud83c\udde9",
+        "max": 7,
+        "ph": "473 1234"
+    },
+    "Guadeloupe": {
+        "code": "+590",
+        "iso": "gp",
+        "flag": "\ud83c\uddec\ud83c\uddf5",
+        "max": 9,
+        "ph": "690 12 34 56"
+    },
+    "Guam": {
+        "code": "+1671",
+        "iso": "gu",
+        "flag": "\ud83c\uddec\ud83c\uddfa",
+        "max": 7,
+        "ph": "671 1234"
+    },
+    "Guernsey": {
+        "code": "+44",
+        "iso": "gg",
+        "flag": "\ud83c\uddec\ud83c\uddec",
+        "max": 10,
+        "ph": "7911 123456"
+    },
+    "Guinea-Bissau": {
+        "code": "+245",
+        "iso": "gw",
+        "flag": "\ud83c\uddec\ud83c\uddfc",
+        "max": 7,
+        "ph": "955 1234"
+    },
+    "Heard Island and McDonald Islands": {
+        "code": "+672",
+        "iso": "hm",
+        "flag": "\ud83c\udded\ud83c\uddf2",
+        "max": 6,
+        "ph": "123 456"
+    },
+    "Jersey": {
+        "code": "+44",
+        "iso": "je",
+        "flag": "\ud83c\uddef\ud83c\uddea",
+        "max": 10,
+        "ph": "7911 123456"
+    },
+    "Kiribati": {
+        "code": "+686",
+        "iso": "ki",
+        "flag": "\ud83c\uddf0\ud83c\uddee",
+        "max": 5,
+        "ph": "72 123"
+    },
+    "Kosovo": {
+        "code": "+383",
+        "iso": "xk",
+        "flag": "\ud83c\uddfd\ud83c\uddf0",
+        "max": 8,
+        "ph": "44 123 456"
+    },
+    "Liechtenstein": {
+        "code": "+423",
+        "iso": "li",
+        "flag": "\ud83c\uddf1\ud83c\uddee",
+        "max": 7,
+        "ph": "79 123 45"
+    },
+    "Macau S.A.R.": {
+        "code": "+853",
+        "iso": "mo",
+        "flag": "\ud83c\uddf2\ud83c\uddf4",
+        "max": 8,
+        "ph": "6612 3456"
+    },
+    "Man (Isle of)": {
+        "code": "+44",
+        "iso": "im",
+        "flag": "\ud83c\uddee\ud83c\uddf2",
+        "max": 10,
+        "ph": "7911 123456"
+    },
+    "Marshall Islands": {
+        "code": "+692",
+        "iso": "mh",
+        "flag": "\ud83c\uddf2\ud83c\udded",
+        "max": 7,
+        "ph": "235 1234"
+    },
+    "Martinique": {
+        "code": "+596",
+        "iso": "mq",
+        "flag": "\ud83c\uddf2\ud83c\uddf6",
+        "max": 9,
+        "ph": "696 12 34 56"
+    },
+    "Mayotte": {
+        "code": "+262",
+        "iso": "yt",
+        "flag": "\ud83c\uddfe\ud83c\uddf9",
+        "max": 9,
+        "ph": "639 12 34 56"
+    },
+    "Micronesia": {
+        "code": "+691",
+        "iso": "fm",
+        "flag": "\ud83c\uddeb\ud83c\uddf2",
+        "max": 7,
+        "ph": "920 1234"
+    },
+    "Montserrat": {
+        "code": "+1664",
+        "iso": "ms",
+        "flag": "\ud83c\uddf2\ud83c\uddf8",
+        "max": 7,
+        "ph": "664 1234"
+    },
+    "Nauru": {
+        "code": "+674",
+        "iso": "nr",
+        "flag": "\ud83c\uddf3\ud83c\uddf7",
+        "max": 7,
+        "ph": "557 1234"
+    },
+    "New Caledonia": {
+        "code": "+687",
+        "iso": "nc",
+        "flag": "\ud83c\uddf3\ud83c\udde8",
+        "max": 6,
+        "ph": "75 12 34"
+    },
+    "Niue": {
+        "code": "+683",
+        "iso": "nu",
+        "flag": "\ud83c\uddf3\ud83c\uddfa",
+        "max": 4,
+        "ph": "4123"
+    },
+    "Norfolk Island": {
+        "code": "+672",
+        "iso": "nf",
+        "flag": "\ud83c\uddf3\ud83c\uddeb",
+        "max": 6,
+        "ph": "322 123"
+    },
+    "North Korea": {
+        "code": "+850",
+        "iso": "kp",
+        "flag": "\ud83c\uddf0\ud83c\uddf5",
+        "max": 10,
+        "ph": "191 234 5678"
+    },
+    "Northern Mariana Islands": {
+        "code": "+1670",
+        "iso": "mp",
+        "flag": "\ud83c\uddf2\ud83c\uddf5",
+        "max": 7,
+        "ph": "670 1234"
+    },
+    "Palau": {
+        "code": "+680",
+        "iso": "pw",
+        "flag": "\ud83c\uddf5\ud83c\uddfc",
+        "max": 7,
+        "ph": "775 1234"
+    },
+    "Pitcairn Island": {
+        "code": "+64",
+        "iso": "pn",
+        "flag": "\ud83c\uddf5\ud83c\uddf3",
+        "max": 9,
+        "ph": "21 123 4567"
+    },
+    "Reunion": {
+        "code": "+262",
+        "iso": "re",
+        "flag": "\ud83c\uddf7\ud83c\uddea",
+        "max": 9,
+        "ph": "692 12 34 56"
+    },
+    "Saint Helena": {
+        "code": "+290",
+        "iso": "sh",
+        "flag": "\ud83c\uddf8\ud83c\udded",
+        "max": 4,
+        "ph": "5123"
+    },
+    "Saint Kitts and Nevis": {
+        "code": "+1869",
+        "iso": "kn",
+        "flag": "\ud83c\uddf0\ud83c\uddf3",
+        "max": 7,
+        "ph": "869 1234"
+    },
+    "Saint Lucia": {
+        "code": "+1758",
+        "iso": "lc",
+        "flag": "\ud83c\uddf1\ud83c\udde8",
+        "max": 7,
+        "ph": "758 1234"
+    },
+    "Saint Pierre and Miquelon": {
+        "code": "+508",
+        "iso": "pm",
+        "flag": "\ud83c\uddf5\ud83c\uddf2",
+        "max": 6,
+        "ph": "55 12 34"
+    },
+    "Saint Vincent and the Grenadines": {
+        "code": "+1784",
+        "iso": "vc",
+        "flag": "\ud83c\uddfb\ud83c\udde8",
+        "max": 7,
+        "ph": "784 1234"
+    },
+    "Saint-Barthelemy": {
+        "code": "+590",
+        "iso": "bl",
+        "flag": "\ud83c\udde7\ud83c\uddf1",
+        "max": 9,
+        "ph": "690 12 34 56"
+    },
+    "Saint-Martin (French part)": {
+        "code": "+590",
+        "iso": "mf",
+        "flag": "\ud83c\uddf2\ud83c\uddeb",
+        "max": 9,
+        "ph": "690 12 34 56"
+    },
+    "Samoa": {
+        "code": "+685",
+        "iso": "ws",
+        "flag": "\ud83c\uddfc\ud83c\uddf8",
+        "max": 7,
+        "ph": "72 12345"
+    },
+    "San Marino": {
+        "code": "+378",
+        "iso": "sm",
+        "flag": "\ud83c\uddf8\ud83c\uddf2",
+        "max": 10,
+        "ph": "66 123 456"
+    },
+    "Sao Tome and Principe": {
+        "code": "+239",
+        "iso": "st",
+        "flag": "\ud83c\uddf8\ud83c\uddf9",
+        "max": 7,
+        "ph": "981 1234"
+    },
+    "Sint Maarten (Dutch part)": {
+        "code": "+1721",
+        "iso": "sx",
+        "flag": "\ud83c\uddf8\ud83c\uddfd",
+        "max": 7,
+        "ph": "721 1234"
+    },
+    "Solomon Islands": {
+        "code": "+677",
+        "iso": "sb",
+        "flag": "\ud83c\uddf8\ud83c\udde7",
+        "max": 7,
+        "ph": "741 2345"
+    },
+    "South Georgia": {
+        "code": "+500",
+        "iso": "gs",
+        "flag": "\ud83c\uddec\ud83c\uddf8",
+        "max": 5,
+        "ph": "51 234"
+    },
+    "Suriname": {
+        "code": "+597",
+        "iso": "sr",
+        "flag": "\ud83c\uddf8\ud83c\uddf7",
+        "max": 7,
+        "ph": "712 3456"
+    },
+    "Svalbard and Jan Mayen Islands": {
+        "code": "+47",
+        "iso": "sj",
+        "flag": "\ud83c\uddf8\ud83c\uddef",
+        "max": 8,
+        "ph": "412 34 567"
+    },
+    "Timor-Leste": {
+        "code": "+670",
+        "iso": "tl",
+        "flag": "\ud83c\uddf9\ud83c\uddf1",
+        "max": 8,
+        "ph": "7712 3456"
+    },
+    "Tokelau": {
+        "code": "+690",
+        "iso": "tk",
+        "flag": "\ud83c\uddf9\ud83c\uddf0",
+        "max": 4,
+        "ph": "4123"
+    },
+    "Tonga": {
+        "code": "+676",
+        "iso": "to",
+        "flag": "\ud83c\uddf9\ud83c\uddf4",
+        "max": 5,
+        "ph": "71 234"
+    },
+    "Turks and Caicos Islands": {
+        "code": "+1649",
+        "iso": "tc",
+        "flag": "\ud83c\uddf9\ud83c\udde8",
+        "max": 7,
+        "ph": "649 1234"
+    },
+    "Tuvalu": {
+        "code": "+688",
+        "iso": "tv",
+        "flag": "\ud83c\uddf9\ud83c\uddfb",
+        "max": 5,
+        "ph": "20 123"
+    },
+    "United States Minor Outlying Islands": {
+        "code": "+1",
+        "iso": "us",
+        "flag": "\ud83c\uddfa\ud83c\uddf8",
+        "max": 10,
+        "ph": "202 555 0123"
+    },
+    "Vanuatu": {
+        "code": "+678",
+        "iso": "vu",
+        "flag": "\ud83c\uddfb\ud83c\uddfa",
+        "max": 7,
+        "ph": "771 2345"
+    },
+    "Vatican City State (Holy See)": {
+        "code": "+379",
+        "iso": "va",
+        "flag": "\ud83c\uddfb\ud83c\udde6",
+        "max": 10,
+        "ph": "06 698 12345"
+    },
+    "Virgin Islands (British)": {
+        "code": "+1284",
+        "iso": "vg",
+        "flag": "\ud83c\uddfb\ud83c\uddec",
+        "max": 7,
+        "ph": "284 1234"
+    },
+    "Virgin Islands (US)": {
+        "code": "+1340",
+        "iso": "vi",
+        "flag": "\ud83c\uddfb\ud83c\uddee",
+        "max": 7,
+        "ph": "340 1234"
+    },
+    "Wallis and Futuna Islands": {
+        "code": "+681",
+        "iso": "wf",
+        "flag": "\ud83c\uddfc\ud83c\uddeb",
+        "max": 6,
+        "ph": "72 12 34"
+    },
+    "Western Sahara": {
+        "code": "+212",
+        "iso": "eh",
+        "flag": "\ud83c\uddea\ud83c\udded",
+        "max": 9,
+        "ph": "612 345678"
+    }
+}

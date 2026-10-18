@@ -129,8 +129,7 @@
 </div>
 
 <div class="bam-wrap">
-
-    {{-- ── Registration Form ── --}}
+   {{-- ── Registration Form ── --}}
     <div class="bam-card">
         <div class="bam-card-title">Alumni Registration Form</div>
 

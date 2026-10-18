@@ -35,7 +35,7 @@
     min-width: 60px;
     padding: 12px 12px 12px 10px;
     background: transparent;
-    color: #1a8a8a;
+    color: var(--teal, #1a8a8a);
     flex-shrink: 0;
     align-self: stretch;
     border-right: 1px solid rgba(8,102,102,0.10);  /* thin visible divider */
@@ -44,7 +44,7 @@
     font-size: 1.8rem;
     font-weight: 700;
     line-height: 1;
-    color: #1a8a8a;
+    color: var(--teal, #1a8a8a);
 }
 .ec-my {
     font-size: .7rem;
@@ -52,7 +52,7 @@
     margin-top: 2px;
     text-transform: uppercase;
     letter-spacing: .04em;
-    color: #1a8a8a;
+    color: var(--teal, #1a8a8a);
 }
 
 /* Thumbnail – fixed size, contain logo, with small left gap */
@@ -79,7 +79,7 @@
 .ec-title {
     font-size: 1rem;
     font-weight: 700;
-    color: #086666;
+    color: var(--teal, #086666);
     margin: 0 0 6px;
 }
 
@@ -135,7 +135,7 @@
 
 .ec-gallery-link {
     font-size: .8rem;
-    color: #086666;
+    color: var(--teal, #086666);
     font-weight: 600;
     text-decoration: none;
     display: inline-block;
@@ -150,7 +150,7 @@
     background: none;
     border: none;
     cursor: pointer;
-    color: #e87722;
+    color: var(--orange, #e87722);
     font-weight: 600;
     font-size: .8rem;
     padding: 4px 0 0;
@@ -194,9 +194,9 @@
     opacity: .88;
 }
 
-.ec-btn-primary  { background: #086666; color: #fff; }
-.ec-btn-outline  { background: transparent; color: #086666; border: 2px solid #086666; }
-.ec-btn-cancel   { background: transparent; color: #e87722; border: 2px solid #e87722; width: 100%; }
+.ec-btn-primary  { background: var(--teal, #086666); color: #fff; }
+.ec-btn-outline  { background: transparent; color: var(--teal, #086666); border: 2px solid var(--teal, #086666); }
+.ec-btn-cancel   { background: transparent; color: var(--orange, #e87722); border: 2px solid var(--orange, #e87722); width: 100%; }
 
 /* Badges */
 .ec-badge {
@@ -269,8 +269,8 @@
     transition: all .2s;
 }
 .tab-btn.active {
-    background: #086666;
-    border-color: #086666;
+    background: var(--teal, #086666);
+    border-color: var(--teal, #086666);
     color: #fff;
 }
 
@@ -419,10 +419,10 @@
     background: #fef3c7;
 }
 .ec-modal-title {
-    font-family: 'Cairo', sans-serif;
+    font-family: inherit;
     font-size: 1.28rem;
     font-weight: 700;
-    color: #086666;
+    color: var(--teal, #086666);
     margin: 0 0 6px;
 }
 .ec-modal-desc {
@@ -478,22 +478,22 @@
     font-size: 0.88rem;
     font-weight: 700;
     border: none;
-    background: #086666;
+    background: var(--teal, #086666);
     color: #fff;
     cursor: pointer;
     transition: background 0.15s, transform 0.15s;
     box-shadow: 0 4px 14px rgba(8, 102, 102, 0.28);
 }
 .btn-modal-confirm:hover {
-    background: #054d4d;
+    background: var(--teal-dark, #054d4d);
     transform: translateY(-1px);
 }
 .btn-modal-confirm.danger {
-    background: #e87722;
+    background: var(--orange, #e87722);
     box-shadow: 0 4px 14px rgba(232, 119, 34, 0.28);
 }
 .btn-modal-confirm.danger:hover {
-    background: #cf6211;
+    background: var(--orange-dark, #cf6211);
 }
 </style>
 @endpush
@@ -504,7 +504,7 @@
     <div class="container">
 
         <div style="text-align:center;margin-bottom:40px">
-            <h1 style="font-size:2.5rem;font-weight:700;color:#086666;display:inline-block;padding-bottom:8px;border-bottom:4px solid #e87722;line-height:1.2">
+            <h1 style="font-size:2.5rem;font-weight:700;color:var(--teal, #086666);display:inline-block;padding-bottom:8px;border-bottom:4px solid var(--orange, #e87722);line-height:1.2">
                 Events
             </h1>
         </div>

@@ -35,13 +35,23 @@ class ThemeController extends Controller
             'body_size'       => 'required|string|max:20',
         ]);
 
-        SiteTheme::saveAll($request->only([
+        $data = $request->only([
             'primary_color','secondary_color',
             'heading_font','body_font','nav_font',
             'heading_size','subheading_size','body_size','nav_size',
             'heading_weight','text_color','bg_color','nav_bg_color',
             'footer_bg_color','card_bg_color','border_radius','button_radius',
-        ]));
+        ]);
+
+        // When admin selects a Font Style, ensure body and nav fonts update accordingly
+        if (empty($data['body_font']) || $data['body_font'] === 'Roboto') {
+            $data['body_font'] = $data['heading_font'];
+        }
+        if (empty($data['nav_font']) || $data['nav_font'] === 'Poppins') {
+            $data['nav_font'] = $data['heading_font'];
+        }
+
+        SiteTheme::saveAll($data);
 
         return back()->with('success', 'Theme settings saved successfully. Changes are live on the website.');
     }
@@ -52,7 +62,7 @@ class ThemeController extends Controller
             'primary_color'   => '#1a7a7a',
             'secondary_color' => '#e87722',
             'heading_font'    => 'Poppins',
-            'body_font'       => 'Roboto',
+            'body_font'       => 'Poppins',
             'nav_font'        => 'Poppins',
             'heading_size'    => '32px',
             'subheading_size' => '24px',

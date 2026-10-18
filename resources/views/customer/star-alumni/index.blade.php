@@ -8,7 +8,7 @@
         
         {{-- Clean & Centered Page Title with Full Text Underline --}}
         <div style="text-align: center; margin-bottom: 40px;">
-            <h1 style="font-size: 2.5rem; font-weight: 700; color: #086666; display: inline-block; padding-bottom: 8px; border-bottom: 4px solid var(--orange); line-height: 1.2;">
+            <h1 style="font-size: 2.5rem; font-weight: 700; color: var(--teal, #086666); display: inline-block; padding-bottom: 8px; border-bottom: 4px solid var(--orange, #e87722); line-height: 1.2;">
                 Star Alumni
             </h1>
         </div>

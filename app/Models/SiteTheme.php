@@ -27,6 +27,9 @@ class SiteTheme extends Model
             );
         }
         Cache::forget('site_theme_settings');
+        if (class_exists(\App\Support\PublicCache::class)) {
+            \App\Support\PublicCache::flush();
+        }
     }
 
     // ── Get a single setting with a default fallback ──

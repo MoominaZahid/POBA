@@ -125,7 +125,7 @@
                 @endforeach
             </select>
             <div class="fnt-sample" id="fontSample">
-                The quick brown fox jumps over the lazy dog — POBA Alumni Portal
+                Welcome to POBA Alumni Network - Join our prestigious community of Pakistan Ocean & Bay Alumni.
             </div>
 
             <label class="fld-label" style="margin-bottom:10px">Font Sizes</label>
@@ -158,8 +158,8 @@
         </div>
 
         {{-- Hidden fields --}}
-        <input type="hidden" name="body_font"       value="{{ $settings['body_font']       ?? 'Roboto' }}">
-        <input type="hidden" name="nav_font"        value="{{ $settings['nav_font']        ?? 'Poppins' }}">
+        <input type="hidden" name="body_font"       id="hidden_body_font" value="{{ $settings['body_font']       ?? $settings['heading_font'] ?? 'Poppins' }}">
+        <input type="hidden" name="nav_font"        id="hidden_nav_font"  value="{{ $settings['nav_font']        ?? $settings['heading_font'] ?? 'Poppins' }}">
         <input type="hidden" name="nav_size"        value="{{ $settings['nav_size']        ?? '14px' }}">
         <input type="hidden" name="heading_weight"  value="{{ $settings['heading_weight']  ?? '700' }}">
         <input type="hidden" name="text_color"      value="{{ $settings['text_color']      ?? '#2c3e50' }}">
@@ -215,6 +215,11 @@ function liveUpdate() {
     const h1size    = gv('f_h1')          || '32px';
     const h2size    = gv('f_h2')          || '24px';
     const bodySize  = gv('f_body')        || '14px';
+
+    const hb = document.getElementById('hidden_body_font');
+    if (hb) hb.value = font;
+    const hn = document.getElementById('hidden_nav_font');
+    if (hn) hn.value = font;
 
     loadFont(font);
     const sample = document.getElementById('fontSample');
